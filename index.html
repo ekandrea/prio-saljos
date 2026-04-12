@@ -1085,7 +1085,6 @@ function rateBtn(leadId,field,val,current){
 }
 function renderKK(lead){
  const ort=lead.address?lead.address.split(',').pop().trim():(lead.city||'');
- const lastNote=lead.history&&lead.history.length?lead.history[lead.history.length-1]:'';
  const c1=lead.check_size||'';const c2=lead.check_revenue||'';const c3=lead.check_visible||'';
  const greens=[c1,c2,c3].filter(c=>c==='g').length;
  const reds=[c1,c2,c3].filter(c=>c==='r').length;
@@ -1094,55 +1093,53 @@ function renderKK(lead){
  else if(reds>=2)verdict='<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">SKIPPA</span>';
  else if(c1||c2||c3)verdict='<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">KANSKE</span>';
  const ph=lead.vdPhone||lead.phone||'';
+ const regYear=lead.history&&lead.history[0]&&lead.history[0].date?lead.history[0].date.substring(0,4):'';
  document.getElementById('kk-area').innerHTML=
-  '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">'+
-   '<div>'+
-    '<h2 style="font-size:20px;font-weight:800;letter-spacing:-.02em;margin-bottom:3px">'+esc(lead.company)+'</h2>'+
-    '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+
-     '<span class="industry-badge">'+getIndLabel(lead.industry)+'</span>'+
-     (ort?'<span style="font-size:11px;color:var(--MUTED)">'+esc(ort)+'</span>':'')+
-     '<span style="font-size:10px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(lead.orgnr)||'')+'</span>'+
-     (verdict?' '+verdict:'')+
+  '<div style="display:grid;grid-template-columns:1fr 280px;gap:16px">'+
+  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:14px;padding:24px">'+
+   '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:18px">'+
+    '<div>'+
+     '<h2 style="font-size:20px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px">'+esc(lead.company)+'</h2>'+
+     '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+
+      '<span class="industry-badge">'+getIndLabel(lead.industry)+'</span>'+
+      (ort?'<span style="font-size:11px;color:var(--MUTED)">'+esc(ort)+'</span>':'')+
+      '<span style="font-size:10px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(lead.orgnr)||'')+'</span>'+
+      (regYear?'<span style="font-size:10px;color:var(--MUTED)">Reg. '+regYear+'</span>':'')+
+      (verdict?' '+verdict:'')+
+     '</div>'+
     '</div>'+
+    '<button class="btn btn-o btn-sm" onclick="stopDialer()">Tillbaka</button>'+
    '</div>'+
-   '<button class="btn btn-o btn-sm" onclick="stopDialer()" style="flex-shrink:0">Tillbaka</button>'+
+   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'+
+    '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Kontaktperson</div><input value="'+esc(lead.vdName||lead.contact||'')+'" oninput="saveField('+lead.id+',\'vdName\',this.value)" placeholder="Namn" style="font-size:13px;font-weight:600;padding:8px 12px"></div>'+
+    '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">E-post</div><input value="'+esc(lead.vdEmail||lead.email||'')+'" oninput="saveField('+lead.id+',\'vdEmail\',this.value)" placeholder="namn@foretag.se" style="padding:8px 12px"></div>'+
+   '</div>'+
+   '<div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Telefon</div>'+
+   '<div style="display:flex;gap:8px;align-items:center;margin-bottom:14px">'+
+    '<input value="'+esc(ph)+'" oninput="saveField('+lead.id+',\'vdPhone\',this.value)" placeholder="07X-XXX XX XX" style="font-size:15px;font-weight:700;padding:9px 14px;flex:1">'+
+    (ph?'<a href="'+toTel(ph)+'" onclick="setCallingPhone(\''+esc(ph)+'\',\''+esc(lead.vdName||'')+'\')" style="padding:9px 20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap">Ring</a>':'')+
+   '</div>'+
+   '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+    '<a href="https://www.google.com/maps/search/'+encodeURIComponent((lead.company||'')+' '+(ort||'Skåne'))+'" target="_blank" class="link-btn">Google Maps</a>'+
+    '<a href="https://www.allabolag.se/'+normOrg(lead.orgnr)+'" target="_blank" class="link-btn">Allabolag</a>'+
+    '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Hitta.se</a>'+
+    '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn">Merinfo</a>'+
+    '<a href="https://www.eniro.se/'+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Eniro</a>'+
+    '<a href="https://www.google.com/search?q='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Google</a>'+
+    '<button class="link-btn" style="background:var(--ACC);color:#fff;border:none" onclick="sendOffert('+lead.id+')">Skicka offert</button>'+
+   '</div>'+
   '</div>'+
-  '<div style="display:grid;grid-template-columns:1fr 320px;gap:20px">'+
-   '<div>'+
-    '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:20px;margin-bottom:14px">'+
-     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">'+
-      '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Kontaktperson</div><input value="'+esc(lead.vdName||lead.contact||'')+'" oninput="saveField('+lead.id+',\'vdName\',this.value)" placeholder="Namn" style="font-size:13px;font-weight:600;padding:9px 12px"></div>'+
-      '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">E-post</div><input value="'+esc(lead.vdEmail||lead.email||'')+'" oninput="saveField('+lead.id+',\'vdEmail\',this.value)" placeholder="namn@foretag.se" style="padding:9px 12px"></div>'+
-     '</div>'+
-     '<div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Telefon</div>'+
-     '<div style="display:flex;gap:8px;align-items:center">'+
-      '<input value="'+esc(ph)+'" oninput="saveField('+lead.id+',\'vdPhone\',this.value)" placeholder="07X-XXX XX XX" style="font-size:16px;font-weight:700;padding:10px 14px;flex:1;letter-spacing:.02em">'+
-      (ph?'<a href="'+toTel(ph)+'" onclick="setCallingPhone(\''+esc(ph)+'\',\''+esc(lead.vdName||'')+'\')" style="display:flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(34,197,94,.25);transition:all .15s">Ring</a>':'')+
-     '</div>'+
-     (!ph?'<div style="display:flex;gap:6px;margin-top:10px">'+
-      '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:8px">Hitta.se</a>'+
-      '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:8px">Merinfo</a>'+
-      '<a href="https://www.eniro.se/'+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:8px">Eniro</a>'+
-     '</div>':'')+
-    '</div>'+
-    '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
-     '<a href="https://www.google.com/maps/search/'+encodeURIComponent((lead.company||'')+' '+(ort||'Skåne'))+'" target="_blank" class="link-btn">Google Maps</a>'+
-     '<a href="https://www.allabolag.se/'+normOrg(lead.orgnr)+'" target="_blank" class="link-btn">Allabolag</a>'+
-     '<a href="https://www.google.com/search?q='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Google</a>'+
-     '<button class="link-btn" style="background:var(--ACC);color:#fff;border:none" onclick="sendOffert('+lead.id+')">Skicka offert</button>'+
+  '<div style="display:flex;flex-direction:column;gap:12px">'+
+   '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:14px;padding:18px">'+
+    '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:12px">Kvalificering</div>'+
+    '<div style="display:flex;flex-direction:column;gap:10px">'+
+     '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">Storlek</div><div style="font-size:10px;color:var(--MUTED)">2–10 anst</div></div><div style="display:flex;gap:3px">'+rateBtn(lead.id,'check_size','g',c1)+rateBtn(lead.id,'check_size','y',c1)+rateBtn(lead.id,'check_size','r',c1)+'</div></div>'+
+     '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">Omsättning</div><div style="font-size:10px;color:var(--MUTED)">1–10 mkr</div></div><div style="display:flex;gap:3px">'+rateBtn(lead.id,'check_revenue','g',c2)+rateBtn(lead.id,'check_revenue','y',c2)+rateBtn(lead.id,'check_revenue','r',c2)+'</div></div>'+
+     '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">Synlighet</div><div style="font-size:10px;color:var(--MUTED)">Hemsida + Google</div></div><div style="display:flex;gap:3px">'+rateBtn(lead.id,'check_visible','g',c3)+rateBtn(lead.id,'check_visible','y',c3)+rateBtn(lead.id,'check_visible','r',c3)+'</div></div>'+
     '</div>'+
    '</div>'+
-   '<div>'+
-    '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:18px;margin-bottom:14px">'+
-     '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:14px">Kvalificering</div>'+
-     '<div style="display:flex;flex-direction:column;gap:12px">'+
-      '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">Storlek</div><div style="font-size:10px;color:var(--MUTED)">2–10 anst</div></div><div style="display:flex;gap:3px">'+rateBtn(lead.id,'check_size','g',c1)+rateBtn(lead.id,'check_size','y',c1)+rateBtn(lead.id,'check_size','r',c1)+'</div></div>'+
-      '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">Omsättning</div><div style="font-size:10px;color:var(--MUTED)">1–10 mkr</div></div><div style="display:flex;gap:3px">'+rateBtn(lead.id,'check_revenue','g',c2)+rateBtn(lead.id,'check_revenue','y',c2)+rateBtn(lead.id,'check_revenue','r',c2)+'</div></div>'+
-      '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">Synlighet</div><div style="font-size:10px;color:var(--MUTED)">Hemsida + Google</div></div><div style="display:flex;gap:3px">'+rateBtn(lead.id,'check_visible','g',c3)+rateBtn(lead.id,'check_visible','y',c3)+rateBtn(lead.id,'check_visible','r',c3)+'</div></div>'+
-     '</div>'+
-    '</div>'+
-    (lastNote?'<div style="background:#fafafc;border:1px solid var(--BORDER);border-radius:10px;padding:12px"><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;margin-bottom:2px">Senast '+esc(lastNote.date||'')+'</div><div style="font-size:11px;font-weight:600">'+esc(lastNote.outcome||'')+'</div></div>':'')+
-   '</div>'+
+   '<button onclick="document.getElementById(\'inline-outcome\').scrollIntoView({behavior:\'smooth\'})" style="width:100%;padding:12px;background:var(--ACC);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">Logga utfall</button>'+
+  '</div>'+
   '</div>';
  if(window.lucide)lucide.createIcons();
 }
