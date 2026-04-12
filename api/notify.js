@@ -10,12 +10,12 @@ export default async function handler(req, res) {
 
   let title, msg, priority;
   if (event === 'opened') {
-    title = '👀 Offert öppnad';
-    msg = (company || 'Okänd') + ' har öppnat din offert just nu';
+    title = 'Offert oppnad';
+    msg = (company || 'Okand') + ' har oppnat din offert just nu';
     priority = '3';
   } else if (event === 'accepted') {
-    title = '🎉 OFFERT GODKÄND!';
-    msg = (company || 'Okänd') + ' har godkänt ' + (pkg || 'offerten') + '!';
+    title = 'OFFERT GODKAND!';
+    msg = (company || 'Okand') + ' har godkant ' + (pkg || 'offerten') + '!';
     priority = '5';
   } else {
     return res.status(400).json({ error: 'unknown event' });
