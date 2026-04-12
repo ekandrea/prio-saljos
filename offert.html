@@ -137,6 +137,8 @@ body{min-height:100vh;background:#fff;font-family:'DM Sans',sans-serif;color:#1a
  <div class="urgency">Halva uppstarten för de 10 första i Skåne.</div>
 
 
+ <div class="compare">En anställd som svarar i telefon och sköter admin kostar runt 25 000 kr i månaden.<br><span>Prio kostar från 2 990 kr — och jobbar dygnet runt, året runt.</span></div>
+
  <div class="steps">
   <div class="section-label">SÅ HÄR GÅR DET TILL</div>
   <div class="step"><div class="step-num">1</div><span class="step-text">Du väljer vad som passar dig</span></div>
@@ -182,13 +184,13 @@ let accepted=false;
 const pkgs={
  bas:{name:'Prio',price:'2 990',setup:'4 990',tag:null,
   short:'Nån svarar alltid',
-  desc:'Vi svarar i telefonen åt dig. Tar reda på vad kunden vill, bokar in jobbet och skickar bekräftelse. Du kollar telefonen på rasten och ser vad som hänt. Inga missade samtal, inga tappade jobb.'},
+  desc:'Vi svarar i telefonen åt dig dygnet runt — kvällar, helger, mitt under semestern. Vi tar reda på vad kunden vill, bokar in jobbet och skickar en bekräftelse till kunden direkt. Du kollar telefonen på rasten och ser allt som hänt. Inga missade samtal, inga tappade jobb.'},
  pro:{name:'Prio Pro',price:'4 990',setup:'4 990',tag:'Vanligaste valet',
-  short:'Vi sköter uppföljningen också',
-  desc:'Allt i Prio — plus att vi följer upp kunder som inte hört av sig, påminner nöjda kunder att lämna omdömen och skickar prisförslag åt dig. Du har koll på allt i en portal.'},
+  short:'Mer jobb, mindre admin',
+  desc:'Allt i Prio — plus att vi ringer tillbaka kunder som inte hört av sig, påminner nöjda kunder att lämna omdömen så fler hittar dig, och tar fram prisförslag som du godkänner innan de skickas. Du slipper sitta med datorn på kvällen. Allt samlas i din egen portal.'},
  total:{name:'Prio Total',price:'9 990',setup:'4 990',tag:null,
-  short:'Vi sköter allt runtomkring',
-  desc:'Allt i Pro — plus schema för dig och dina anställda, fakturering via Fortnox och en egen kontaktperson hos oss. Du bygger. Vi tar hand om resten.'}
+  short:'Du jobbar — vi sköter resten',
+  desc:'Allt i Pro — plus att vi lägger schema åt dig och dina anställda, kopplar ihop med ditt bokföringssystem så fakturor skickas automatiskt, och du får en egen kontaktperson hos oss som lär känna din verksamhet. Du fokuserar på jobbet. Vi tar hand om allt annat.'}
 };
 
 function render(){
