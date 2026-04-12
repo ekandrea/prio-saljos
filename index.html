@@ -1180,29 +1180,24 @@ function renderOutcomes(lead){
 }
 function renderInlineOutcome(lead){
  const el=document.getElementById('inline-outcome');if(!el)return;
+ const ob='flex:1;padding:10px 8px;border:1px solid var(--BORDER);border-radius:8px;background:var(--W);cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:var(--TEXT);transition:border-color .12s';
  el.innerHTML=
-  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:20px;margin-top:16px">'+
-  '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">'+
-   '<span style="font-size:12px;font-weight:700;color:var(--TEXT)">Utfall</span>'+
-   '<button class="btn btn-o btn-sm" onclick="skipLead()" style="padding:6px 14px;font-size:11px">Hoppa &rarr;</button>'+
-  '</div>'+
-  '<div style="display:flex;gap:8px;margin-bottom:12px">'+
-   '<button onclick="quickOutcome(\'nosvar\')" style="flex:1;padding:10px 8px;border:1px solid var(--BORDER);border-radius:8px;background:var(--W);cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:var(--TEXT);transition:all .12s" onmouseenter="this.style.borderColor=\'var(--ACC)\'" onmouseleave="this.style.borderColor=\'var(--BORDER)\'">Ej svar</button>'+
-   '<button onclick="quickOutcome(\'ringsenare\')" style="flex:1;padding:10px 8px;border:1px solid var(--BORDER);border-radius:8px;background:var(--W);cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:var(--TEXT);transition:all .12s" onmouseenter="this.style.borderColor=\'var(--ACC)\'" onmouseleave="this.style.borderColor=\'var(--BORDER)\'">Ring senare</button>'+
-   '<button onclick="quickOutcome(\'demo\')" style="flex:1;padding:10px 8px;border:1px solid #c4b5fd;border-radius:8px;background:#f5f3ff;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;color:#5b21b6;transition:all .12s">Demo bokad</button>'+
-   '<button onclick="quickOutcome(\'offert\')" style="flex:1;padding:10px 8px;border:1px solid #fcd34d;border-radius:8px;background:#fffbeb;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:#92400e;transition:all .12s">Offert</button>'+
-   '<button onclick="quickOutcome(\'order\')" style="flex:1;padding:10px 8px;border:1px solid #86efac;border-radius:8px;background:#f0fdf4;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;color:#166534;transition:all .12s">Stängd</button>'+
-  '</div>'+
-  '<textarea id="note-ta" placeholder="Anteckning..." style="height:40px;resize:vertical;font-size:12px;border-radius:8px;margin-bottom:8px" oninput="saveNote()"></textarea>'+
-  '<details><summary style="font-size:10px;color:var(--MUTED);cursor:pointer;font-weight:600">Fler alternativ + historik</summary>'+
-  '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">';
- let extra='';
- for(let g in OUTCOMES){OUTCOMES[g].forEach(o=>{extra+='<button class="oc-btn '+(o.cls||'')+'" onclick="handleOutcome(\''+esc(o.t)+'\','+o.h+',\''+o.u+'\','+o.ret+')" style="font-size:10px;padding:4px 8px">'+esc(o.t)+'</button>';});}
- el.innerHTML=el.innerHTML+extra+'</div><div style="margin-top:10px" id="hist-list"></div></details></div>';
+  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:18px;margin-top:16px">'+
+   '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'+
+    '<span style="font-size:12px;font-weight:700">Utfall</span>'+
+    '<button onclick="skipLead()" style="padding:5px 12px;border:1px solid var(--BORDER);border-radius:6px;background:var(--W);cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:var(--MUTED)">Hoppa &rarr;</button>'+
+   '</div>'+
+   '<div style="display:flex;gap:6px;margin-bottom:10px">'+
+    '<button onclick="quickOutcome(\'nosvar\')" style="'+ob+'">Ej svar</button>'+
+    '<button onclick="quickOutcome(\'ringsenare\')" style="'+ob+'">Ring senare</button>'+
+    '<button onclick="quickOutcome(\'demo\')" style="'+ob+';border-color:#c4b5fd;background:#f5f3ff;color:#5b21b6;font-weight:700">Demo bokad</button>'+
+    '<button onclick="quickOutcome(\'offert\')" style="'+ob+';border-color:#fcd34d;background:#fffbeb;color:#92400e">Offert</button>'+
+    '<button onclick="quickOutcome(\'order\')" style="'+ob+';border-color:#86efac;background:#f0fdf4;color:#166534;font-weight:700">Stängd</button>'+
+   '</div>'+
+   '<textarea id="note-ta" placeholder="Anteckning..." style="height:36px;resize:vertical;font-size:12px;border-radius:8px" oninput="saveNote()"></textarea>'+
+  '</div>';
  const userNote=lead.userNote||'';
  if(userNote)document.getElementById('note-ta').value=userNote;
- renderHistory(lead);
- if(window.lucide)lucide.createIcons();
 }
 function quickOutcome(type){
  sessionCalls++;
