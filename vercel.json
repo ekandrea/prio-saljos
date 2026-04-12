@@ -1,5 +1,8 @@
 {
   "version": 2,
+  "functions": {
+    "api/sync.js": { "maxDuration": 30 }
+  },
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/prio_leads.json", "dest": "/prio_leads.json" },
