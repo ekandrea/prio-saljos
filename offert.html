@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prio — Offert</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0f1c;--card:#111827;--border:rgba(59,130,246,.2);--blue:#3b82f6;--green:#10b981;--purple:#8b5cf6;--text:#e2e8f0;--muted:#94a3b8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+.container{max-width:800px;margin:0 auto;padding:24px 16px}
+.header{text-align:center;padding:40px 0 32px}
+.logo{font-size:48px;font-weight:900;background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.subtitle{color:var(--muted);font-size:14px;margin-bottom:4px}
+.customer-name{font-size:20px;font-weight:700;color:#fff;margin-top:12px}
+.guarantee{display:inline-block;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:#34d399;padding:8px 20px;border-radius:99px;font-size:13px;font-weight:600;margin-top:16px}
+.packages{display:flex;flex-direction:column;gap:16px;margin:32px 0}
+.pkg{background:var(--card);border:2px solid var(--border);border-radius:20px;padding:28px;cursor:pointer;transition:all .2s;position:relative}
+.pkg:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.pkg.selected{border-color:var(--blue);box-shadow:0 0 0 4px rgba(59,130,246,.2)}
+.pkg.popular{border-color:var(--purple)}
+.pkg.popular::before{content:'POPULÄRAST';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8b5cf6,#a78bfa);color:#fff;padding:4px 16px;border-radius:99px;font-size:10px;font-weight:800;letter-spacing:1px}
+.pkg-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:16px}
+.pkg-name{font-size:22px;font-weight:800;color:#fff}
+.pkg-price{text-align:right}
+.pkg-price .amount{font-size:28px;font-weight:900;color:#fff}
+.pkg-price .period{font-size:13px;color:var(--muted)}
+.pkg-features{list-style:none;display:flex;flex-direction:column;gap:8px}
+.pkg-features li{font-size:13px;color:var(--muted);display:flex;align-items:start;gap:8px;line-height:1.5}
+.pkg-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.check-icon{width:18px;height:18px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.pkg.selected .check-icon{background:var(--blue);border-color:var(--blue)}
+.pkg.selected .check-icon::after{content:'✓';color:#fff;font-size:11px;font-weight:700}
+.setup{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin:24px 0;text-align:center}
+.setup-title{font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.setup-price{font-size:24px;font-weight:800;color:#fff}
+.setup-note{font-size:12px;color:var(--muted);margin-top:4px}
+.setup-split{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.split-btn{padding:8px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.split-btn.active{background:rgba(59,130,246,.15);border-color:var(--blue);color:var(--blue)}
+.split-btn:hover{border-color:var(--blue)}
+.cta{width:100%;padding:18px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:24px;transition:all .2s;box-shadow:0 4px 20px rgba(59,130,246,.3)}
+.cta:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(59,130,246,.4)}
+.cta:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.footer{text-align:center;padding:32px 0;color:var(--muted);font-size:12px}
+.success{display:none;text-align:center;padding:64px 24px}
+.success.show{display:block}
+.success h2{font-size:28px;font-weight:800;color:#fff;margin:16px 0 8px}
+.success p{color:var(--muted);font-size:14px;line-height:1.6}
+.form-hidden{display:none}
+.form-hidden.show{display:block}
+@media(min-width:640px){
+ .packages{flex-direction:row}
+ .pkg{flex:1}
+}
+</style>
+</head>
+<body>
+<div class="container" id="offer-form">
+ <div class="header">
+  <div class="logo">Prio</div>
+  <div class="subtitle">AI-telefonist för hantverkare</div>
+  <div class="guarantee">30 dagars nöjdhetsgaranti</div>
+  <div class="customer-name" id="customer-name"></div>
+ </div>
+
+ <div class="packages">
+  <div class="pkg" onclick="selectPkg('prio')">
+   <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div class="check-icon" id="chk-prio"></div><span class="pkg-name">Prio</span></div>
+   <div class="pkg-price"><div class="amount">2 990 kr</div><div class="period">/månad</div></div>
+   <ul class="pkg-features">
+    <li>Svarar dygnet runt</li>
+    <li>Bokar jobb åt dig</li>
+    <li>Skickar bekräftelse till kund</li>
+   </ul>
+  </div>
+
+  <div class="pkg popular" onclick="selectPkg('pro')">
+   <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div class="check-icon" id="chk-pro"></div><span class="pkg-name">Prio Pro</span></div>
+   <div class="pkg-price"><div class="amount">4 990 kr</div><div class="period">/månad</div></div>
+   <ul class="pkg-features">
+    <li>Allt i Prio</li>
+    <li>Ringer gamla kunder</li>
+    <li>Samlar in omdömen</li>
+    <li>Prisförslag till kunder</li>
+    <li>Kundportal</li>
+   </ul>
+  </div>
+
+  <div class="pkg" onclick="selectPkg('total')">
+   <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div class="check-icon" id="chk-total"></div><span class="pkg-name">Prio Total</span></div>
+   <div class="pkg-price"><div class="amount">9 990 kr</div><div class="period">/månad</div></div>
+   <ul class="pkg-features">
+    <li>Allt i Pro</li>
+    <li>Schemahantering</li>
+    <li>Fortnox-integration</li>
+    <li>Dedikerad kontaktperson</li>
+   </ul>
+  </div>
+ </div>
+
+ <div class="setup">
+  <div class="setup-title">Engångsavgift uppstart</div>
+  <div class="setup-price">4 990 kr</div>
+  <div class="setup-note">Kan delas på 3 månader</div>
+  <div class="setup-split">
+   <button class="split-btn active" onclick="setSplit(1)">Betala direkt</button>
+   <button class="split-btn" onclick="setSplit(3)">Dela på 3 mån</button>
+  </div>
+ </div>
+
+ <div id="summary" class="form-hidden">
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin:16px 0">
+   <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Din beställning</div>
+   <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Paket</span><strong id="sum-pkg">—</strong></div>
+   <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Månadsavgift</span><strong id="sum-monthly">—</strong></div>
+   <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span>Uppstart</span><strong id="sum-setup">—</strong></div>
+   <div style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px;display:flex;justify-content:space-between"><span style="font-weight:700">Första fakturan</span><strong id="sum-first" style="color:var(--blue);font-size:18px">—</strong></div>
+  </div>
+ </div>
+
+ <button class="cta" id="cta-btn" disabled onclick="submitOrder()">Välj ett paket ovan</button>
+
+ <div class="footer">
+  <p>Prio AB — AI-telefonist för hantverkare</p>
+  <p style="margin-top:4px">30 dagars nöjdhetsgaranti. Ingen bindningstid.</p>
+ </div>
+</div>
+
+<div class="container success" id="success-view">
+ <div style="font-size:64px;margin-bottom:16px">🎉</div>
+ <h2>Tack för din beställning!</h2>
+ <p id="success-text">Vi hör av oss inom 24 timmar för att komma igång.</p>
+ <div style="margin-top:32px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px">
+  <div style="font-size:14px;font-weight:700;margin-bottom:8px">Vad händer nu?</div>
+  <div style="font-size:13px;color:var(--muted);line-height:1.8">
+   1. Vi kontaktar dig inom 24h<br>
+   2. Vi sätter upp din AI-telefonist<br>
+   3. Du kopplar om ditt nummer<br>
+   4. Prio svarar på alla samtal!
+  </div>
+ </div>
+</div>
+
+<script>
+const params=new URLSearchParams(window.location.search);
+const namn=params.get('namn')||params.get('name')||'';
+const leadId=params.get('id')||'';
+if(namn)document.getElementById('customer-name').textContent='Offert till: '+namn;
+
+let selectedPkg=null;
+let splitMonths=1;
+const prices={prio:2990,pro:4990,total:9990};
+const labels={prio:'Prio',pro:'Prio Pro',total:'Prio Total'};
+
+function selectPkg(pkg){
+ selectedPkg=pkg;
+ document.querySelectorAll('.pkg').forEach(p=>p.classList.remove('selected'));
+ event.currentTarget.classList.add('selected');
+ document.getElementById('summary').classList.add('show');
+ updateSummary();
+ document.getElementById('cta-btn').disabled=false;
+ document.getElementById('cta-btn').textContent='Godkänn offert — '+labels[pkg];
+}
+function setSplit(months){
+ splitMonths=months;
+ document.querySelectorAll('.split-btn').forEach(b=>b.classList.remove('active'));
+ event.currentTarget.classList.add('active');
+ updateSummary();
+}
+function updateSummary(){
+ if(!selectedPkg)return;
+ const monthly=prices[selectedPkg];
+ const setupPer=Math.ceil(4990/splitMonths);
+ document.getElementById('sum-pkg').textContent=labels[selectedPkg];
+ document.getElementById('sum-monthly').textContent=monthly.toLocaleString('sv-SE')+' kr/mån';
+ document.getElementById('sum-setup').textContent=splitMonths>1?setupPer.toLocaleString('sv-SE')+' kr/mån x '+splitMonths+' mån':'4 990 kr';
+ document.getElementById('sum-first').textContent=(monthly+setupPer).toLocaleString('sv-SE')+' kr';
+}
+function submitOrder(){
+ if(!selectedPkg)return;
+ document.getElementById('offer-form').style.display='none';
+ document.getElementById('success-view').classList.add('show');
+ document.getElementById('success-text').textContent=(namn||'Du')+' har valt '+labels[selectedPkg]+'. Vi hör av oss inom 24 timmar!';
+ // Notify SäljOS if embedded
+ if(window.opener){window.opener.postMessage({type:'prio-offert-accepted',leadId,pkg:selectedPkg,split:splitMonths},'*');}
+}
+</script>
+</body>
+</html>

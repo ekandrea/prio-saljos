@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Säljös ⚡</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root{--P:#0c0c14;--BG:#f8f8fa;--W:#fff;--R:12px;--G:#22c55e;--RD:#ef4444;--OR:#f59e0b;--AM:#eab308;--ACC:#5b5fc7;--ACC2:#7c7ff2;--SBW:260px;--TEXT:#111;--MUTED:#8b8fa3;--BORDER:#e8e8ee;--ME:#10b981}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--BG);color:var(--TEXT);min-height:100vh;font-size:13px;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+#login-screen{position:fixed;inset:0;background:linear-gradient(165deg,#0c0c14 0%,#151530 50%,#1e1450 100%);z-index:9999;display:flex;align-items:center;justify-content:center}
+#login-screen::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(91,95,199,.15),transparent 70%);border-radius:50%}
+#login-screen::after{content:'';position:absolute;bottom:-10%;left:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(124,127,242,.1),transparent 70%);border-radius:50%}
+.login-box{background:var(--W);border-radius:24px;padding:52px 48px;width:400px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08)}
+.login-logo{font-size:48px;margin-bottom:6px}
+.login-box h2{font-size:26px;font-weight:800;letter-spacing:-.04em;margin-bottom:4px}
+.login-box .sub{font-size:12px;color:var(--MUTED);margin-bottom:32px}
+.login-box .user-pill{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #c4b5fd;border-radius:12px;padding:14px 20px;margin-bottom:24px;text-align:left}
+.login-box .user-pill .label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#7c3aed;margin-bottom:4px}
+.login-box .user-pill .name{font-size:18px;font-weight:800;color:#5b21b6;letter-spacing:-.02em}
+.login-box input{padding:13px 16px;font-size:14px;text-align:center;width:100%;border:1px solid var(--BORDER);border-radius:10px;outline:none;transition:border-color .15s;margin-bottom:14px;font-family:inherit}
+.login-box input:focus{border-color:var(--ACC);box-shadow:0 0 0 3px rgba(91,95,199,.1)}
+.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#5b5fc7,#7c7ff2);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,95,199,.35)}
+.login-err{color:var(--RD);font-size:12px;margin-top:10px;display:none}
+#sb{position:fixed;left:0;top:0;bottom:0;width:var(--SBW);background:var(--P);color:#fff;display:flex;flex-direction:column;z-index:100;overflow-y:auto;transition:transform .25s}
+#sb.hidden{transform:translateX(-100%)}
+#sb .logo{padding:22px 20px 14px;display:flex;align-items:center;gap:10px}
+#sb .logo .t{font-size:18px;font-weight:800;letter-spacing:-.04em;background:linear-gradient(135deg,#a5a8f8,#7c7ff2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#sb .seller-pill{margin:0 14px 12px;background:linear-gradient(135deg,rgba(91,95,199,.15),rgba(124,127,242,.08));border:1px solid rgba(91,95,199,.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px}
+#sb .seller-pill .av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--ACC),var(--ACC2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+#sb .seller-pill .nm{font-size:13px;font-weight:700;color:#fff}
+#sb .seller-pill .rl{font-size:10px;color:#666;margin-top:1px}
+.sync-bar{margin:0 14px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#333;flex-shrink:0;transition:all .4s}
+.sync-dot.ok{background:var(--G);box-shadow:0 0 6px rgba(34,197,94,.5)}
+.sync-dot.err{background:var(--RD)}
+.sync-dot.busy{background:var(--OR);animation:pulse .8s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.sync-bar .sync-text{font-size:10px;color:#555;flex:1}
+.sync-bar .sync-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#888;font-size:10px;font-weight:600;padding:3px 8px;cursor:pointer;font-family:inherit}
+.sync-bar .sync-btn:hover{background:rgba(255,255,255,.1);color:#ccc}
+#sb .sec{padding:8px 16px 3px;font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#2a2a3a;margin-top:8px;font-weight:700}
+#sb .ni{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;border-left:3px solid transparent;transition:all .2s;font-size:13px;color:#777;font-weight:500;border-radius:0 8px 8px 0;margin-right:8px}
+#sb .ni:hover{background:rgba(255,255,255,.06);color:#ccc}
+#sb .ni.active{border-left-color:var(--ACC2);background:linear-gradient(135deg,rgba(91,95,199,.15),rgba(124,127,242,.08));color:#fff;font-weight:600}
+#sb .ni .badge{background:var(--ACC);color:#fff;font-size:9px;padding:2px 7px;border-radius:8px;margin-left:auto;font-weight:700}
+#sb .ni .badge.warn{background:var(--OR)}
+#sb .bottom{margin-top:auto;padding:12px;border-top:1px solid #111827}
+#hamburger{position:fixed;top:16px;left:var(--SBW);z-index:200;background:var(--W);color:var(--TEXT);border:1px solid var(--BORDER);border-radius:10px;padding:8px 10px;font-size:16px;cursor:pointer;transition:all .25s;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,.08);opacity:.7}
+#hamburger:hover{opacity:1;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.main{margin-left:var(--SBW);min-height:100vh;padding:32px 40px;transition:margin-left .25s}
+.main.expanded{margin-left:0}
+.view{display:none;animation:fi .3s ease}.view.on{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-title{font-size:22px;font-weight:800;margin-bottom:24px;letter-spacing:-.03em;padding-left:42px;background:linear-gradient(135deg,var(--TEXT),var(--ACC));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.op{display:inline-block;padding:2px 9px;border-radius:7px;font-size:10px;font-weight:700}
+.op-telenor{background:#dbeafe;color:#1e40af}.op-tre{background:#ede9fe;color:#5b21b6}.op-telia{background:#f3e8ff;color:#6d28d9}.op-tele2{background:#e0e7ff;color:#3730a3}.op-okänd{background:#f3f4f6;color:#555}
+.st-badge{display:inline-block;padding:2px 9px;border-radius:7px;font-size:10px;font-weight:600}
+.st-ny{background:#dbeafe;color:#1e40af}.st-prospekt{background:#f0fdf4;color:#166534}.st-ring_senare{background:#fef3c7;color:#92400e}.st-offert{background:#ede9fe;color:#5b21b6}.st-order{background:#d1fae5;color:#065f46}.st-inte_intresserad{background:#fee2e2;color:#991b1b}.st-avslutad{background:#f3f4f6;color:#374151}.st-ej_svar{background:#fff7ed;color:#9a3412}.st-blacklist{background:#1f2937;color:#f9fafb}.st-apg{background:#fef3c7;color:#92400e}
+.priority-target{background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:1px 7px;border-radius:5px;font-size:9px;font-weight:700}
+.industry-badge{background:#e0e7ff;color:#3730a3;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:600}
+.sub-count{display:inline-block;background:#dbeafe;color:#1e40af;padding:1px 7px;border-radius:6px;font-size:10px;margin-left:6px;font-weight:700}
+.card{background:var(--W);border-radius:14px;border:1px solid var(--BORDER);padding:20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.btn{border:none;border-radius:8px;cursor:pointer;font-weight:600;font-family:inherit;padding:9px 18px;font-size:12px;transition:all .15s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.btn:active{transform:translateY(0);box-shadow:none}
+.btn-p{background:var(--ACC);color:#fff}.btn-g{background:var(--G);color:#fff}.btn-r{background:var(--RD);color:#fff}
+.btn-o{background:var(--W);border:1px solid var(--BORDER);color:var(--TEXT)}
+.btn-bv{background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff}
+.btn-pts{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
+.btn-sm{padding:5px 11px;font-size:11px}
+input,textarea,select{font-family:inherit;border:1px solid var(--BORDER);border-radius:10px;padding:10px 14px;font-size:13px;outline:none;transition:all .2s;width:100%;background:var(--W);color:var(--TEXT)}
+input:focus,textarea:focus,select:focus{border-color:var(--ACC);box-shadow:0 0 0 4px rgba(91,95,199,.1)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:12px 14px;font-size:10px;color:var(--MUTED);border-bottom:2px solid #eeeef4;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:#fafafc}
+td{padding:12px 14px;border-bottom:1px solid #f4f4f8;font-size:13px}
+tr.clickable{transition:all .15s}
+tr.clickable:hover{background:linear-gradient(135deg,#f5f3ff,#fafafc);cursor:pointer;transform:scale(1.002)}
+#d-idle .left{background:linear-gradient(165deg,#0c0c14,#151530 50%,#1e1450);color:#fff;padding:64px 52px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+#d-idle .left::before{content:'';position:absolute;top:-30%;right:-20%;width:500px;height:500px;background:radial-gradient(circle,rgba(91,95,199,.12),transparent 70%);border-radius:50%}
+#d-idle .left>*{position:relative;z-index:1}
+#d-idle .left .pre{font-size:10px;text-transform:uppercase;letter-spacing:4px;color:var(--ACC2);font-weight:700;margin-bottom:16px}
+#d-idle .left h1{font-size:38px;line-height:1.1;margin-bottom:12px;font-weight:800;letter-spacing:-.04em}
+#d-idle .left h1 span{background:linear-gradient(135deg,#a5a8f8,#7c7ff2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#d-idle .left p{color:rgba(255,255,255,.35);font-size:14px;margin-bottom:36px;line-height:1.7}
+.start-btn{border:none;border-radius:10px;padding:15px 36px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;align-self:flex-start}
+.start-btn-g{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 4px 20px rgba(34,197,94,.25)}
+.start-btn-b{background:linear-gradient(135deg,#10b981,#059669);color:#fff}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.25)}
+.q-item{padding:13px 15px;border-radius:10px;margin-bottom:6px;background:#fafafc;border:1px solid var(--BORDER);transition:all .12s;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.q-item:hover{border-color:#c0c0d0;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.q-item .co{font-weight:700;font-size:13px}.q-item .meta{display:flex;gap:8px;align-items:center}
+.q-item .sc{background:linear-gradient(135deg,var(--ACC),var(--ACC2));color:#fff;padding:2px 9px;border-radius:7px;font-size:10px;font-weight:700}
+#d-active{display:none}#d-active.on{display:block}
+#bcb{position:fixed;bottom:0;left:var(--SBW);right:0;background:linear-gradient(180deg,rgba(255,255,255,.95),#fff);backdrop-filter:blur(12px);border-top:none;box-shadow:0 -4px 20px rgba(0,0,0,.08);padding:16px 0;display:flex;align-items:center;justify-content:center;gap:18px;z-index:50;transition:left .25s}
+#bcb.expanded{left:0}
+#d-active.on{padding-bottom:76px}
+.call-btn{width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;font-size:18px;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.call-btn:hover{transform:scale(1.07)}.call-btn:active{transform:scale(.95)}
+.cbring{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 2px 12px rgba(34,197,94,.25)}
+.cbmute{background:#f4f4f8;color:#666;border:1px solid var(--BORDER)}.cbmute.active{background:rgba(251,191,36,.12);color:#d97706;border-color:rgba(251,191,36,.3)}
+.cbhang{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 2px 12px rgba(239,68,68,.2)}
+#bcb .divider{width:1px;height:24px;background:var(--BORDER)}
+#bcb .calling-lbl{color:var(--MUTED);font-size:12px;font-weight:500}
+.fab-container{position:fixed;bottom:26px;right:36px;z-index:80;display:flex;gap:10px}
+.fab-outcome{border:none;border-radius:12px;padding:14px 28px;font-size:13px;font-weight:700;font-family:inherit;background:linear-gradient(135deg,var(--ACC),var(--ACC2));color:#fff;box-shadow:0 4px 16px rgba(91,95,199,.3);cursor:pointer;transition:all .2s}
+.fab-outcome:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(91,95,199,.4)}
+.fab-skip{background:var(--W);border:1px solid var(--BORDER);color:var(--MUTED);border-radius:12px;padding:14px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.fab-skip:hover{border-color:var(--RD);color:var(--RD);background:#fef2f2;box-shadow:0 4px 12px rgba(239,68,68,.15)}
+#outcome-overlay{position:fixed;inset:0;z-index:84;display:none}
+.float-panel{position:fixed;bottom:78px;right:36px;width:440px;max-height:72vh;background:var(--W);border-radius:16px;border:none;box-shadow:0 12px 48px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.05);z-index:85;overflow:hidden;display:flex;flex-direction:column;animation:panelUp .25s cubic-bezier(.34,1.56,.64,1)}
+@keyframes panelUp{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.fp-header{padding:18px 24px;border-bottom:1px solid #eeeef4;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:15px;background:linear-gradient(135deg,#f8f7ff,#fff)}
+.fp-header button{background:#f4f4f8;border:none;width:28px;height:28px;border-radius:8px;font-size:14px;cursor:pointer;color:var(--MUTED);transition:all .15s;display:flex;align-items:center;justify-content:center}
+.fp-header button:hover{background:#eee;color:var(--TEXT)}
+.fp-body{padding:20px 24px;overflow-y:auto;flex:1}
+.oc-group{margin-bottom:14px}
+.oc-title{font-size:9px;font-weight:800;color:var(--ACC);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #f0eef8}
+.oc-btn{display:inline-block;padding:7px 12px;margin:3px;border-radius:8px;border:1px solid var(--BORDER);background:var(--W);cursor:pointer;font-size:11px;font-family:inherit;transition:all .15s;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.oc-btn:hover{border-color:var(--ACC);background:linear-gradient(135deg,#f5f3ff,#ede9fe);color:var(--ACC);transform:translateY(-1px);box-shadow:0 3px 8px rgba(91,95,199,.15)}
+.oc-btn.green{border-color:#bbf7d0}.oc-btn.green:hover{border-color:var(--G);background:linear-gradient(135deg,#ecfdf5,#d1fae5);color:#065f46;box-shadow:0 3px 8px rgba(34,197,94,.15)}
+.oc-btn.red{border-color:#fecaca}.oc-btn.red:hover{border-color:var(--RD);background:linear-gradient(135deg,#fef2f2,#fee2e2);color:#991b1b;box-shadow:0 3px 8px rgba(239,68,68,.15)}
+.next-btn{width:100%;margin-top:14px;background:linear-gradient(135deg,var(--ACC),var(--ACC2));color:#fff;border:none;border-radius:12px;padding:14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 12px rgba(91,95,199,.25);transition:all .2s}
+.next-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,95,199,.35)}
+.filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.ftab{padding:6px 14px;border-radius:8px;border:1px solid var(--BORDER);background:var(--W);cursor:pointer;font-size:11px;font-weight:600;font-family:inherit;transition:all .2s;color:var(--MUTED)}
+.ftab.active{background:linear-gradient(135deg,var(--ACC),var(--ACC2));color:#fff;border-color:var(--ACC);box-shadow:0 2px 8px rgba(91,95,199,.25)}.ftab:hover:not(.active){border-color:var(--ACC);color:var(--ACC);background:#f5f3ff}
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.dash-kpi{background:var(--W);border-radius:16px;border:1px solid var(--BORDER);padding:24px;text-align:center;position:relative;overflow:hidden;transition:transform .15s}
+.dash-kpi:hover{transform:translateY(-2px)}
+.dash-kpi .big{font-size:52px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.dash-kpi .label{font-size:12px;color:var(--MUTED);margin-top:8px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.dash-kpi .sub{font-size:11px;margin-top:4px;font-weight:500}
+.dash-kpi.green{border-top:4px solid var(--G);background:linear-gradient(135deg,#f0fdf4,#fff)}.dash-kpi.green .big{color:#16a34a}
+.dash-kpi.blue{border-top:4px solid var(--ACC);background:linear-gradient(135deg,#f5f3ff,#fff)}.dash-kpi.blue .big{color:var(--ACC)}
+.dash-kpi.orange{border-top:4px solid var(--OR);background:linear-gradient(135deg,#fffbeb,#fff)}.dash-kpi.orange .big{color:#d97706}
+.dash-kpi.red{border-top:4px solid var(--RD);background:linear-gradient(135deg,#fef2f2,#fff)}.dash-kpi.red .big{color:#dc2626}
+.dash-kpi.purple{border-top:4px solid #8b5cf6;background:linear-gradient(135deg,#f5f3ff,#fff)}.dash-kpi.purple .big{color:#7c3aed}
+.dash-kpi.teal{border-top:4px solid var(--ME);background:linear-gradient(135deg,#f0fdf4,#fff)}.dash-kpi.teal .big{color:#059669}
+.dash-maal{background:var(--W);border-radius:16px;border:1px solid var(--BORDER);padding:24px;margin-bottom:16px}
+.dash-maal h4{font-size:14px;font-weight:700;margin-bottom:16px}
+.maal-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.maal-label{font-size:12px;font-weight:600;min-width:140px}
+.maal-bar-bg{flex:1;height:12px;background:#f1f5f9;border-radius:6px;overflow:hidden}
+.maal-bar-fill{height:100%;border-radius:6px;transition:width .6s ease}
+.maal-val{font-size:12px;font-weight:700;min-width:60px;text-align:right}
+.dash-activity{background:var(--W);border-radius:16px;border:1px solid var(--BORDER);padding:24px}
+.dash-activity h4{font-size:14px;font-weight:700;margin-bottom:16px}
+.bar-chart .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.bar-chart .bar-label{width:50px;font-size:10px;font-weight:600;color:var(--MUTED);text-align:right}
+.bar-chart .bar{height:18px;border-radius:4px;min-width:2px;transition:width .4s}
+.bar-chart .bar-val{font-size:10px;color:var(--MUTED)}
+.pipeline-section{margin-bottom:22px}
+.pipeline-section h4{font-size:12px;font-weight:700;color:var(--MUTED);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.pipeline-section h4::before{content:'';display:inline-block;width:3px;height:14px;background:var(--ACC);border-radius:2px}
+.pipeline-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.pipeline-card{background:var(--W);border-radius:14px;border:1px solid var(--BORDER);padding:18px;cursor:pointer;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.pipeline-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.1);transform:translateY(-3px);border-color:var(--ACC)}
+.leads-tabs{display:flex;gap:2px;margin-bottom:16px;background:#f1f5f9;border-radius:10px;padding:3px}
+.leads-tab{flex:1;padding:8px;text-align:center;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:var(--MUTED);transition:all .15px;border:none;background:none;font-family:inherit}
+.leads-tab.active{background:var(--W);color:var(--TEXT);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+#qv-overlay{position:fixed;inset:0;z-index:199;display:none}
+.quick-view{position:fixed;top:50%;right:36px;transform:translateY(-50%);width:360px;background:var(--W);border-radius:14px;border:1px solid var(--BORDER);box-shadow:0 8px 40px rgba(0,0,0,.15);z-index:200;display:none;flex-direction:column;overflow:hidden}
+.quick-view.on{display:flex}
+.qv-header{padding:16px 20px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);border-bottom:1px solid var(--BORDER);display:flex;justify-content:space-between;align-items:start}
+.qv-header h4{font-size:15px;font-weight:800;letter-spacing:-.02em;color:#5b21b6}
+.qv-header button{background:none;border:none;font-size:18px;cursor:pointer;color:#7c3aed}
+.qv-body{padding:16px 20px}
+.qv-row{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px}
+.qv-row .label{color:var(--MUTED);font-weight:600}
+.qv-row .val{font-weight:700}
+.qv-links{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.qv-footer{padding:14px 20px;border-top:1px solid var(--BORDER);display:flex;gap:8px}
+.sni-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.sni-chip{padding:10px 14px;border:2px solid var(--BORDER);border-radius:10px;cursor:pointer;font-size:12px;font-weight:600;transition:all .15s;background:var(--W);display:flex;align-items:center;gap:8px}
+.sni-chip:hover{border-color:var(--ACC)}.sni-chip.on{border-color:var(--ACC);background:#f5f3ff;color:var(--ACC)}
+.sni-chip .chk{width:16px;height:16px;border:2px solid var(--BORDER);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;transition:all .15s}
+.sni-chip.on .chk{background:var(--ACC);border-color:var(--ACC);color:#fff}
+.bv-result-table{overflow-x:auto}
+.bv-checkbox{width:16px;height:16px;cursor:pointer}
+.pts-card{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid #bbf7d0;border-radius:14px;padding:24px;margin-top:16px}
+.pts-op-badge{display:inline-block;padding:5px 16px;border-radius:20px;font-size:13px;font-weight:700;margin-top:8px}
+.settings-section{background:var(--W);border:1px solid var(--BORDER);border-radius:14px;padding:24px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:box-shadow .2s}
+.settings-section:hover{box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.settings-section h4{font-size:14px;font-weight:800;margin-bottom:16px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.setting-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.setting-row label{font-size:12px;font-weight:600;color:var(--MUTED);min-width:180px;flex-shrink:0}
+.status-ok{background:#d1fae5;color:#065f46;border:1px solid #86efac;border-radius:8px;padding:10px 14px;font-size:12px}
+.status-err{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;font-size:12px}
+.status-info{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;border-radius:8px;padding:10px 14px;font-size:12px}
+.bind-expired{color:var(--RD);font-weight:700}.bind-soon{color:var(--OR);font-weight:700}.bind-medium{color:var(--AM);font-weight:600}.bind-ok{color:var(--MUTED)}
+.link-btn{display:inline-flex;align-items:center;font-size:11px;padding:5px 11px;border-radius:6px;background:#f4f4f8;color:var(--TEXT);text-decoration:none;font-weight:600;border:1px solid transparent;transition:all .12s}
+.link-btn:hover{background:#eeeef4;border-color:var(--BORDER)}
+.sub-phone{display:block;font-weight:700;color:var(--ACC);text-decoration:none;font-size:13px}
+.sub-phone:hover{text-decoration:underline}
+.hist-item{padding:7px 0;border-bottom:1px solid #f4f4f8;font-size:12px}.hist-item .hd{color:var(--MUTED)}
+.empty{text-align:center;padding:56px 32px;color:var(--MUTED);font-size:14px;background:linear-gradient(135deg,#fafafc,#f5f3ff);border-radius:12px;margin:12px 0}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--BORDER);border-top-color:var(--ACC);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes celebPop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.notif{position:fixed;bottom:80px;left:calc(var(--SBW)+20px);z-index:90;background:var(--W);border:1px solid var(--BORDER);border-left:4px solid var(--G);border-radius:12px;padding:14px 20px;box-shadow:0 8px 24px rgba(0,0,0,.12);animation:npop .35s cubic-bezier(.34,1.56,.64,1);max-width:320px}
+@keyframes npop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:999;display:flex;align-items:center;justify-content:center}
+.modal{background:var(--W);border-radius:14px;padding:32px;max-width:640px;width:95%;max-height:85vh;overflow-y:auto}
+.modal h3{margin-bottom:18px;font-size:17px;font-weight:800;letter-spacing:-.02em}
+@media(max-width:768px){
+#sb{transform:translateX(-100%)}
+.main{margin-left:0!important;padding:16px!important}
+#bcb{left:0!important}
+.dash-grid{grid-template-columns:1fr 1fr}
+#d-idle{grid-template-columns:1fr}
+.float-panel{width:92%;right:4%;bottom:70px}
+.quick-view{width:92%;right:4%;top:auto;bottom:80px;transform:none}
+.page-title{padding-left:42px;font-size:17px}
+.filter-row{gap:4px}
+.filter-row input,.filter-row select{font-size:12px;padding:7px 8px}
+.pipeline-grid{grid-template-columns:1fr}
+.kpi-grid{grid-template-columns:1fr!important}
+table{font-size:12px}
+th,td{padding:8px 10px}
+.modal{padding:20px;width:98%}
+.settings-section{padding:16px}
+#hamburger{left:8px!important;top:10px}
+}
+
+/* === MÖRKT DASHBOARD-TEMA === */
+.dashboard-dark-theme {
+  background: linear-gradient(180deg, #0a0f1c 0%, #050810 100%);
+  min-height: 100vh;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  padding: 28px 36px;
+}
+.dashboard-dark-theme .dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(59,130,246,0.2);
+}
+.dashboard-dark-theme .dash-title {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.dashboard-dark-theme .dash-date {
+  color: #94a3b8;
+  font-size: 14px;
+}
+.dashboard-dark-theme .kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.dashboard-dark-theme .kpi-card {
+  background: linear-gradient(145deg, #111827 0%, #0b1220 100%);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.dashboard-dark-theme .kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.dashboard-dark-theme .kpi-card.tb { border-left: 4px solid #8b5cf6; }
+.dashboard-dark-theme .kpi-card.samtal { border-left: 4px solid #3b82f6; }
+.dashboard-dark-theme .kpi-card.ordrar { border-left: 4px solid #10b981; }
+.dashboard-dark-theme .kpi-card.offerter { border-left: 4px solid #f59e0b; }
+.dashboard-dark-theme .kpi-card.aterkomster { border-left: 4px solid #ef4444; }
+.dashboard-dark-theme .kpi-card.prio { border-left: 4px solid #ec4899; }
+.dashboard-dark-theme .kpi-label {
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+.dashboard-dark-theme .kpi-value {
+  color: #fff;
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.dashboard-dark-theme .kpi-sub {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+}
+.dashboard-dark-theme .goal-container {
+  margin-top: 16px;
+}
+.dashboard-dark-theme .goal-bar {
+  height: 8px;
+  background: #1e293b;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.dashboard-dark-theme .goal-progress {
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+  box-shadow: 0 0 10px rgba(139,92,246,0.5);
+}
+.dashboard-dark-theme .goal-text {
+  color: #64748b;
+  font-size: 12px;
+  margin-top: 6px;
+}
+.dashboard-dark-theme .activity-section {
+  background: linear-gradient(145deg, #111827 0%, #0b1220 100%);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 16px;
+  padding: 28px;
+}
+.dashboard-dark-theme .section-title {
+  color: #e2e8f0;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dashboard-dark-theme .activity-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 200px;
+  padding: 20px 0;
+}
+.dashboard-dark-theme .activity-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.dashboard-dark-theme .activity-bar {
+  width: 100%;
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 6px 6px 0 0;
+  min-height: 4px;
+  transition: opacity 0.2s;
+  position: relative;
+}
+.dashboard-dark-theme .activity-bar:hover {
+  opacity: 0.8;
+}
+.dashboard-dark-theme .activity-bar::after {
+  content: attr(data-value);
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.dashboard-dark-theme .activity-bar:hover::after {
+  opacity: 1;
+}
+.dashboard-dark-theme .activity-label {
+  text-align: center;
+  color: #64748b;
+  font-size: 11px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* TB MODAL */
+.tb-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+.tb-modal-content {
+  background: linear-gradient(145deg, #1a1f2e 0%, #0d1117 100%);
+  border: 2px solid #3b82f6;
+  border-radius: 20px;
+  padding: 40px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+}
+.tb-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+.tb-header h2 {
+  color: #3b82f6;
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 10px 0;
+  letter-spacing: 1px;
+}
+.tb-header p {
+  color: #94a3b8;
+  font-size: 18px;
+  margin: 0;
+}
+.tb-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+.tb-input-group {
+  display: flex;
+  flex-direction: column;
+}
+.tb-input-group label {
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.tb-input-group input {
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 12px;
+  padding: 16px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.2s;
+}
+.tb-input-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.2);
+}
+.tb-hint {
+  color: #64748b;
+  font-size: 12px;
+  margin-top: 6px;
+}
+.tb-type-selector {
+  margin-bottom: 30px;
+}
+.tb-type-selector label {
+  display: block;
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.type-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+.type-btn {
+  background: #1e293b;
+  border: 2px solid #334155;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.type-btn:hover {
+  border-color: #3b82f6;
+  background: #252f47;
+}
+.type-btn.active {
+  border-color: #3b82f6;
+  background: rgba(59,130,246,0.15);
+}
+.type-icon {
+  font-size: 32px;
+}
+.type-label {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+.tb-actions {
+  display: flex;
+  gap: 15px;
+}
+.tb-save {
+  flex: 1;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 20px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 0.1s;
+}
+.tb-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(59,130,246,0.4);
+}
+.tb-skip {
+  padding: 20px 30px;
+  background: transparent;
+  border: 2px solid #475569;
+  border-radius: 12px;
+  color: #94a3b8;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tb-skip:hover {
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+@media (max-width: 600px) {
+  .tb-grid {
+    grid-template-columns: 1fr;
+  }
+  .tb-modal-content {
+    padding: 25px;
+  }
+}
+</style>
+</head>
+<body>
+<div id="login-screen">
+ <div class="login-box">
+  <div class="login-logo">⚡</div>
+  <h2>Säljös</h2>
+  <div class="sub">Prio SäljOS — sälj till hantverkare</div>
+  <input type="text" id="login-name" placeholder="Ditt namn" onkeydown="if(event.key==='Enter')document.getElementById('login-pw').focus()" autocomplete="name">
+  <input type="password" id="login-pw" placeholder="Lösenord" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="current-password">
+  <button class="login-btn" onclick="doLogin()">Logga in</button>
+  <div class="login-err" id="login-err">Fel lösenord eller namn saknas</div>
+ </div>
+</div>
+<button id="hamburger" onclick="toggleSidebar()" style="display:none">☰</button>
+<div id="sb">
+ <div class="logo"><span style="font-size:22px">⚡</span><div class="t">Säljös</div></div>
+ <div class="seller-pill"><div class="av" id="sb-av">A</div><div><div class="nm" id="sb-nm">Andy</div><div class="rl">Sales rep</div></div></div>
+ <div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span class="sync-text" id="sync-text">Laddar...</span><button class="sync-btn" onclick="cloudSync()">Synka ↑↓</button></div>
+ <div class="sec">Huvudmeny</div>
+ <div class="ni active" onclick="go('dialer')" id="nav-dialer"><i data-lucide="zap" style="width:16px;height:16px"></i> Dialer <span class="badge" id="b-dialer">0</span></div>
+ <div class="ni" onclick="go('pipeline')" id="nav-pipeline"><i data-lucide="git-branch" style="width:16px;height:16px"></i> Pipeline <span class="badge warn" id="b-pipeline">0</span></div>
+ <div class="ni" onclick="go('leads')" id="nav-leads"><i data-lucide="users" style="width:16px;height:16px"></i> Leads <span class="badge" id="b-leads">0</span></div>
+ <div class="ni" onclick="go('dash')" id="nav-dash"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i> Dashboard</div>
+ <div class="sec">Verktyg</div>
+ <div class="ni" onclick="go('sok')" id="nav-sok"><i data-lucide="search" style="width:16px;height:16px"></i> Sök</div>
+ <div class="bottom">
+  <div class="ni" onclick="openAddModal()"><i data-lucide="plus-circle" style="width:16px;height:16px"></i> Nytt lead</div>
+  <div class="ni" onclick="go('settings')" id="nav-settings"><i data-lucide="settings" style="width:16px;height:16px"></i> Inställningar</div>
+  <div class="ni" onclick="logout()" style="color:#ef4444"><i data-lucide="log-out" style="width:16px;height:16px"></i> Logga ut</div>
+ </div>
+</div>
+<div class="main" id="main">
+ <div class="view on" id="v-dialer">
+  <div id="d-idle" style="min-height:calc(100vh - 56px);display:flex;flex-direction:column">
+   <div style="background:linear-gradient(165deg,#0c0c14 0%,#151530 50%,#1e1450 100%);border-radius:16px;padding:48px 52px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-20%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(91,95,199,.12),transparent 70%);border-radius:50%"></div>
+    <div style="position:relative;z-index:1">
+     <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:6px" id="greeting-text">God morgon</div>
+     <h1 style="font-size:32px;font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:20px" id="seller-greeting">Andy 👋</h1>
+     <div id="today-summary" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:28px"></div>
+     <button class="start-btn start-btn-g" onclick="startAutopilot()" style="font-size:16px;padding:18px 48px;border-radius:14px">
+      ▶ BÖRJA DAGEN
+     </button>
+    </div>
+   </div>
+   <div id="q-preview" style="margin-top:20px"></div>
+  </div>
+  <div id="q-list" style="display:none;"></div>
+  <div id="d-active"><div id="kk-area"></div><div id="inline-outcome" style="margin-top:16px"></div></div>
+ </div>
+ <div class="view" id="v-pipeline">
+  <div class="page-title">🤝 Pipeline</div>
+  <div class="pipeline-section"><h4>🔴 Återkomst</h4><div class="pipeline-grid" id="my-callbacks"></div></div>
+  <div class="pipeline-section"><h4>📋 Offert skickad</h4><div class="pipeline-grid" id="my-offers"></div></div>
+  <div class="pipeline-section"><h4>🤝 Demo bokad</h4><div class="pipeline-grid" id="my-demos"></div></div>
+  <div class="pipeline-section"><h4>✅ Stängda</h4><div class="pipeline-grid" id="my-closed"></div></div>
+  <div class="pipeline-section"><h4>❌ Förlorade</h4><div class="pipeline-grid" id="my-lost"></div></div>
+ </div>
+ <div class="view" id="v-leads">
+  <div class="page-title">🌊 Leads</div>
+  <div class="leads-tabs">
+   <button class="leads-tab active" id="tab-aktiva" onclick="switchLeadsTab('aktiva')">📋 Aktiva leads</button>
+   <button class="leads-tab" id="tab-prospekt" onclick="switchLeadsTab('prospekt')">🎯 Prospektpool <span id="prospekt-badge" style="background:var(--ACC);color:#fff;font-size:9px;padding:1px 6px;border-radius:6px;margin-left:4px">0</span></button>
+  </div>
+  <div id="leads-aktiva">
+   <div class="filter-row">
+    <input id="search-inp" placeholder="Sök bolagsnamn, org-nr, telefon..." oninput="filterLeads()" style="max-width:260px">
+    <input type="date" id="reg-from" onchange="filterLeads()" style="max-width:150px;width:auto">
+    <input type="date" id="reg-to" onchange="filterLeads()" style="max-width:150px;width:auto">
+    <button class="btn btn-p btn-sm" onclick="toggleTarget()">⭐ Prio</button>
+   </div>
+   <div class="filter-row" id="status-filters"></div>
+   <div class="filter-row" id="op-filters"></div>
+   <div class="card" style="padding:0;overflow-x:auto">
+    <table><thead><tr><th>Företag</th><th>Bransch</th><th>Ort</th><th>Telefon</th><th>Kontakt</th><th>Status</th><th>Poäng</th></tr></thead><tbody id="leads-tb"></tbody></table>
+   </div>
+   <div style="display:flex;justify-content:center;gap:12px;padding:12px" id="pag-row"></div>
+  </div>
+  <div id="leads-prospekt" style="display:none">
+   <div class="filter-row">
+    <input id="prospekt-search" placeholder="Sök bolagsnamn, org-nr..." oninput="renderProspekt()" style="max-width:260px">
+    <select id="prospekt-ind" onchange="renderProspekt()" style="max-width:160px;width:auto"><option value="">Alla branscher</option><option value="snickare">🪟 Snickare</option><option value="elektriker">⚡ Elektriker</option><option value="vvs">🔧 VVS</option><option value="målare">🎨 Målare</option><option value="plåtslagare">🔩 Plåtslagare</option><option value="golvläggare">🏠 Golvläggare</option><option value="takläggare">🔧 Takläggare</option><option value="bygg">🏗️ Övrigt bygg</option></select>
+    <select id="prospekt-ort" onchange="renderProspekt()" style="max-width:160px;width:auto"><option value="">Alla orter</option></select>
+    <select id="prospekt-status" onchange="renderProspekt()" style="max-width:140px;width:auto"><option value="">Alla status</option><option value="ny">Ny</option><option value="ringd">Ringd</option><option value="intresserad">Intresserad</option><option value="ej_intresserad">Ej intresserad</option><option value="återkom">Återkom</option></select>
+    <button class="btn btn-p btn-sm" onclick="aktivera20()">⚡ Aktivera 20 st → Dialer</button>
+   </div>
+   <div class="card" style="padding:0;overflow-x:auto">
+    <table><thead><tr><th><input type="checkbox" id="prospekt-all" onchange="prospektCheckAll(this.checked)" style="width:auto"></th><th>Företag</th><th>Org-nr</th><th>Bransch</th><th>Ort</th><th>Registrerat</th><th></th></tr></thead><tbody id="prospekt-tb"></tbody></table>
+   </div>
+   <div style="display:flex;justify-content:space-between;align-items:center;padding:12px"><span id="prospekt-count" style="font-size:12px;color:var(--MUTED)"></span><div style="display:flex;gap:8px"><button class="btn btn-bv btn-sm" onclick="importPrioFile()">📁 Importera prio_leads.txt</button><button class="btn btn-g btn-sm" onclick="aktiveraValda()">✅ Aktivera valda → Dialer</button></div></div>
+  </div>
+ </div>
+ 
+ <!-- NYTT: Mörkt Dashboard -->
+ <div class="view dashboard-dark-theme" id="v-dash">
+  <div class="dash-header">
+   <h1 class="dash-title">📊 PRIO DASHBOARD</h1>
+   <span class="dash-date" id="dash-date"></span>
+  </div>
+  
+  <div class="kpi-grid">
+   <div class="kpi-card samtal" style="grid-column:span 2">
+    <div class="kpi-label">🔥 Samtal Idag</div>
+    <div class="kpi-value" style="font-size:72px" id="calls-value">0</div>
+    <div class="goal-container" style="margin-top:12px">
+     <div class="goal-bar"><div class="goal-progress" id="calls-progress" style="width:0%"></div></div>
+     <div class="goal-text" id="calls-goal-text">Mål: 50 samtal</div>
+    </div>
+   </div>
+   <div class="kpi-card ordrar">
+    <div class="kpi-label">📞 Demos Bokade</div>
+    <div class="kpi-value" id="demos-value">0</div>
+    <div class="kpi-sub" id="demos-sub">Denna vecka</div>
+   </div>
+   <div class="kpi-card offerter">
+    <div class="kpi-label">📋 Offerter Ute</div>
+    <div class="kpi-value" id="offers-value">0</div>
+    <div class="kpi-sub">Väntar på svar</div>
+   </div>
+   <div class="kpi-card tb">
+    <div class="kpi-label">💰 Stängda Kunder</div>
+    <div class="kpi-value" id="closed-value">0</div>
+    <div class="kpi-sub" id="closed-sub">Totalt</div>
+   </div>
+   <div class="kpi-card aterkomster">
+    <div class="kpi-label">🔔 Återkomster</div>
+    <div class="kpi-value" id="reminders-value">0</div>
+    <div class="kpi-sub" id="reminders-text">Inga väntande</div>
+   </div>
+  </div>
+
+  <div class="activity-section">
+   <h2 class="section-title"><span>📈</span> Aktivitet Senaste 14 Dagarna</h2>
+   <div class="activity-chart" id="activity-chart"></div>
+  </div>
+ </div>
+ 
+ <div class="view" id="v-sok">
+  <div class="page-title">🔍 Sök</div>
+  <input id="sok-inp" placeholder="Sök på bolagsnamn, org-nr eller telefon..." oninput="doSearch(this.value)" style="font-size:15px;padding:14px 20px;margin-bottom:20px">
+  <div id="sok-res"></div>
+ </div>
+ <div class="view" id="v-bolagsverket">
+  <div class="page-title">🏛️ Bolagsverket</div>
+  <div class="card" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#bfdbfe;margin-bottom:20px">
+   <div style="display:flex;align-items:center;gap:14px">
+    <div style="font-size:32px">🏛️</div>
+    <div><div style="font-weight:800;font-size:14px;color:#1e40af">Direkt kopplad till Bolagsverket via server-API</div><div style="font-size:12px;color:#3b82f6;margin-top:3px">Sök nyregistrerade bolag → importera till Prospektpool</div></div>
+    <div id="bv-api-indicator" style="margin-left:auto;font-size:11px;padding:6px 12px;border-radius:8px;background:#dbeafe;color:#1e40af;font-weight:600">Kontrollerar...</div>
+   </div>
+  </div>
+  <div class="settings-section"><h4>🏷️ Välj branscher (SNI-koder)</h4><div class="sni-grid" id="sni-grid"></div></div>
+  <div class="settings-section">
+   <h4>🔍 Sökfilter</h4>
+   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+    <div><label style="font-size:11px;color:var(--MUTED);font-weight:600;display:block;margin-bottom:4px">Registrerat från</label><input type="date" id="bv-from"></div>
+    <div><label style="font-size:11px;color:var(--MUTED);font-weight:600;display:block;margin-bottom:4px">Registrerat till</label><input type="date" id="bv-to"></div>
+    <div><label style="font-size:11px;color:var(--MUTED);font-weight:600;display:block;margin-bottom:4px">Län</label><select id="bv-county"><option value="">Alla län</option><option value="M">Skåne</option><option value="O">Västra Götaland</option><option value="AB">Stockholms län</option><option value="C">Uppsala</option><option value="D">Södermanland</option><option value="E">Östergötland</option><option value="F">Jönköping</option><option value="N">Halland</option><option value="T">Örebro</option><option value="U">Västmanland</option><option value="W">Dalarna</option><option value="X">Gävleborg</option><option value="AC">Västerbotten</option><option value="BD">Norrbotten</option></select></div>
+    <div><label style="font-size:11px;color:var(--MUTED);font-weight:600;display:block;margin-bottom:4px">Bolagsform</label><select id="bv-form"><option value="">Alla</option><option value="AB">Aktiebolag</option><option value="HB">Handelsbolag</option><option value="EF">Enskild firma</option></select></div>
+    <div><label style="font-size:11px;color:var(--MUTED);font-weight:600;display:block;margin-bottom:4px">Max resultat</label><select id="bv-limit"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option><option value="200">200</option></select></div>
+    <div><label style="font-size:11px;color:var(--MUTED);font-weight:600;display:block;margin-bottom:4px">Tilldela operatör</label><select id="bv-op"><option>Okänd</option><option>Telenor</option><option>Tre</option><option>Telia</option><option>Tele2</option></select></div>
+   </div>
+   <div style="display:flex;gap:10px;align-items:center">
+    <button class="btn btn-bv" onclick="searchBV()" id="bv-btn">🔍 Sök i Bolagsverket</button>
+    <button class="btn btn-o" onclick="bvCheckAll(true)">☑️ Välj alla</button>
+    <button class="btn btn-g btn-sm" onclick="importSelectedBV()" id="bv-import-btn" style="display:none">⬇️ Importera valda</button>
+    <span id="bv-status" style="font-size:12px"></span>
+   </div>
+  </div>
+  <div id="bv-results"></div>
+ </div>
+ <div class="view" id="v-settings">
+  <div class="page-title">⚙️ Inställningar</div>
+  <div class="settings-section"><h4>🎯 Dagligt samtalsmål</h4><div style="display:flex;align-items:center;gap:12px"><input type="number" id="daily-goal" value="50" min="1" max="500" style="max-width:100px" oninput="localStorage.setItem('saljos_goal',this.value);renderDash()"><span style="font-size:12px;color:var(--MUTED)">samtal per dag</span></div></div>
+  <div class="settings-section"><h4>🔌 API-status</h4><button class="btn btn-o btn-sm" onclick="checkAllApis()" style="margin-bottom:12px">🔄 Kontrollera alla</button><div id="api-status-grid" style="display:flex;flex-direction:column;gap:8px"><div class="status-info">Klicka "Kontrollera alla".</div></div></div>
+  <div class="settings-section"><h4>💾 Datahantering</h4><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-p" onclick="cloudSync()">☁️ Synka nu</button><button class="btn btn-o" onclick="exportData()">⬇️ Exportera backup</button><button class="btn btn-o" onclick="importDataFile()">⬆️ Återställ från backup</button><button class="btn btn-r" onclick="clearAllData()" style="margin-left:auto">🗑️ Rensa lokal data</button></div></div>
+  <div class="settings-section"><h4>🔐 Ändra lösenord</h4><div class="setting-row"><label>Nuvarande lösenord</label><input type="password" id="s-pw-old"></div><div class="setting-row"><label>Nytt lösenord</label><input type="password" id="s-pw-new" placeholder="Minst 6 tecken"></div><button class="btn btn-p btn-sm" style="margin-top:8px" onclick="changePw()">Ändra</button><div id="pw-status" style="margin-top:8px;font-size:12px"></div></div>
+ </div>
+</div>
+
+<div id="add-modal" class="overlay" style="display:none">
+ <div class="modal">
+  <h3>Lägg till nytt lead</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Bolagsnamn*</label><input id="al-co"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Org-nummer</label><input id="al-org"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Kontaktperson</label><input id="al-con"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Telefon</label><input id="al-ph"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">E-post</label><input id="al-em"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Operatör</label><select id="al-op"><option>Okänd</option><option>Telenor</option><option>Tre</option><option>Telia</option><option>Tele2</option></select></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Abonnemang</label><input id="al-plan"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Pris (kr/mån)</label><input id="al-pr"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Bindningstid slutar</label><input id="al-bind" type="date"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Webbplats</label><input id="al-web"></div>
+   <div style="grid-column:1/-1"><label style="font-size:11px;color:var(--MUTED);font-weight:600">Bransch</label><select id="al-industry"><option value="">-- Auto-detektera --</option><option value="åkeri">🚛 Åkeri/Transport</option><option value="måleri">🎨 Måleri</option><option value="bygg">🏗️ Bygg</option><option value="logistik">📦 Logistik</option><option value="vvs">🔧 VVS</option><option value="el">⚡ El</option><option value="annat">🏢 Övrigt</option></select></div>
+  </div>
+  <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-o" onclick="closeAddModal()">Avbryt</button><button class="btn btn-p" onclick="addLead()">Spara lead</button></div>
+ </div>
+</div>
+
+<div id="import-modal" class="overlay" style="display:none">
+ <div class="modal">
+  <h3>Importera leads</h3>
+  <div style="margin-bottom:14px"><label style="font-size:11px;color:var(--MUTED);font-weight:600;display:block;margin-bottom:4px">Operatör</label><select id="imp-op" style="max-width:200px"><option>Okänd</option><option>Telenor</option><option>Tre</option><option>Telia</option><option>Tele2</option></select></div>
+  <div style="margin-bottom:14px"><label style="font-size:11px;color:var(--MUTED);font-weight:600;display:block;margin-bottom:4px">Klistra in (tab-separerad)</label><textarea id="imp-paste" placeholder="Orgnr TAB Telefon TAB Namn TAB Startdatum TAB Slutdatum TAB Plan" style="height:120px;font-size:12px;resize:vertical;font-family:monospace"></textarea></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-o" onclick="closeImport()">Avbryt</button><button class="btn btn-p" onclick="doImport()">Importera</button></div>
+ </div>
+</div>
+
+<!-- TB MODAL -->
+<div id="tb-modal" class="tb-modal-overlay" style="display:none;">
+ <div class="tb-modal-content">
+  <div class="tb-header">
+   <h2>🎯 NY AFFÄR REGISTRERAD</h2>
+   <p id="tb-company-name">Företagsnamn</p>
+  </div>
+  <div class="tb-grid">
+   <div class="tb-input-group">
+    <label>TB (Provision) kr</label>
+    <input type="number" id="tb-amount" placeholder="0" autofocus>
+    <span class="tb-hint">Din provision denna affär</span>
+   </div>
+   <div class="tb-input-group">
+    <label>Nyteckningar</label>
+    <input type="number" id="tb-nyteck" placeholder="0" min="0">
+    <span class="tb-hint">Nya abonnemang</span>
+   </div>
+   <div class="tb-input-group">
+    <label>Förlängningar</label>
+    <input type="number" id="tb-forlang" placeholder="0" min="0">
+    <span class="tb-hint">Befintliga som förlängs</span>
+   </div>
+  </div>
+  <div class="tb-type-selector">
+   <label>Affärstyp</label>
+   <div class="type-buttons">
+    <button type="button" class="type-btn active" data-type="nyteck" onclick="selectType('nyteck')">
+     <span class="type-icon">✨</span>
+     <span class="type-label">Nyteckning</span>
+    </button>
+    <button type="button" class="type-btn" data-type="forlangning" onclick="selectType('forlangning')">
+     <span class="type-icon">🔄</span>
+     <span class="type-label">Förlängning</span>
+    </button>
+   </div>
+  </div>
+  <div class="tb-actions">
+   <button class="tb-save" onclick="saveTB()">
+    <span class="btn-icon">💾</span> SPARA AFFÄR
+   </button>
+   <button class="tb-skip" onclick="skipTB()">Hoppa över</button>
+  </div>
+ </div>
+</div>
+
+<div id="fab-area" style="display:none">
+ <div class="fab-container">
+  <button class="fab-skip" onclick="skipLead()">⏭️ Hoppa över</button>
+  <button class="fab-outcome" onclick="toggleOutcomePanel()">📋 Utfall</button>
+ </div>
+</div>
+<div id="outcome-overlay" onclick="closeOutcomePanel()"></div>
+<div id="panel-outcome" class="float-panel" style="display:none">
+ <div class="fp-header">Hur gick samtalet? <button onclick="closeOutcomePanel()">✕</button></div>
+ <div class="fp-body">
+  <div id="outcome-btns"></div>
+  <div style="margin-top:12px"><div style="font-size:10px;font-weight:700;color:var(--MUTED);text-transform:uppercase;margin-bottom:5px">Anteckningar</div><textarea id="note-ta" style="height:75px;resize:vertical;font-size:12px" oninput="saveNote()"></textarea></div>
+  <div style="margin-top:12px"><div style="font-size:10px;font-weight:700;color:var(--MUTED);text-transform:uppercase;margin-bottom:5px">Historik</div><div id="hist-list"></div></div>
+ </div>
+</div>
+<div id="progress-bar-area" style="display:none;position:fixed;bottom:60px;left:var(--SBW);right:0;background:linear-gradient(135deg,#0c0c14,#151530);padding:10px 24px;z-index:49;align-items:center;gap:16px;transition:left .25s">
+ <div style="flex:1;height:6px;background:#1e293b;border-radius:3px;overflow:hidden"><div id="progress-fill" style="height:100%;background:linear-gradient(90deg,var(--ACC),var(--G));border-radius:3px;transition:width .4s;width:0%"></div></div>
+ <div style="display:flex;gap:16px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap">
+  <span>Samtal: <span id="p-calls">0</span></span>
+  <span style="color:#f59e0b">Offerter: <span id="p-offers">0</span></span>
+  <span style="color:var(--G)">Ordrar: <span id="p-orders">0</span></span>
+  <span style="color:var(--MUTED);font-weight:500"><span id="p-pos">0</span> av <span id="p-total">0</span></span>
+ </div>
+</div>
+<div id="bcb" style="display:none">
+ <button class="call-btn cbmute" onclick="toggleMute()" id="mute-btn">🎤</button>
+ <button class="call-btn cbhang" onclick="hangUp()">📞</button>
+ <span class="divider"></span>
+ <span id="calling-lbl" class="calling-lbl"></span>
+ <button class="call-btn cbring" onclick="makeCall()" style="margin-left:8px">📞</button>
+</div>
+<div id="qv-overlay" onclick="closeQuickView()"></div>
+<div id="quick-view" class="quick-view">
+ <div class="qv-header"><div><h4 id="qv-name">—</h4><div id="qv-org" style="font-size:11px;color:#7c3aed;margin-top:2px">—</div></div><button onclick="closeQuickView()">✕</button></div>
+ <div class="qv-body">
+  <div class="qv-row"><span class="label">Bransch</span><span class="val" id="qv-ind">—</span></div>
+  <div class="qv-row"><span class="label">Telefon</span><span class="val" id="qv-phone">—</span></div>
+  <div class="qv-links" id="qv-links"></div>
+  <div><label style="font-size:10px;color:var(--MUTED);font-weight:700;text-transform:uppercase;display:block;margin-bottom:4px">Lägg till telefon</label><div style="display:flex;gap:6px"><input id="qv-phone-input" placeholder="07X-XXX XX XX" style="font-size:12px"><button class="btn btn-g btn-sm" onclick="saveQVPhone()">Spara</button></div></div>
+ </div>
+ <div class="qv-footer"><button class="btn btn-p" style="flex:1" onclick="aktiveraFromQV()">⚡ Aktivera → Dialer</button><button class="btn btn-r btn-sm" onclick="removeProspekt()">🗑️</button></div>
+</div>
+<div id="notif-area"></div>
+
+<script>
+const TARGET=['snickare','elektriker','vvs','målare','plåtslagare','golvläggare','takläggare','bygg'];
+const LOCK_MIN=120;
+const DEFAULT_PW='saljos2026';
+let currentSeller=sessionStorage.getItem('saljos_seller')||'Andy';
+const SNI=[
+ {code:'43210',label:'⚡ Elinstallation',ind:'elektriker'},{code:'43220',label:'🔧 VVS-installation',ind:'vvs'},
+ {code:'43340',label:'🎨 Målning & glasarbeten',ind:'målare'},{code:'43120',label:'⛏️ Mark- & grundarbeten',ind:'bygg'},
+ {code:'41200',label:'🏗️ Byggande av bostäder',ind:'bygg'},{code:'43110',label:'🏠 Rivning',ind:'bygg'},
+ {code:'43310',label:'🧱 Puts & fasad',ind:'bygg'},{code:'43320',label:'🪟 Snickeri & montering',ind:'snickare'},
+ {code:'43330',label:'🏠 Golvläggning',ind:'golvläggare'},{code:'43910',label:'🔩 Takarbeten',ind:'takläggare'},
+ {code:'43390',label:'🔧 Övriga bygginstallationer',ind:'bygg'},{code:'25120',label:'🔩 Plåtslageri',ind:'plåtslagare'},
+];
+const SKANE_KOMMUNER=['Malmö','Helsingborg','Lund','Landskrona','Kristianstad','Ängelholm','Eslöv','Trelleborg','Ystad','Hässleholm','Höganäs','Bjuv','Staffanstorp','Lomma','Vellinge','Kävlinge','Svalöv','Simrishamn','Sjöbo','Tomelilla','Osby','Klippan','Åstorp','Båstad','Perstorp','Bromölla','Örkelljunga','Höör','Hörby','Skurup','Svedala','Burlöv'];
+const OUTCOMES={
+ 'Inget svar':[{t:'Ej svar – åter om 2h',h:2,u:'h',ret:true},{t:'Röstbrevlåda – åter imorgon',h:24,u:'h',ret:true},{t:'Upptaget – åter om 1h',h:1,u:'h',ret:true}],
+ 'Nej':[{t:'Inte intresserad',h:90,u:'d',ret:false},{t:'Kanske senare – 30d',h:30,u:'d',ret:false},{t:'Spärra – RING ALDRIG',h:0,u:'bl',ret:false}],
+ 'Kvalificering':[{t:'Ring senare (välj datum)',h:0,u:'cb',ret:true},{t:'Vill ha mer info – åter 3d',h:3,u:'d',ret:true},{t:'Skicka offert',h:0,u:'offert',ret:false},{t:'Demo bokad',h:0,u:'apg',ret:false}],
+ 'Affär':[{t:'✅ Stängd – kund!',h:0,u:'order',ret:false,cls:'green'},{t:'📄 Offert skickad',h:0,u:'offert',ret:false,cls:'green'},{t:'❌ Förlorad',h:0,u:'lost',ret:false,cls:'red'}],
+ 'Övrigt':[{t:'Stäng utan utfall',h:0,u:'none',ret:true}],
+};
+const SN={ny:'Ny',prospekt:'Prospekt',ring_senare:'Återkomst',offert:'Offert skickad',order:'Stängd',inte_intresserad:'Förlorad',avslutad:'Avslutad',ej_svar:'Ej svar',blacklist:'Spärrad',apg:'Demo bokad'};
+
+let leads=[],dialerQ=[],dialerIdx=-1,dialerOn=false;
+let sessionCalls=0,sessionOffers=0,sessionOrders=0;
+let callTimer=null,muted=false,callingPhone='';
+let panelOpen=false,curPage=0;
+const PAGE=50;
+let stFilter='alla',opFilter='alla',showTarget=false;
+let selSNI=new Set(),bvResults=[];
+let qvLeadId=null;
+let sbVisible=true;
+let activeLeadsTab='aktiva';
+let tbLeadId=null;
+
+function toggleDialerFilter(){const f=document.getElementById('dialer-filter');f.style.display=f.style.display==='none'?'block':'none';}
+function clearDialerFilter(){document.getElementById('df-op').value='';document.getElementById('df-ind').value='';document.getElementById('df-bind-min').value='';document.getElementById('df-bind-max').value='';document.getElementById('df-status').value='';renderDialer();}
+function toggleSidebar(){
+ sbVisible=!sbVisible;
+ const sb=document.getElementById('sb'),main=document.getElementById('main'),bcb=document.getElementById('bcb'),hb=document.getElementById('hamburger');
+ if(sbVisible){sb.classList.remove('hidden');main.classList.remove('expanded');bcb.classList.remove('expanded');hb.style.display='none';}
+ else{sb.classList.add('hidden');main.classList.add('expanded');bcb.classList.add('expanded');hb.style.display='';hb.style.left='12px';}
+}
+function migrateOldData(){
+ const oldKey='saljos_leads_v2';
+ const newKey=localKey();
+ const oldData=localStorage.getItem(oldKey);
+ const newData=localStorage.getItem(newKey);
+ if(oldData && !newData){localStorage.setItem(newKey,oldData);console.log('Migrerade '+JSON.parse(oldData).length+' leads till '+newKey);}
+}
+function updateSellerUI(){
+ const raw=currentSeller||'andy';
+ const n=raw.charAt(0).toUpperCase()+raw.slice(1);
+ const av=n.charAt(0);
+ const nm=document.getElementById('sb-nm');
+ const avEl=document.getElementById('sb-av');
+ if(nm)nm.textContent=n;
+ if(avEl)avEl.textContent=av;
+ document.title='Säljös ⚡ — '+n;
+}
+function init(){
+ if(window.lucide)lucide.createIcons();
+ if(sessionStorage.getItem('saljos_auth')==='1'){
+  currentSeller=sessionStorage.getItem('saljos_seller')||'Andy';
+  document.getElementById('login-screen').style.display='none';
+  updateSellerUI();
+  startApp();
+ }
+}
+function doLogin(){
+ const name=document.getElementById('login-name').value.trim();
+ const pw=document.getElementById('login-pw').value;
+ const stored=localStorage.getItem('saljos_pw')||DEFAULT_PW;
+ if(!name){document.getElementById('login-err').style.display='block';return;}
+ if(pw===stored){
+  sessionStorage.setItem('saljos_auth','1');
+  sessionStorage.setItem('saljos_seller',name.toLowerCase().trim());
+  currentSeller=name.toLowerCase().trim();
+  document.getElementById('login-screen').style.display='none';
+  updateSellerUI();
+  startApp();
+ }else{document.getElementById('login-err').style.display='block';document.getElementById('login-pw').value='';}
+}
+function logout(){cloudPush().catch(()=>{});sessionStorage.clear();location.reload();}
+async function startApp(){
+ migrateOldData();loadLocal();updateBadges();renderDialer();initSNI();setBVDates();
+ const savedGoal=localStorage.getItem('saljos_goal');
+ if(savedGoal)document.getElementById('daily-goal').value=savedGoal;
+ setInterval(lockCleanup,60000);
+ setInterval(()=>saveData(),30000);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(panelOpen)closeOutcomePanel();if(qvLeadId)closeQuickView();if(document.getElementById('tb-modal').style.display==='flex')skipTB();}});
+ await cloudPull();updateBadges();renderDialer();
+}
+async function cloudPull(){
+ setSyncState('busy','Hämtar...');
+ const localRaw=localStorage.getItem(localKey());
+ const localLeads=localRaw?JSON.parse(localRaw):[];
+ try{
+  const res=await fetch('/api/sync?seller='+encodeURIComponent(currentSeller));if(!res.ok)throw new Error(res.status);
+  const data=await res.json();
+  if(data.record&&data.record.leads&&data.record.leads.length>0){
+   leads=data.record.leads;migrateLeads();saveLocal();setSyncState('ok','Synkad '+new Date().toLocaleTimeString('sv-SE'));
+   return;
+  }
+  if(localLeads.length){leads=localLeads;migrateLeads();setSyncState('ok','Lokal data ('+leads.length+')');cloudPush();return;}
+  leads=[];saveLocal();setSyncState('ok','Inga leads ännu');
+ }catch(e){
+  if(localLeads.length){leads=localLeads;migrateLeads();setSyncState('ok','Lokal data ('+leads.length+')');}
+  else{leads=[];saveLocal();setSyncState('err','Kunde inte ansluta');}
+ }
+}
+async function cloudPush(){
+ setSyncState('busy','Sparar...');
+ try{const res=await fetch('/api/sync',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({leads,seller:currentSeller,updatedAt:new Date().toISOString()})});if(!res.ok)throw new Error();saveLocal();setSyncState('ok','Synkad '+new Date().toLocaleTimeString('sv-SE'));}
+ catch(e){saveLocal();setSyncState('err','Moln ej nåbart');}
+}
+async function cloudSync(){await cloudPull();await cloudPush();}
+function setSyncState(s,t){const d=document.getElementById('sync-dot'),tx=document.getElementById('sync-text');if(!d)return;d.className='sync-dot '+s;if(tx)tx.textContent=t;}
+function localKey(){return 'saljos_leads_'+currentSeller.toLowerCase().trim();}
+function loadLocal(){try{const d=localStorage.getItem(localKey());if(d){leads=JSON.parse(d);migrateLeads();}}catch(e){}}
+function saveLocal(){try{localStorage.setItem(localKey(),JSON.stringify(leads));}catch(e){}}
+function saveData(){saveLocal();cloudPush();}
+function migrateLeads(){leads.forEach(l=>{if(!l.lockedBy)l.lockedBy=null;if(!l.lockedAt)l.lockedAt=null;if(!l.industry)l.industry=detectIndustry(l.company);if(!l.history)l.history=[];if(!l.subs)l.subs=[];if(!l.seller)l.seller=null;if(!l.status)l.status='ny';if(!l.tb_amount)l.tb_amount=0;if(!l.nyteck_count)l.nyteck_count=0;if(!l.forlang_count)l.forlang_count=0;if(!l.deal_type)l.deal_type=null;});}
+async function checkAllApis(){
+ const grid=document.getElementById('api-status-grid');grid.innerHTML='<div><span class="spinner"></span> Kontrollerar...</div>';
+ const checks=[{name:'☁️ Supabase Sync',url:'/api/sync'},{name:'🏛️ Bolagsverket',url:'/api/bv?_endpoint=&maxAntal=1'},{name:'📡 PTS',url:'/api/pts?number=0701234567'}];
+ let html='';
+ for(const c of checks){try{const r=await fetch(c.url,{signal:AbortSignal.timeout(6000)});if(r.ok||r.status===400)html+=`<div class="status-ok">✅ ${c.name} — Aktiv</div>`;else if(r.status===500){const d=await r.json().catch(()=>({}));html+=`<div class="status-err">❌ ${c.name} — ${d.error||'Env var saknas'}</div>`;}else html+=`<div style="background:#fef9c3;color:#854d0e;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:12px">⚠️ ${c.name} — HTTP ${r.status}</div>`;}catch(e){html+=`<div class="status-err">❌ ${c.name} — Inte nåbar</div>`;}}
+ grid.innerHTML=html;
+}
+function initSNI(){
+ const grid=document.getElementById('sni-grid');if(!grid)return;
+ grid.innerHTML=SNI.map(s=>`<div class="sni-chip ${TARGET.includes(s.ind)?'on':''}" id="sni-${s.code}" onclick="toggleSNI('${s.code}','${s.ind}')"><div class="chk" id="chk-${s.code}">${TARGET.includes(s.ind)?'✓':''}</div><div><div style="font-size:12px;font-weight:600">${s.label}</div><div style="font-size:10px;color:var(--MUTED)">SNI ${s.code}</div></div></div>`).join('');
+ SNI.filter(s=>TARGET.includes(s.ind)).forEach(s=>selSNI.add(s.code));
+ checkBVStatus();
+}
+async function checkBVStatus(){const ind=document.getElementById('bv-api-indicator');if(!ind)return;try{const r=await fetch('/api/bv?_endpoint=&maxAntal=1');if(r.status===500){ind.textContent='❌ BV_API_KEY saknas';ind.style.background='#fee2e2';ind.style.color='#991b1b';}else{ind.textContent='✅ API konfigurerad';ind.style.background='#d1fae5';ind.style.color='#065f46';}}catch{ind.textContent='⚠️ Ej tillgänglig';}}
+function toggleSNI(code){if(selSNI.has(code)){selSNI.delete(code);document.getElementById('sni-'+code)?.classList.remove('on');document.getElementById('chk-'+code).textContent='';}else{selSNI.add(code);document.getElementById('sni-'+code)?.classList.add('on');document.getElementById('chk-'+code).textContent='✓';}}
+function setBVDates(){setTimeout(()=>{const now=new Date(),ago=new Date(now);ago.setMonth(ago.getMonth()-1);const f=document.getElementById('bv-from'),t=document.getElementById('bv-to');if(f)f.value=ago.toISOString().slice(0,10);if(t)t.value=now.toISOString().slice(0,10);},100);}
+async function searchBV(){
+ if(!selSNI.size){showNotif('Välj minst en bransch','');return;}
+ const btn=document.getElementById('bv-btn'),statusEl=document.getElementById('bv-status'),resultsEl=document.getElementById('bv-results');
+ btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Söker...';statusEl.innerHTML='';
+ const params=new URLSearchParams();[...selSNI].forEach(s=>params.append('sniKod',s));
+ const from=document.getElementById('bv-from').value,to=document.getElementById('bv-to').value,county=document.getElementById('bv-county').value,form=document.getElementById('bv-form').value,limit=document.getElementById('bv-limit').value;
+ if(from)params.append('registreringsdatumFran',from);if(to)params.append('registreringsdatumTill',to);if(county)params.append('lan',county);if(form)params.append('bolagsform',form);params.append('maxAntal',limit);
+ try{
+  const res=await fetch('/api/bv?'+params.toString());const data=await res.json();
+  if(!res.ok){resultsEl.innerHTML='<div class="card" style="background:#fff7ed;padding:24px;text-align:center"><div style="font-size:32px">🔑</div><div style="font-weight:800;margin:8px 0">BV_API_KEY saknas</div><button class="btn btn-p" onclick="go(\'settings\')">⚙️ Inställningar</button></div>';return;}
+  bvResults=parseBV(data);renderBV();statusEl.innerHTML='<span style="color:var(--G);font-weight:600">✅ '+bvResults.length+' bolag</span>';document.getElementById('bv-import-btn').style.display='inline-block';
+ }catch(e){resultsEl.innerHTML='<div class="card" style="color:var(--RD);padding:20px">Fel: '+esc(e.message)+'</div>';}
+ finally{btn.disabled=false;btn.innerHTML='🔍 Sök i Bolagsverket';}
+}
+function parseBV(data){let items=[];if(Array.isArray(data))items=data;else if(data.foretagsinformation)items=data.foretagsinformation;else if(data.foretagsinformationer)items=data.foretagsinformationer;else if(data.result)items=data.result;else if(data.hits)items=data.hits;return items.map((c,i)=>({_idx:i,orgnr:c.organisationsnummer||c.orgnr||'',company:c.foretagsnamn||c.namn||c.name||'',phone:c.telefon||'',address:c.postort||c.ort||'',regDate:c.registreringsdatum||'',form:c.bolagsform||'AB',industry:detectIndustry(c.foretagsnamn||c.namn||'')})).filter(c=>c.company||c.orgnr);}
+function renderBV(){const container=document.getElementById('bv-results');const existOrgs=new Set(leads.map(l=>normOrg(l.orgnr)));container.innerHTML='<div class="settings-section"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h4 style="margin-bottom:0">Resultat — '+bvResults.length+' bolag</h4><div style="display:flex;gap:8px"><button class="btn btn-o btn-sm" onclick="bvCheckAll(true)">Välj alla</button><button class="btn btn-g btn-sm" onclick="importSelectedBV()">⬇️ Importera</button></div></div><div class="bv-result-table"><table><thead><tr><th><input type="checkbox" onchange="bvCheckAll(this.checked)" style="width:auto"></th><th>Bolagsnamn</th><th>Org-nr</th><th>Bransch</th><th>Ort</th><th></th></tr></thead><tbody>'+bvResults.map(r=>{const dup=existOrgs.has(normOrg(r.orgnr));return'<tr style="'+(dup?'opacity:.45':'')+'"><td><input type="checkbox" id="bv-cb-'+r._idx+'" class="bv-checkbox" '+(!dup?'checked':'')+' '+(dup?'disabled':'')+'></td><td><strong>'+esc(r.company)+'</strong>'+(TARGET.includes(r.industry)?' <span class="priority-target">⭐</span>':'')+'</td><td style="font-size:11px;font-family:monospace">'+esc(r.orgnr)+'</td><td><span class="industry-badge">'+getIndLabel(r.industry)+'</span></td><td style="font-size:12px">'+esc(r.address)+'</td><td><span class="st-badge '+(dup?'st-avslutad':'st-ny')+'">'+(dup?'Finns':'Ny')+'</span></td></tr>';}).join('')+'</tbody></table></div></div>';}
+function bvCheckAll(val){document.querySelectorAll('.bv-checkbox:not(:disabled)').forEach(c=>c.checked=val);}
+function importSelectedBV(){const op=document.getElementById('bv-op').value;const existOrgs=new Set(leads.map(l=>normOrg(l.orgnr)));let n=0;bvResults.forEach(r=>{const cb=document.getElementById('bv-cb-'+r._idx);if(!cb||!cb.checked||cb.disabled)return;if(existOrgs.has(normOrg(r.orgnr)))return;leads.push({id:nextId(),company:r.company,contact:'',phone:'',orgnr:r.orgnr,operator:op,email:'',plan:'',priceOrig:'',priceDiscount:'',priceFinal:'',bindingDate:null,industry:r.industry||detectIndustry(r.company),portingDate:null,nextCallDate:null,status:op==='Okänd'?'prospekt':'ny',note:'',vdName:'',vdPhone:'',vdEmail:'',website:'',offerSent:false,offerOpened:false,history:[],lockedBy:null,lockedAt:null,seller:null,subs:[],tb_amount:0,nyteck_count:0,forlang_count:0,deal_type:null});n++;});saveData();updateBadges();renderBV();if(n)showNotif(n+' leads importerade → Prospektpool','🏛️');else alert('Inga nya leads.');}
+async function ptsLookup(){const num=document.getElementById('pts-num')?.value.trim();if(!num)return;const area=document.getElementById('pts-result');area.innerHTML='<div><span class="spinner"></span></div>';try{const r=await fetch('/api/pts?number='+encodeURIComponent(num));const d=await r.json();if(!r.ok)throw new Error(d.error||r.status);const opColors={Telia:'#5b21b6',Telenor:'#1e40af',Tre:'#5B0FA0',Tele2:'#1e3a8a'};const op=d.operatör||'?',clr=opColors[op]||'#374151';area.innerHTML='<div class="pts-card"><div style="font-size:22px;font-weight:800">'+fmtPhone(d.nummer||'')+'</div><div class="pts-op-badge" style="background:'+clr+'22;color:'+clr+'">📡 '+esc(op)+'</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px"><div><div style="font-size:10px;color:var(--MUTED);font-weight:700">Operatör</div><div style="font-size:15px;font-weight:700">'+esc(op)+'</div></div><div><div style="font-size:10px;color:var(--MUTED);font-weight:700">Port.</div><div style="font-size:15px;font-weight:700">'+esc(d.portningsdatum||'—')+'</div></div><div><div style="font-size:10px;color:var(--MUTED);font-weight:700">Typ</div><div style="font-size:15px;font-weight:700">'+esc(d.nummertyp||'—')+'</div></div></div>'+(d.nix?'<div style="margin-top:10px;background:#fee2e2;color:#991b1b;padding:6px 12px;border-radius:6px;font-size:12px">⛔ NIX</div>':'')+'<button class="btn btn-g btn-sm" style="margin-top:14px" onclick="addFromPts(\''+esc(normPhone(d.nummer||''))+'\')">➕ Lägg till som lead</button></div>';}catch(e){area.innerHTML='<div style="color:var(--MUTED);font-size:12px">Fel: '+esc(e.message)+' — <a href="https://nummer.pts.se/NbrSearch" target="_blank">Sök manuellt</a></div>';}}
+function addFromPts(ph){document.getElementById('al-ph').value=ph;openAddModal();}
+function lockLead(id){const l=leads.find(l=>l.id===id);if(!l)return false;if(l.lockedBy&&l.lockedBy!==currentSeller&&!lockExp(l))return false;l.lockedBy=currentSeller;l.lockedAt=new Date().toISOString();saveLocal();return true;}
+function unlockLead(id){const l=leads.find(l=>l.id===id);if(l&&l.lockedBy===currentSeller){l.lockedBy=null;l.lockedAt=null;saveLocal();}}
+function lockExp(l){return !l.lockedAt||(Date.now()-new Date(l.lockedAt).getTime())/60000>LOCK_MIN;}
+function lockStatus(l){if(!l.lockedBy)return 'free';if(lockExp(l))return 'exp';if(l.lockedBy===currentSeller)return 'mine';return 'other';}
+function lockCleanup(){let ch=false;leads.forEach(l=>{if(l.lockedBy&&lockExp(l)){l.lockedBy=null;l.lockedAt=null;ch=true;}});if(ch)saveLocal();}
+function scoreLead(l){
+ if(l.status==='prospekt')return -1;
+ if(!l.phone||l.phone.trim()==='')return -1;
+ let s=0,today=new Date();
+ if(l.bindingDate){const d=Math.ceil((new Date(l.bindingDate)-today)/864e5);if(d<0)s+=100;else if(d<14)s+=80;else if(d<30)s+=60;else if(d<60)s+=40;else if(d<90)s+=20;}
+ if(TARGET.includes(l.industry))s+=50;
+ if(l.nextCallDate&&(today-new Date(l.nextCallDate))/864e5>0)s+=Math.min(Math.ceil((today-new Date(l.nextCallDate))/864e5)*5,30);
+ if(l.status==='ny')s+=10;if(l.status==='ej_svar')s+=5;if(l.status==='ring_senare')s+=15;
+ if(l.subs)s+=l.subs.length*2;
+ const ls=lockStatus(l);if(ls==='other')return -1000;if(ls==='mine')s+=25;
+ return s;
+}
+function scoredLeads(){return leads.filter(l=>!['blacklist','order','prospekt'].includes(l.status)).map(l=>({...l,score:scoreLead(l)})).filter(l=>l.score>0).sort((a,b)=>b.score-a.score);}
+function targetLeads(){return scoredLeads().filter(l=>TARGET.includes(l.industry));}
+
+// =============================================
+// FIXAD: applyDialerFilters + renderDialer
+// =============================================
+function applyDialerFilters(arr){
+ const fOp=(document.getElementById('df-op')?.value||'').trim();
+ const fInd=(document.getElementById('df-ind')?.value||'').trim();
+ const fStatus=(document.getElementById('df-status')?.value||'').trim();
+ const bindMinEl=document.getElementById('df-bind-min');
+ const bindMaxEl=document.getElementById('df-bind-max');
+ const fBindMin=(bindMinEl&&bindMinEl.value!=='')?parseInt(bindMinEl.value):null;
+ const fBindMax=(bindMaxEl&&bindMaxEl.value!=='')?parseInt(bindMaxEl.value):null;
+ const today=new Date();
+ return arr.filter(l=>{
+  if(fOp&&l.operator!==fOp)return false;
+  if(fInd&&l.industry!==fInd)return false;
+  if(fStatus&&l.status!==fStatus)return false;
+  if(fBindMin!==null||fBindMax!==null){
+   if(!l.bindingDate)return false;
+   const days=Math.ceil((new Date(l.bindingDate)-today)/864e5);
+   if(fBindMin!==null&&days<fBindMin)return false;
+   if(fBindMax!==null&&days>fBindMax)return false;
+  }
+  return true;
+ });
+}
+
+function getAutopilotQueue(){
+ const now=new Date();
+ const callbacks=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=now&&!['blacklist','order','prospekt','avslutad','inte_intresserad'].includes(l.status));
+ const offers=leads.filter(l=>['offert','apg'].includes(l.status)&&l.seller===currentSeller);
+ const scored=scoredLeads().filter(l=>!callbacks.find(c=>c.id===l.id)&&!offers.find(o=>o.id===l.id));
+ return {callbacks,offers,scored,total:callbacks.length+offers.length+scored.length};
+}
+function renderDialer(){
+ if(dialerOn)return;
+ const q=getAutopilotQueue();
+ const hour=new Date().getHours();
+ const greet=hour<10?'God morgon':hour<17?'Hej':'God kväll';
+ const el=document.getElementById('greeting-text');if(el)el.textContent=greet;
+ const sg=document.getElementById('seller-greeting');
+ if(sg){const raw=currentSeller||'andy';sg.textContent=raw.charAt(0).toUpperCase()+raw.slice(1)+' 👋';}
+ const sum=document.getElementById('today-summary');
+ if(sum)sum.innerHTML=
+  '<div style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.25);border-radius:12px;padding:14px 20px;min-width:140px"><div style="font-size:28px;font-weight:800;color:#ef4444">'+q.callbacks.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Återkomster</div></div>'+
+  '<div style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:14px 20px;min-width:140px"><div style="font-size:28px;font-weight:800;color:#f59e0b">'+q.offers.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Offerter att följa upp</div></div>'+
+  '<div style="background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.25);border-radius:12px;padding:14px 20px;min-width:140px"><div style="font-size:28px;font-weight:800;color:#22c55e">'+q.scored.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Leads redo</div></div>';
+ const preview=document.getElementById('q-preview');
+ if(preview&&q.callbacks.length){
+  preview.innerHTML='<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:10px">Först ut — återkomster</div>'+q.callbacks.slice(0,3).map(l=>qItem({...l,score:scoreLead(l)})).join('');
+ } else if(preview){preview.innerHTML='';}
+ document.getElementById('b-dialer').textContent=q.total;
+}
+// =============================================
+
+function qItem(l){return '<div class="q-item" onclick="openFromQueue('+l.id+')"><div><div class="co">'+esc(l.company)+(l.subs&&l.subs.length>1?'<span class="sub-count">'+l.subs.length+' st</span>':'')+'</div><div style="font-size:11px;color:var(--MUTED);margin-top:2px">'+fmtPhone(l.phone)+' · '+getIndLabel(l.industry)+'</div></div><div class="meta"><span class="op op-'+(l.operator||'okänd').toLowerCase()+'">'+esc(l.operator||'Okänd')+'</span><span class="'+bindCls(l.bindingDate)+'" style="font-size:11px">'+bindLbl(l.bindingDate)+'</span><span class="sc">'+l.score+'</span></div></div>';}
+function claimNextTarget(){const t=targetLeads();if(!t.length){showNotif('Inga prioriterade leads!','');return;}if(lockLead(t[0].id))openKK(t[0].id);else{showNotif('Försök igen!','');renderDialer();}}
+function openFromQueue(id){const l=leads.find(l=>l.id===id);if(!l)return;const ls=lockStatus(l);if(ls==='other'){showNotif('Låst av '+l.lockedBy+'!','');return;}if(ls==='free'||ls==='exp')lockLead(id);openKK(id);}
+
+function startAutopilot(){
+ const q=getAutopilotQueue();
+ dialerQ=[...q.callbacks,...q.offers,...q.scored].map(l=>({...l,score:scoreLead(l)}));
+ if(!dialerQ.length){showNotif('Inga leads att ringa!','');return;}
+ dialerIdx=0;dialerOn=true;
+ document.getElementById('d-idle').style.display='none';
+ document.getElementById('d-active').classList.add('on');
+ document.getElementById('bcb').style.display='flex';
+ document.getElementById('progress-bar-area').style.display='flex';
+ sessionCalls=0;sessionOffers=0;sessionOrders=0;
+ updateProgress();
+ nextDialerLead();
+}
+function startDialer(){startAutopilot();}
+
+function updateProgress(){
+ const el=document.getElementById('p-calls');if(!el)return;
+ el.textContent=sessionCalls;
+ document.getElementById('p-offers').textContent=sessionOffers;
+ document.getElementById('p-orders').textContent=sessionOrders;
+ document.getElementById('p-pos').textContent=dialerIdx+1;
+ document.getElementById('p-total').textContent=dialerQ.length;
+ const pct=dialerQ.length?Math.round(((dialerIdx+1)/dialerQ.length)*100):0;
+ document.getElementById('progress-fill').style.width=pct+'%';
+}
+function stopDialer(){dialerOn=false;dialerIdx=-1;document.getElementById('d-active').classList.remove('on');document.getElementById('d-idle').style.display='';document.getElementById('bcb').style.display='none';document.getElementById('progress-bar-area').style.display='none';const io=document.getElementById('inline-outcome');if(io)io.innerHTML='';renderDialer();updateBadges();}
+function nextDialerLead(){if(dialerIdx>=dialerQ.length){stopDialer();return;}const l=leads.find(l=>l.id===dialerQ[dialerIdx].id);if(!l){dialerIdx++;nextDialerLead();return;}lockLead(l.id);renderKK(l);renderInlineOutcome(l);document.getElementById('calling-lbl').textContent='';callingPhone='';}
+function skipLead(){const l=getCurLead();if(l)unlockLead(l.id);dialerIdx++;if(dialerIdx<dialerQ.length)nextDialerLead();else stopDialer();updateBadges();}
+function renderKK(lead){
+ const ort=lead.address?lead.address.split(',').pop().trim():(lead.city||'');
+ const lastNote=lead.history&&lead.history.length?lead.history[lead.history.length-1]:'';
+ document.getElementById('kk-area').innerHTML=
+  '<div style="background:linear-gradient(135deg,#f8f7ff,#fff);border:1px solid #e8e6f0;border-radius:16px;padding:28px 32px;margin-bottom:20px;box-shadow:0 2px 12px rgba(91,95,199,.06)">'+
+  '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:20px">'+
+  '<div><h2 style="font-size:28px;font-weight:800;letter-spacing:-.03em;margin-bottom:4px;color:var(--TEXT)">'+esc(lead.company)+'</h2>'+
+  '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px">'+
+  '<span class="industry-badge" style="font-size:12px;padding:4px 12px">'+getIndLabel(lead.industry)+'</span>'+
+  (ort?'<span style="font-size:12px;color:var(--MUTED)">📍 '+esc(ort)+'</span>':'')+
+  '<span style="font-size:12px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(lead.orgnr)||'—')+'</span>'+
+  '</div></div>'+
+  '<button class="btn btn-o" onclick="stopDialer()" style="white-space:nowrap"><i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:-2px"></i> Tillbaka</button></div>'+
+  '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px">'+
+  '<a href="https://www.allabolag.se/'+normOrg(lead.orgnr)+'" target="_blank" class="link-btn" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd">📊 Allabolag</a>'+
+  '<a href="https://www.google.com/maps/search/'+encodeURIComponent((lead.company||'')+' '+(ort||''))+'" target="_blank" class="link-btn" style="background:#dcfce7;color:#166534;border-color:#86efac">📍 Google Maps</a>'+
+  '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn" style="background:#fef3c7;color:#92400e;border-color:#fcd34d">🔍 Merinfo</a>'+
+  '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">📞 Hitta.se</a>'+
+  '<a href="https://www.google.com/search?q='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Google</a>'+
+  '<button class="link-btn" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;font-weight:700" onclick="sendOffert('+lead.id+')">📄 Skicka offert</button>'+
+  '</div></div>'+
+  '<div style="display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start">'+
+  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:14px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.04)">'+
+  '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:14px">Kontaktuppgifter</div>'+
+  '<div style="display:flex;flex-direction:column;gap:14px">'+
+  '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Kontaktperson</label><input value="'+esc(lead.vdName||lead.contact||'')+'" oninput="saveField('+lead.id+',\'vdName\',this.value)" placeholder="Namn..." style="font-size:15px;font-weight:600"></div>'+
+  '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Telefon</label><div style="display:flex;gap:6px;align-items:center"><input value="'+esc(lead.vdPhone||lead.phone||'')+'" oninput="saveField('+lead.id+',\'vdPhone\',this.value)" placeholder="07X-XXX XX XX" style="font-size:15px;font-weight:700">'+(lead.vdPhone||lead.phone?'<a href="'+toTel(lead.vdPhone||lead.phone)+'" class="btn btn-g btn-sm" style="border-radius:20px;padding:8px 16px;white-space:nowrap" onclick="setCallingPhone(\''+(lead.vdPhone||lead.phone)+'\',\''+(lead.vdName||'')+'\')"><i data-lucide="phone" style="width:14px;height:14px;vertical-align:-2px"></i> Ring</a>':'')+'</div></div>'+
+  '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">E-post</label><input value="'+esc(lead.vdEmail||lead.email||'')+'" oninput="saveField('+lead.id+',\'vdEmail\',this.value)" placeholder="namn@foretag.se"></div>'+
+  '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Ort / Adress</label><input value="'+esc(lead.address||lead.city||'')+'" oninput="saveField('+lead.id+',\'address\',this.value)" placeholder="Ort..."></div>'+
+  '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Antal anställda</label><input value="'+esc(lead.employees||'')+'" oninput="saveField('+lead.id+',\'employees\',this.value)" placeholder="t.ex. 3"></div>'+
+  '</div></div>'+
+  '<div>'+
+  '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:14px">Info & anteckningar</div>'+
+  '<div style="background:#fafafc;border:1px solid var(--BORDER);border-radius:10px;padding:16px;margin-bottom:14px">'+
+  '<div style="font-size:10px;color:var(--ACC);font-weight:700;text-transform:uppercase;margin-bottom:6px">Verksamhet</div>'+
+  '<div style="font-size:12px;color:var(--TEXT);line-height:1.5;max-height:100px;overflow-y:auto">'+esc(lead.note||lead.notes||'Ingen beskrivning')+'</div>'+
+  '</div>'+
+  (lastNote?'<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:14px;margin-bottom:14px"><div style="font-size:10px;color:#92400e;font-weight:700;text-transform:uppercase;margin-bottom:4px">Senaste händelse ('+esc(lastNote.date||'')+')</div><div style="font-size:12px;font-weight:600;color:#78350f">'+esc(lastNote.outcome||'')+'</div>'+(lastNote.note?'<div style="font-size:11px;color:#92400e;margin-top:4px">'+esc(lastNote.note)+'</div>':'')+'</div>':'')+
+  '</div>'+
+  '</div>';
+ if(window.lucide)lucide.createIcons();
+}
+function renderSubs(lead){
+ if(!lead.subs||!lead.subs.length)return '<div style="text-align:center;padding:32px;color:var(--MUTED);background:#fafafc;border-radius:10px;font-size:13px"><i data-lucide="phone-off" style="width:24px;height:24px;margin-bottom:8px;opacity:.4"></i><div>Inga abonnemang registrerade</div></div>';
+ return '<div style="display:flex;flex-direction:column;gap:6px">'+lead.subs.map(function(s,i){
+  return '<div style="border:1px solid var(--BORDER);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:all .15s" onmouseenter="this.style.boxShadow=\'0 4px 12px rgba(0,0,0,.08)\'" onmouseleave="this.style.boxShadow=\'0 1px 3px rgba(0,0,0,.04)\'">'+
+   '<div onclick="toggleSub('+i+')" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;background:var(--W)">'+
+   '<div style="display:flex;align-items:center;gap:12px"><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#f5f3ff,#ede9fe);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--ACC)">'+(i+1)+'</div><div><strong style="font-size:13px">'+esc(s.user||'Okänd')+'</strong><div><a href="'+toTel(s.phone)+'" class="sub-phone" onclick="event.stopPropagation()" style="font-size:12px">'+fmtPhone(s.phone)+'</a></div></div></div>'+
+   '<div style="display:flex;align-items:center;gap:8px">'+
+   '<span class="'+bindCls(s.end)+'" style="font-size:11px">'+bindLbl(s.end)+'</span>'+
+   '<button class="btn btn-g btn-sm" onclick="event.stopPropagation();setCallingPhone(\''+esc(s.phone)+'\',\''+esc(s.user)+'\');makeCall()" style="border-radius:20px;padding:6px 14px"><i data-lucide="phone" style="width:12px;height:12px;vertical-align:-1px"></i> Ring</button>'+
+   '</div></div>'+
+   '<div id="sub-d-'+i+'" style="display:none;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:14px 16px;background:linear-gradient(135deg,#fafafc,#f5f3ff);border-top:1px solid #eeeef4">'+
+   '<div><div style="font-size:10px;color:var(--ACC);font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">Porterad</div><strong style="font-size:12px">'+esc(s.portDate||'—')+'</strong></div>'+
+   '<div><div style="font-size:10px;color:var(--ACC);font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">Bindning</div><strong style="font-size:12px" class="'+bindCls(s.end)+'">'+esc(s.end||'—')+'</strong></div>'+
+   '<div><div style="font-size:10px;color:var(--ACC);font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">Plan</div><span style="font-size:12px;font-weight:600">'+esc(s.plan||'—')+'</span></div>'+
+   '</div></div>';
+ }).join('')+'</div>';
+}
+function toggleSub(i){const el=document.getElementById('sub-d-'+i);el.style.display=el.style.display==='none'?'grid':'none';}
+function openOutcomePanel(){const p=document.getElementById('panel-outcome'),ov=document.getElementById('outcome-overlay');panelOpen=true;p.style.display='flex';ov.style.display='block';}
+function closeOutcomePanel(){const p=document.getElementById('panel-outcome'),ov=document.getElementById('outcome-overlay');panelOpen=false;p.style.display='none';ov.style.display='none';}
+function toggleOutcomePanel(){if(panelOpen)closeOutcomePanel();else openOutcomePanel();}
+function renderOutcomes(lead){
+ let html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">'+
+  '<button class="oc-btn" onclick="quickOutcome(\'nosvar\')" style="padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:20px">📵</span><span style="font-weight:700">Inget svar</span><span style="font-size:10px;color:var(--MUTED)">Ringer igen om 2h</span></button>'+
+  '<button class="oc-btn" onclick="quickOutcome(\'ringsenare\')" style="padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:20px">📅</span><span style="font-weight:700">Ring senare</span><span style="font-size:10px;color:var(--MUTED)">Välj datum</span></button>'+
+  '<button class="oc-btn green" onclick="quickOutcome(\'offert\')" style="padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px"><span style="font-size:20px">📄</span><span style="font-weight:700">Offert skickad</span><span style="font-size:10px;color:var(--MUTED)">Följ upp senare</span></button>'+
+  '<button class="oc-btn green" onclick="quickOutcome(\'order\')" style="padding:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;border-color:var(--G);background:linear-gradient(135deg,#f0fdf4,#dcfce7)"><span style="font-size:20px">🎉</span><span style="font-weight:700;color:#065f46">AFFÄR!</span><span style="font-size:10px;color:#059669">Registrera order</span></button>'+
+  '</div>';
+ html+='<details style="margin-bottom:12px"><summary style="font-size:11px;color:var(--MUTED);cursor:pointer;font-weight:600;padding:8px 0">Fler alternativ ▾</summary><div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">';
+ for(let g in OUTCOMES){OUTCOMES[g].forEach(o=>{html+='<button class="oc-btn '+(o.cls||'')+'" onclick="handleOutcome(\''+esc(o.t)+'\','+o.h+',\''+o.u+'\','+o.ret+')" style="font-size:10px;padding:5px 9px">'+esc(o.t)+'</button>';});}
+ html+='</div></details>';
+ html+='<div style="margin-top:4px"><div style="font-size:10px;font-weight:700;color:var(--MUTED);text-transform:uppercase;margin-bottom:5px">Anteckning</div><textarea id="note-ta" style="height:60px;resize:vertical;font-size:12px" oninput="saveNote()"></textarea></div>';
+ html+='<div style="margin-top:8px"><div style="font-size:10px;font-weight:700;color:var(--MUTED);text-transform:uppercase;margin-bottom:5px">Historik</div><div id="hist-list"></div></div>';
+ document.getElementById('outcome-btns').innerHTML=html;
+}
+function renderInlineOutcome(lead){
+ const el=document.getElementById('inline-outcome');if(!el)return;
+ el.innerHTML=
+  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:14px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.04)">'+
+  '<div style="font-size:13px;font-weight:800;margin-bottom:16px;color:var(--TEXT)">Hur gick samtalet?</div>'+
+  '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px">'+
+  '<button class="oc-btn" onclick="quickOutcome(\'nosvar\')" style="padding:18px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px"><i data-lucide="phone-missed" style="width:22px;height:22px;color:var(--MUTED)"></i><span style="font-weight:700;font-size:12px">Inget svar</span><span style="font-size:10px;color:var(--MUTED)">Åter om 2h</span></button>'+
+  '<button class="oc-btn" onclick="quickOutcome(\'ringsenare\')" style="padding:18px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px"><i data-lucide="calendar-clock" style="width:22px;height:22px;color:var(--ACC)"></i><span style="font-weight:700;font-size:12px">Ring senare</span><span style="font-size:10px;color:var(--MUTED)">Välj datum</span></button>'+
+  '<button class="oc-btn" onclick="quickOutcome(\'demo\')" style="padding:18px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;border-color:#c4b5fd;background:linear-gradient(135deg,#f5f3ff,#ede9fe)"><i data-lucide="headphones" style="width:22px;height:22px;color:#7c3aed"></i><span style="font-weight:700;font-size:12px;color:#5b21b6">Demo bokad</span><span style="font-size:10px;color:var(--MUTED)">Kund ska höra AI</span></button>'+
+  '<button class="oc-btn" onclick="quickOutcome(\'offert\')" style="padding:18px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px"><i data-lucide="file-text" style="width:22px;height:22px;color:#f59e0b"></i><span style="font-weight:700;font-size:12px">Skicka offert</span><span style="font-size:10px;color:var(--MUTED)">Offert till kund</span></button>'+
+  '<button class="oc-btn green" onclick="quickOutcome(\'order\')" style="padding:18px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;border-color:var(--G);background:linear-gradient(135deg,#f0fdf4,#dcfce7)"><i data-lucide="trophy" style="width:22px;height:22px;color:#059669"></i><span style="font-weight:700;font-size:12px;color:#065f46">STÄNGD!</span><span style="font-size:10px;color:#059669">Kund sa ja</span></button>'+
+  '</div>'+
+  '<div style="display:flex;gap:10px;align-items:start">'+
+  '<div style="flex:1"><textarea id="note-ta" placeholder="Anteckning..." style="height:50px;resize:vertical;font-size:12px;border-radius:10px" oninput="saveNote()"></textarea></div>'+
+  '<button class="btn btn-o btn-sm" onclick="skipLead()" style="white-space:nowrap;padding:14px 16px"><i data-lucide="skip-forward" style="width:14px;height:14px;vertical-align:-2px"></i> Hoppa</button>'+
+  '</div>'+
+  '<details style="margin-top:10px"><summary style="font-size:11px;color:var(--MUTED);cursor:pointer;font-weight:600">Fler alternativ + historik</summary>'+
+  '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">';
+ let extra='';
+ for(let g in OUTCOMES){OUTCOMES[g].forEach(o=>{extra+='<button class="oc-btn '+(o.cls||'')+'" onclick="handleOutcome(\''+esc(o.t)+'\','+o.h+',\''+o.u+'\','+o.ret+')" style="font-size:10px;padding:4px 8px">'+esc(o.t)+'</button>';});}
+ el.innerHTML=el.innerHTML+extra+'</div><div style="margin-top:10px" id="hist-list"></div></details></div>';
+ if(lead.note)document.getElementById('note-ta').value=lead.note;
+ renderHistory(lead);
+ if(window.lucide)lucide.createIcons();
+}
+function quickOutcome(type){
+ sessionCalls++;
+ if(type==='nosvar'){handleOutcome('Ej svar – åter om 2h',2,'h',true);return;}
+ if(type==='ringsenare'){const d=prompt('Ringdatum (YYYY-MM-DD):');if(d){const lead=getCurLead();if(lead){lead.status='ring_senare';lead.nextCallDate=d;lead.history.push({date:new Date().toISOString().slice(0,10),outcome:'Återkomst: '+d,note:lead.note||'',seller:currentSeller});saveData();closeOutcomePanel();dialerIdx++;updateProgress();if(dialerIdx<dialerQ.length)nextDialerLead();else stopDialer();updateBadges();}}return;}
+ if(type==='demo'){handleOutcome('Demo bokad',0,'apg',false);return;}
+ if(type==='offert'){sessionOffers++;handleOutcome('Skicka offert',0,'offert',false);return;}
+ if(type==='order'){sessionOrders++;handleOutcome('✅ Stängd – kund!',0,'order',false);return;}
+}
+function handleOutcome(text,hours,unit,ret){
+ if(unit==='order'){showTBModal(getCurLead().id,getCurLead().company);return;}
+ logOutcome(text,hours,unit,ret);
+}
+function showTBModal(leadId,foretag){
+ tbLeadId=leadId;
+ document.getElementById('tb-company-name').textContent=foretag;
+ document.getElementById('tb-modal').style.display='flex';
+ document.getElementById('tb-amount').focus();
+}
+function selectType(type){
+ document.querySelectorAll('.type-btn').forEach(btn=>{
+  btn.classList.toggle('active',btn.dataset.type===type);
+ });
+}
+function saveTB(){
+ if(!tbLeadId)return;
+ const tbAmount=parseInt(document.getElementById('tb-amount').value)||0;
+ const nyteck=parseInt(document.getElementById('tb-nyteck').value)||0;
+ const forlang=parseInt(document.getElementById('tb-forlang').value)||0;
+ const type=document.querySelector('.type-btn.active')?.dataset.type||'nyteck';
+ const l=leads.find(l=>l.id===tbLeadId);
+ if(l){
+  l.tb_amount=tbAmount;
+  l.nyteck_count=nyteck;
+  l.forlang_count=forlang;
+  l.deal_type=type;
+  l.status='order';
+  l.seller=currentSeller;
+  l.history.push({date:new Date().toISOString().slice(0,10),outcome:'✅ Order! (TB: '+tbAmount+' kr)',note:l.note||'',seller:currentSeller});
+  saveData();
+ }
+ document.getElementById('tb-modal').style.display='none';
+ document.getElementById('tb-amount').value='';
+ document.getElementById('tb-nyteck').value='';
+ document.getElementById('tb-forlang').value='';
+ const savedId=tbLeadId;
+ tbLeadId=null;
+ unlockLead(savedId);
+ dialerIdx++;if(dialerIdx<dialerQ.length)nextDialerLead();else stopDialer();
+ updateBadges();updateProgress();
+ celebrate();
+}
+function skipTB(){
+ document.getElementById('tb-modal').style.display='none';
+ document.getElementById('tb-amount').value='';
+ document.getElementById('tb-nyteck').value='';
+ document.getElementById('tb-forlang').value='';
+ if(tbLeadId){
+  const l=leads.find(l=>l.id===tbLeadId);
+  if(l){
+   l.status='order';
+   l.seller=currentSeller;
+   l.history.push({date:new Date().toISOString().slice(0,10),outcome:'✅ Order!',note:l.note||'',seller:currentSeller});
+   saveData();
+  }
+  const savedId=tbLeadId;
+  tbLeadId=null;
+  unlockLead(savedId);
+  dialerIdx++;if(dialerIdx<dialerQ.length)nextDialerLead();else stopDialer();
+  updateBadges();
+ }
+}
+function logOutcome(text,hours,unit,ret){
+ const lead=getCurLead();if(!lead)return;
+ lead.history.push({date:new Date().toISOString().slice(0,10),outcome:text,note:lead.note||'',seller:currentSeller});
+ if(unit==='bl'){lead.status='blacklist';lead.nextCallDate=null;}
+ else if(unit==='x'){lead.status='avslutad';lead.nextCallDate=null;}
+ else if(unit==='offert'){lead.status='offert';lead.offerSent=true;lead.seller=currentSeller;lead.nextCallDate=null;}
+ else if(unit==='apg'){lead.status='apg';lead.nextCallDate=null;}
+ else if(unit==='lost'){lead.status='avslutad';lead.nextCallDate=null;}
+ else if(unit==='cb'){const d=prompt('Ringdatum (YYYY-MM-DD):');if(d){lead.status='ring_senare';lead.nextCallDate=d;}}
+ else if(unit==='h'){lead.status='ej_svar';const d=new Date();d.setHours(d.getHours()+hours);lead.nextCallDate=d.toISOString();}
+ else if(unit==='d'){lead.status=hours>=90?'inte_intresserad':'ej_svar';const d=new Date();d.setDate(d.getDate()+hours);lead.nextCallDate=d.toISOString().slice(0,10);}
+ else if(unit==='m'){lead.status='inte_intresserad';const d=new Date();d.setMonth(d.getMonth()+hours);lead.nextCallDate=d.toISOString().slice(0,10);}
+ if(!ret)unlockLead(lead.id);
+ saveData();closeOutcomePanel();callingPhone='';
+ dialerIdx++;updateProgress();if(dialerIdx<dialerQ.length)nextDialerLead();else stopDialer();
+ updateBadges();
+}
+function switchLeadsTab(tab){
+ activeLeadsTab=tab;
+ document.getElementById('tab-aktiva').classList.toggle('active',tab==='aktiva');
+ document.getElementById('tab-prospekt').classList.toggle('active',tab==='prospekt');
+ document.getElementById('leads-aktiva').style.display=tab==='aktiva'?'block':'none';
+ document.getElementById('leads-prospekt').style.display=tab==='prospekt'?'block':'none';
+ if(tab==='prospekt')renderProspekt();else renderLeads();
+}
+function initProspektOrt(){
+ const sel=document.getElementById('prospekt-ort');if(!sel)return;
+ if(sel.options.length<=1){SKANE_KOMMUNER.forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o);});}
+}
+function renderProspekt(){
+ initProspektOrt();
+ const q=(document.getElementById('prospekt-search')?.value||'').toLowerCase();
+ const ind=document.getElementById('prospekt-ind')?.value||'';
+ const ort=document.getElementById('prospekt-ort')?.value||'';
+ let filtered=leads.filter(l=>l.status==='prospekt').filter(l=>{
+  if(ind&&l.industry!==ind)return false;
+  if(ort){const addr=((l.address||'')+(l.city||'')).toLowerCase();if(!addr.includes(ort.toLowerCase()))return false;}
+  if(q){const s=(l.company+' '+l.orgnr+' '+getIndLabel(l.industry)+' '+(l.address||'')).toLowerCase();if(!s.includes(q))return false;}
+  return true;
+ });
+ const tb=document.getElementById('prospekt-tb');if(!tb)return;
+ tb.innerHTML=filtered.map(l=>{const ort=l.address?l.address.split(',').pop().trim():(l.city||'');return '<tr style="cursor:pointer" onclick="openQuickView('+l.id+')"><td onclick="event.stopPropagation()"><input type="checkbox" class="prospekt-cb" data-id="'+l.id+'" style="width:auto"></td><td><strong>'+esc(l.company)+'</strong>'+(TARGET.includes(l.industry)?' <span class="priority-target">⭐</span>':'')+'</td><td style="font-size:11px;font-family:monospace">'+esc(fmtOrg(l.orgnr)||'—')+'</td><td><span class="industry-badge">'+getIndLabel(l.industry)+'</span></td><td style="font-size:12px">'+esc(ort||'—')+'</td><td style="font-size:12px">'+(l.history[0]?.date||'—')+'</td><td onclick="event.stopPropagation()"><button class="btn btn-g btn-sm" onclick="aktiveraLead('+l.id+')">Aktivera →</button></td></tr>';}).join('')||'<tr><td colspan="7" class="empty">Inga prospekt</td></tr>';
+ const pc=document.getElementById('prospekt-count');if(pc)pc.textContent=filtered.length+' visas · '+leads.filter(l=>l.status==='prospekt').length+' totalt';
+ const pb=document.getElementById('prospekt-badge');if(pb)pb.textContent=leads.filter(l=>l.status==='prospekt').length;
+}
+function openQuickView(id){
+ const l=leads.find(l=>l.id===id);if(!l)return;
+ qvLeadId=id;
+ document.getElementById('qv-name').textContent=l.company;
+ document.getElementById('qv-org').textContent=fmtOrg(l.orgnr)||'—';
+ document.getElementById('qv-ind').textContent=getIndLabel(l.industry);
+ document.getElementById('qv-phone').textContent=l.phone?fmtPhone(l.phone):'Saknas';
+ document.getElementById('qv-phone-input').value=l.phone?fmtPhone(l.phone):'';
+ const org=normOrg(l.orgnr);
+ document.getElementById('qv-links').innerHTML='<a href="https://www.merinfo.se/search?q='+encodeURIComponent(fmtOrg(l.orgnr))+'" target="_blank" class="link-btn">Merinfo</a><a href="https://www.allabolag.se/'+org+'" target="_blank" class="link-btn">Allabolag</a><a href="https://www.google.com/search?q='+encodeURIComponent(l.company)+'" target="_blank" class="link-btn">Google</a><a href="https://www.linkedin.com/search/results/companies/?keywords='+encodeURIComponent(l.company)+'" target="_blank" class="link-btn">LinkedIn</a>';
+ document.getElementById('quick-view').classList.add('on');
+ document.getElementById('qv-overlay').style.display='block';
+}
+function closeQuickView(){document.getElementById('quick-view').classList.remove('on');document.getElementById('qv-overlay').style.display='none';qvLeadId=null;}
+function saveQVPhone(){if(!qvLeadId)return;const ph=normPhone(document.getElementById('qv-phone-input').value);const l=leads.find(l=>l.id===qvLeadId);if(l){l.phone=ph;if(!l.subs.some(s=>normPhone(s.phone)===ph))l.subs.push({phone:ph,user:'',portDate:'',end:'',plan:''});saveData();document.getElementById('qv-phone').textContent=fmtPhone(ph);showNotif('Telefon sparad!','');}}
+function aktiveraFromQV(){if(!qvLeadId)return;aktiveraLead(qvLeadId);closeQuickView();}
+function removeProspekt(){if(!qvLeadId)return;if(!confirm('Ta bort detta prospekt?'))return;leads=leads.filter(l=>l.id!==qvLeadId);saveData();closeQuickView();renderProspekt();updateBadges();}
+function aktiveraLead(id){const l=leads.find(l=>l.id===id);if(l){l.status='ny';saveData();renderProspekt();updateBadges();showNotif(l.company+' aktiverat → Dialer','✅');}}
+function aktiveraValda(){const ids=[...document.querySelectorAll('.prospekt-cb:checked')].map(cb=>parseInt(cb.dataset.id));if(!ids.length){showNotif('Välj minst ett','');return;}ids.forEach(id=>{const l=leads.find(l=>l.id===id);if(l)l.status='ny';});saveData();renderProspekt();updateBadges();showNotif(ids.length+' leads aktiverade → Dialer','⚡');}
+function aktivera20(){const p=leads.filter(l=>l.status==='prospekt').slice(0,20);if(!p.length){showNotif('Inga prospekt kvar','');return;}p.forEach(l=>l.status='ny');saveData();renderProspekt();updateBadges();showNotif(p.length+' aktiverade → Dialer','⚡');}
+function prospektCheckAll(val){document.querySelectorAll('.prospekt-cb').forEach(cb=>cb.checked=val);}
+function renderPipeline(){
+ const myCB=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=new Date()&&!['blacklist','order','prospekt'].includes(l.status));
+ document.getElementById('my-callbacks').innerHTML=myCB.length?myCB.map(pCard).join(''):'<div style="color:var(--MUTED);padding:20px">Inga återkomster.</div>';
+ const myOff=leads.filter(l=>l.status==='offert');
+ document.getElementById('my-offers').innerHTML=myOff.length?myOff.map(pCard).join(''):'<div style="color:var(--MUTED);padding:20px">Inga offerter ute.</div>';
+ const myDemos=leads.filter(l=>l.status==='apg');
+ document.getElementById('my-demos').innerHTML=myDemos.length?myDemos.map(pCard).join(''):'<div style="color:var(--MUTED);padding:20px">Inga demos bokade.</div>';
+ const myClosed=leads.filter(l=>l.status==='order').slice(0,10);
+ document.getElementById('my-closed').innerHTML=myClosed.length?myClosed.map(pCard).join(''):'<div style="color:var(--MUTED);padding:20px">Inga stängda ännu.</div>';
+ const myLost=leads.filter(l=>l.status==='inte_intresserad').slice(0,5);
+ document.getElementById('my-lost').innerHTML=myLost.length?myLost.map(pCard).join(''):'<div style="color:var(--MUTED);padding:20px">Inga förlorade.</div>';
+ document.getElementById('b-pipeline').textContent=myCB.length+myOff.length+myDemos.length;
+ if(window.lucide)lucide.createIcons();
+}
+function fmtDate(d){if(!d)return'';try{const dt=new Date(d);if(isNaN(dt))return d;return dt.toLocaleDateString('sv-SE',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}catch{return d;}}
+function pCard(l){const note=l.history.length?l.history[l.history.length-1].note:'';return '<div class="pipeline-card" onclick="openKK('+l.id+')"><div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px"><div><div style="font-weight:700;font-size:14px">'+esc(l.company)+'</div><div style="display:flex;gap:8px;align-items:center;margin-top:4px"><span class="industry-badge">'+getIndLabel(l.industry)+'</span><span style="font-size:11px;color:var(--MUTED)">'+fmtPhone(l.phone)+'</span></div></div><span class="st-badge st-'+l.status+'">'+SN[l.status]+'</span></div>'+(note?'<div style="font-size:11px;color:#666;font-style:italic;margin-bottom:8px;padding:8px 10px;background:#fafafc;border-radius:6px">"'+esc(note.substring(0,55))+(note.length>55?'...':'')+'"</div>':'')+(l.nextCallDate?'<div style="font-size:11px;color:var(--ACC);margin-bottom:10px;font-weight:600"><i data-lucide="calendar" style="width:12px;height:12px;vertical-align:-2px"></i> '+fmtDate(l.nextCallDate)+'</div>':'')+'<div style="display:flex;gap:8px"><button class="btn btn-p btn-sm" onclick="event.stopPropagation();openKK('+l.id+')" style="flex:1">Öppna</button><button class="btn btn-pts btn-sm" onclick="event.stopPropagation();sendOffert('+l.id+')">📄 Offert</button><button class="btn btn-o btn-sm" onclick="event.stopPropagation();unlockLead('+l.id+');renderPipeline()"><i data-lucide="unlock" style="width:13px;height:13px"></i></button></div></div>';}
+function filterLeads(){curPage=0;renderLeads();}
+function renderLeads(){
+ const sts=['alla','ny','ring_senare','offert','order','avslutad','inte_intresserad','ej_svar'];
+ document.getElementById('status-filters').innerHTML=sts.map(s=>'<button class="ftab '+(stFilter===s?'active':'')+'" onclick="stFilter=\''+s+'\';renderLeads()">'+(s==='alla'?'Alla':(SN[s]||s))+'</button>').join('');
+ document.getElementById('op-filters').innerHTML='';
+ const q=(document.getElementById('search-inp').value||'').toLowerCase();
+ const fromD=document.getElementById('reg-from')?.value||'',toD=document.getElementById('reg-to')?.value||'';
+ let filtered=leads.filter(l=>{
+  if(l.status==='blacklist'||l.status==='prospekt')return false;
+  if(stFilter!=='alla'&&l.status!==stFilter)return false;
+  //operator filter removed for Prio
+  if(showTarget&&!TARGET.includes(l.industry))return false;
+  if(fromD&&l.bindingDate&&l.bindingDate<fromD)return false;
+  if(toD&&l.bindingDate&&l.bindingDate>toD)return false;
+  if(q){const s=(l.company+' '+l.orgnr+' '+l.phone+' '+l.contact+' '+(l.subs||[]).map(s=>s.phone+' '+s.user).join(' ')).toLowerCase();if(!s.includes(q))return false;}
+  return true;
+ }).map(l=>({...l,score:scoreLead(l)})).sort((a,b)=>b.score-a.score);
+ const pages=Math.ceil(filtered.length/PAGE);
+ if(curPage>=pages)curPage=Math.max(0,pages-1);
+ const paged=filtered.slice(curPage*PAGE,(curPage+1)*PAGE);
+ document.getElementById('leads-tb').innerHTML=paged.map(l=>{const ort=l.address?l.address.split(',').pop().trim():(l.city||'');return '<tr class="clickable" onclick="openKK('+l.id+')"><td><strong>'+esc(l.company)+'</strong>'+(TARGET.includes(l.industry)?' <span class="priority-target">⭐</span>':'')+'<div style="font-size:11px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(l.orgnr)||'')+'</div></td><td><span class="industry-badge">'+getIndLabel(l.industry)+'</span></td><td style="font-size:12px">'+esc(ort||'—')+'</td><td>'+fmtPhone(l.phone||l.vdPhone)+'</td><td style="font-size:12px">'+esc(l.vdName||l.contact||'—')+'</td><td><span class="st-badge st-'+l.status+'">'+(SN[l.status]||l.status)+'</span></td><td><strong style="color:var(--ACC)">'+(l.score>0?l.score:'—')+'</strong></td></tr>';}).join('')||'<tr><td colspan="7" class="empty">Inga leads</td></tr>';
+ let ph='';if(pages>1){ph='<button class="btn btn-o btn-sm" onclick="curPage--;renderLeads()" '+(curPage===0?'disabled':'')+'>← Föregående</button><span style="padding:8px 16px;font-size:12px;color:var(--MUTED)">Sida '+(curPage+1)+' av '+pages+'</span><button class="btn btn-o btn-sm" onclick="curPage++;renderLeads()" '+(curPage>=pages-1?'disabled':'')+'>Nästa →</button>';}
+ document.getElementById('pag-row').innerHTML=ph;
+}
+function toggleTarget(){showTarget=!showTarget;renderLeads();}
+function renderDash(){
+ const today=new Date().toISOString().slice(0,10);
+ const allH=leads.flatMap(l=>(l.history||[]));
+ const todayCalls=allH.filter(e=>e.date===today).length;
+ const callGoal=50;
+ const callPct=Math.min((todayCalls/callGoal)*100,100);
+ document.getElementById('calls-value').textContent=todayCalls;
+ document.getElementById('calls-progress').style.width=callPct+'%';
+ document.getElementById('calls-goal-text').textContent=todayCalls+' / '+callGoal+' samtal ('+Math.round(callPct)+'%)';
+ if(callPct>=100)document.getElementById('calls-progress').style.background='linear-gradient(90deg, #10b981 0%, #34d399 100%)';
+ else if(callPct>=50)document.getElementById('calls-progress').style.background='linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%)';
+ const weekStart=new Date();weekStart.setDate(weekStart.getDate()-weekStart.getDay()+1);
+ const weekStr=weekStart.toISOString().slice(0,10);
+ const demos=leads.filter(l=>l.status==='apg'&&(l.history||[]).some(h=>h.date>=weekStr));
+ document.getElementById('demos-value').textContent=demos.length;
+ document.getElementById('demos-sub').textContent='Denna vecka';
+ const offerter=leads.filter(l=>l.status==='offert').length;
+ document.getElementById('offers-value').textContent=offerter;
+ const closed=leads.filter(l=>l.status==='order').length;
+ document.getElementById('closed-value').textContent=closed;
+ document.getElementById('closed-sub').textContent='Totalt stängda kunder';
+ const aterkoms=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=new Date()).length;
+ document.getElementById('reminders-value').textContent=aterkoms;
+ document.getElementById('reminders-text').textContent=aterkoms>0?aterkoms+' väntar på återkomst':'Inga väntande';
+ const options={weekday:'long',year:'numeric',month:'long',day:'numeric'};
+ document.getElementById('dash-date').textContent=new Date().toLocaleDateString('sv-SE',options);
+ const days=Array.from({length:14},(_,i)=>{const d=new Date();d.setDate(d.getDate()-13+i);return d.toISOString().slice(0,10);});
+ const chart=document.getElementById('activity-chart');
+ chart.innerHTML='';
+ const maxCount=Math.max(1,...days.map(d=>allH.filter(e=>e.date===d).length));
+ days.forEach((d,i)=>{const c=allH.filter(e=>e.date===d).length;const h=(c/maxCount)*100;const el=document.createElement('div');el.className='activity-bar-wrapper';el.innerHTML='<div class="activity-bar" style="height:'+Math.max(h,4)+'%" data-value="'+c+'"></div><div class="activity-label">'+(i%2===0?d.slice(5):'')+'</div>';chart.appendChild(el);});
+}
+function doSearch(q){
+ if(!q||q.length<2){document.getElementById('sok-res').innerHTML='';return;}
+ const nq=normPhone(q).toLowerCase(),ql=q.toLowerCase();
+ const res=leads.filter(l=>l.company.toLowerCase().includes(ql)||(l.orgnr||'').toLowerCase().includes(ql)||normPhone(l.phone).toLowerCase().includes(nq)||(l.subs||[]).some(s=>normPhone(s.phone).toLowerCase().includes(nq)));
+ document.getElementById('sok-res').innerHTML=res.length?res.map(l=>'<div class="card" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center" onclick="openKK('+l.id+')"><div><strong>'+esc(l.company)+'</strong><div style="font-size:12px;color:var(--MUTED)">'+esc(fmtOrg(l.orgnr)||'')+' · '+fmtPhone(l.phone)+'</div></div><div style="display:flex;gap:8px;align-items:center"><span class="op op-'+(l.operator||'okänd').toLowerCase()+'">'+esc(l.operator||'Okänd')+'</span><span class="st-badge st-'+l.status+'">'+(SN[l.status]||l.status)+'</span></div></div>').join(''):'<div class="card" style="text-align:center;padding:28px;color:var(--MUTED)">Inga resultat</div>';}
+function go(v){
+ document.querySelectorAll('.view').forEach(e=>e.classList.remove('on'));
+ document.getElementById('v-'+v)?.classList.add('on');
+ document.querySelectorAll('#sb .ni').forEach(e=>e.classList.remove('active'));
+ document.getElementById('nav-'+v)?.classList.add('active');
+ if(v==='dialer')renderDialer();
+ if(v==='pipeline')renderPipeline();
+ if(v==='leads'){if(activeLeadsTab==='aktiva')renderLeads();else renderProspekt();}
+ if(v==='dash')renderDash();
+ if(v==='bolagsverket'){initSNI();setBVDates();}
+ if(v!=='dialer'){document.getElementById('bcb').style.display='none';document.getElementById('fab-area').style.display='none';if(dialerOn)stopDialer();}
+ document.getElementById('sb').classList.remove('open');
+ closeQuickView();
+}
+function updateBadges(){
+ document.getElementById('b-dialer').textContent=scoredLeads().length;
+ document.getElementById('b-leads').textContent=leads.filter(l=>!['blacklist','prospekt'].includes(l.status)).length;
+ const cb=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=new Date()&&!['blacklist','order','prospekt'].includes(l.status)).length;
+ const pipe=leads.filter(l=>l.lockedBy===currentSeller&&!['blacklist','order','prospekt'].includes(l.status)).length+cb+leads.filter(l=>['offert','apg'].includes(l.status)&&l.seller===currentSeller).length;
+ document.getElementById('b-pipeline').textContent=pipe;
+ const prospektCount=leads.filter(l=>l.status==='prospekt').length;
+ const pb=document.getElementById('prospekt-badge');if(pb)pb.textContent=prospektCount;
+ renderPipeline();
+}
+function makeCall(){const l=getCurLead();if(!l)return;const ph=callingPhone||l.phone;document.getElementById('calling-lbl').textContent=fmtPhone(ph);window.open(toTel(ph),'_self');}
+function hangUp(){}
+function toggleMute(){muted=!muted;document.getElementById('mute-btn').classList.toggle('active',muted);}
+function setCallingPhone(ph,user){callingPhone=ph;document.getElementById('calling-lbl').textContent=fmtPhone(ph)+(user?' — '+user:'');}
+function saveField(id,field,val){const l=leads.find(l=>l.id===id);if(!l)return;l[field]=val;saveLocal();}
+function openSite(id){const l=leads.find(l=>l.id===id);if(l&&l.website){let u=l.website;if(!u.startsWith('http'))u='https://'+u;window.open(u,'_blank');}}
+function renderHistory(lead){document.getElementById('hist-list').innerHTML=lead.history&&lead.history.length?lead.history.slice().reverse().map(e=>'<div class="hist-item"><span class="hd">'+e.date+'</span> — <strong>'+esc(e.outcome)+'</strong>'+(e.note?' — '+esc(e.note):'')+'</div>').join(''):'<div style="color:var(--MUTED);font-size:12px">Ingen historik.</div>';}
+function saveNote(){const l=getCurLead();if(!l)return;l.note=document.getElementById('note-ta').value;saveLocal();}
+function getCurLead(){if(!dialerOn||dialerIdx<0||dialerIdx>=dialerQ.length)return null;return leads.find(l=>l.id===dialerQ[dialerIdx].id);}
+function openKK(id){const lead=leads.find(l=>l.id===id);if(!lead)return;dialerQ=[lead];dialerIdx=0;dialerOn=true;callingPhone='';go('dialer');document.getElementById('d-idle').style.display='none';document.getElementById('d-active').classList.add('on');document.getElementById('fab-area').style.display='block';document.getElementById('bcb').style.display='flex';nextDialerLead();}
+function showNotif(title,sub){const el=document.createElement('div');el.className='notif';el.innerHTML='<strong style="font-size:12px">'+esc(title)+'</strong>'+(sub?'<div style="font-size:11px;color:var(--MUTED);margin-top:2px">'+esc(sub)+'</div>':'');el.onclick=()=>el.remove();document.getElementById('notif-area').appendChild(el);setTimeout(()=>el.remove(),4000);}
+function celebrate(){
+ const c=document.createElement('div');
+ c.style.cssText='position:fixed;inset:0;z-index:99999;pointer-events:none;display:flex;align-items:center;justify-content:center';
+ c.innerHTML='<div style="animation:celebPop .6s cubic-bezier(.34,1.56,.64,1);text-align:center"><div style="font-size:80px;margin-bottom:12px">🎉</div><div style="font-size:36px;font-weight:900;color:var(--G);text-shadow:0 4px 20px rgba(34,197,94,.4)">AFFÄR!</div></div>';
+ const confetti=Array.from({length:40},()=>{const d=document.createElement('div');const colors=['#22c55e','#5b5fc7','#f59e0b','#ef4444','#8b5cf6','#ec4899'];d.style.cssText='position:fixed;width:8px;height:8px;border-radius:50%;background:'+colors[Math.floor(Math.random()*colors.length)]+';top:-10px;left:'+Math.random()*100+'%;z-index:99998;animation:confettiFall '+(1.5+Math.random())+'s ease-out forwards;animation-delay:'+Math.random()*0.3+'s';return d;});
+ confetti.forEach(d=>document.body.appendChild(d));
+ document.body.appendChild(c);
+ setTimeout(()=>{c.remove();confetti.forEach(d=>d.remove());},3000);
+}
+function openAddModal(){document.getElementById('add-modal').style.display='flex';}
+function closeAddModal(){document.getElementById('add-modal').style.display='none';}
+function addLead(){
+ const co=document.getElementById('al-co').value.trim();if(!co){alert('Bolagsnamn krävs.');return;}
+ const ph=document.getElementById('al-ph').value.trim(),op=document.getElementById('al-op').value;
+ leads.push({id:nextId(),company:co,contact:document.getElementById('al-con').value.trim(),phone:normPhone(ph),orgnr:document.getElementById('al-org').value.trim(),operator:op,email:document.getElementById('al-em').value.trim(),plan:document.getElementById('al-plan').value.trim(),priceOrig:document.getElementById('al-pr').value.trim(),priceDiscount:'',priceFinal:document.getElementById('al-pr').value.trim(),bindingDate:document.getElementById('al-bind').value||null,industry:document.getElementById('al-industry').value||detectIndustry(co),portingDate:null,nextCallDate:null,status:op==='Okänd'?'prospekt':'ny',note:'',vdName:'',vdPhone:'',vdEmail:'',website:document.getElementById('al-web').value.trim(),offerSent:false,offerOpened:false,history:[],lockedBy:null,lockedAt:null,seller:null,subs:ph?[{phone:normPhone(ph),user:document.getElementById('al-con').value.trim(),portDate:'',end:document.getElementById('al-bind').value||'',plan:document.getElementById('al-plan').value.trim()}]:[],tb_amount:0,nyteck_count:0,forlang_count:0,deal_type:null});
+ saveData();closeAddModal();updateBadges();
+ ['al-co','al-org','al-con','al-ph','al-em','al-plan','al-pr','al-web'].forEach(i=>document.getElementById(i).value='');
+ document.getElementById('al-bind').value='';go('leads');
+}
+function openImport(){document.getElementById('import-modal').style.display='flex';}
+function closeImport(){document.getElementById('import-modal').style.display='none';}
+function doImport(){
+ const paste=document.getElementById('imp-paste').value.trim(),op=document.getElementById('imp-op').value;
+ if(!paste){alert('Klistra in data.');return;}
+ let n=0,m=0;
+ paste.split('\n').map(l=>l.trim()).filter(l=>l).forEach(line=>{
+  let p=line.split('\t');if(p.length<2)p=line.split(';');if(p.length<2)p=line.split(',');if(p.length<2)return;
+  const [org,ph,user,,endDate,plan]=[...p.map(x=>x?.trim()||''),...Array(6).fill('')];
+  if(!org&&!ph)return;
+  const ex=leads.find(l=>l.orgnr===org);
+  if(ex){if(!(ex.subs||[]).some(s=>normPhone(s.phone)===normPhone(ph))){ex.subs=ex.subs||[];ex.subs.push({phone:ph,user,portDate:'',end:endDate,plan});m++;}}
+  else{leads.push({id:nextId(),company:user||org,contact:'',phone:ph,orgnr:org,operator:op,email:'',plan,priceOrig:'',priceDiscount:'',priceFinal:'',bindingDate:endDate||null,industry:detectIndustry(user||org),portingDate:null,nextCallDate:null,status:op==='Okänd'?'prospekt':'ny',note:'',vdName:'',vdPhone:'',vdEmail:'',website:'',offerSent:false,offerOpened:false,history:[],lockedBy:null,lockedAt:null,seller:null,subs:ph?[{phone:ph,user,portDate:'',end:endDate,plan}]:[],tb_amount:0,nyteck_count:0,forlang_count:0,deal_type:null});n++;}
+ });
+ saveData();closeImport();updateBadges();
+ alert('Import klar! '+n+' nya · '+m+' nummer tillagda');
+ go('leads');
+}
+function detectPrioIndustry(text){
+ const t=(text||'').toLowerCase();
+ if(/snickare|snickeri|trä|montering/.test(t))return 'snickare';
+ if(/elektriker|elinstallat|elanlägg|elentrepr|elfirma|elservice/.test(t))return 'elektriker';
+ if(/vvs|rörmokare|rörinstallat|rörarbete|rörfirma|rörlägg/.test(t))return 'vvs';
+ if(/målare|måleri|målning|målarfirma|lackering/.test(t))return 'målare';
+ if(/plåtslagare|plåtslageri|plåtarbete|ventilation/.test(t))return 'plåtslagare';
+ if(/golvlägg|golvarbete|golvslip|golv/.test(t))return 'golvläggare';
+ if(/taklägg|takarbete|taktäck|takomlägg/.test(t))return 'takläggare';
+ if(/bygg|renovering|husbygg|ombygg|tillbygg|entrepr|plattsätt|kakel/.test(t))return 'bygg';
+ return 'bygg';
+}
+function importPrioFile(){
+ const inp=document.createElement('input');inp.type='file';inp.accept='.txt,.csv,.tsv';
+ inp.onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+   const lines=ev.target.result.split('\n').map(l=>l.trim()).filter(l=>l);
+   if(lines.length<2){alert('Filen är tom.');return;}
+   let added=0,skipped=0;
+   const header=lines[0].toLowerCase();
+   const startIdx=header.includes('orgn')?1:0;
+   for(let i=startIdx;i<lines.length;i++){
+    const parts=lines[i].split('\t');
+    if(parts.length<2)continue;
+    const [orgNr,foretag,regDatum,verksamhet,adress]=parts.map(x=>(x||'').trim());
+    if(!orgNr||!foretag)continue;
+    const cleanOrg=orgNr.replace(/[\s\-]/g,'');
+    if(leads.some(l=>normOrg(l.orgnr)===cleanOrg)){skipped++;continue;}
+    const ind=detectPrioIndustry(verksamhet||foretag);
+    leads.push({id:nextId(),company:foretag,contact:'',phone:'',orgnr:cleanOrg,operator:'',email:'',plan:'',priceOrig:'',priceDiscount:'',priceFinal:'',bindingDate:null,industry:ind,portingDate:null,nextCallDate:null,status:'prospekt',note:verksamhet||'',notes:verksamhet||'',vdName:'',vdPhone:'',vdEmail:'',website:'',address:adress||'',city:'',employees:'',offerSent:false,offerOpened:false,history:regDatum?[{date:regDatum,outcome:'Registrerat hos Bolagsverket',note:'',seller:'system'}]:[],lockedBy:null,lockedAt:null,seller:null,subs:[],tb_amount:0,nyteck_count:0,forlang_count:0,deal_type:null});
+    added++;
+   }
+   saveData();updateBadges();renderProspekt();
+   alert('Prio-import klar!\n\n'+added+' nya leads importerade\n'+skipped+' redan i systemet');
+   switchLeadsTab('prospekt');
+  };
+  r.readAsText(f,'UTF-8');
+ };
+ inp.click();
+}
+function sendOffert(id){
+ const l=leads.find(l=>l.id===id);if(!l)return;
+ const base=window.location.href.replace(/\/[^\/]*$/,'/offert.html');
+ const url=base+'?namn='+encodeURIComponent(l.company)+'&id='+id;
+ navigator.clipboard.writeText(url).then(()=>showNotif('Offertlänk kopierad!','Klistra in i SMS/mail')).catch(()=>{});
+ window.open(url,'_blank');
+ l.offerSent=true;
+ if(l.status!=='order')l.status='offert';
+ l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad',note:'Länk: '+url,seller:currentSeller});
+ saveData();updateBadges();
+}
+window.addEventListener('message',function(e){
+ if(e.data&&e.data.type==='prio-offert-accepted'){
+  const l=leads.find(l=>l.id===parseInt(e.data.leadId));
+  if(l){l.status='order';l.offerOpened=true;l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert godkänd: '+e.data.pkg,note:'',seller:currentSeller});saveData();updateBadges();showNotif('OFFERT GODKÄND!',l.company+' valde '+e.data.pkg);celebrate();}
+ }
+});
+function exportData(){const b=new Blob([JSON.stringify({leads,exportDate:new Date().toISOString()},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='saljos_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();}
+function importDataFile(){const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{try{const d=JSON.parse(e.target.result);if(d.leads){leads=d.leads;migrateLeads();saveData();updateBadges();alert('Återställt! '+leads.length+' leads.');go('leads');}else alert('Ogiltig fil.');}catch{alert('Kunde inte läsa.');}};r.readAsText(f);};i.click();}
+function clearAllData(){if(!confirm('Rensa ALL lokal data?'))return;localStorage.removeItem(localKey());leads=[];saveLocal();updateBadges();go('dialer');}
+function changePw(){const old=document.getElementById('s-pw-old').value,nw=document.getElementById('s-pw-new').value;const stored=localStorage.getItem('saljos_pw')||DEFAULT_PW;const el=document.getElementById('pw-status');if(old!==stored){el.innerHTML='<span style="color:var(--RD)">Fel lösenord.</span>';return;}if(!nw||nw.length<6){el.innerHTML='<span style="color:var(--RD)">Minst 6 tecken.</span>';return;}localStorage.setItem('saljos_pw',nw);el.innerHTML='<span style="color:var(--G)">✅ Ändrat!</span>';document.getElementById('s-pw-old').value='';document.getElementById('s-pw-new').value='';}
+function normPhone(p){return p?String(p).replace(/[\s\-\(\)\.]/g,''):'';}
+function normOrg(o){return(o||'').replace(/[\s\-]/g,'');}
+function fmtOrg(o){const n=normOrg(o);if(n.length===10)return n.slice(0,6)+'-'+n.slice(6);return o||'';}
+function toTel(p){let n=normPhone(p).replace(/^\+/,'');if(n.startsWith('0'))n='46'+n.slice(1);if(!n.startsWith('46'))n='46'+n;return 'tel:+'+n;}
+function fmtPhone(p){let n=normPhone(p);if(n.startsWith('+46'))n='0'+n.slice(3);if(n.startsWith('46')&&n.length>8)n='0'+n.slice(2);if(n.length===10)return n.slice(0,3)+'-'+n.slice(3,6)+' '+n.slice(6,8)+' '+n.slice(8);return p||'—';}
+function esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function nextId(){return leads.length?Math.max(...leads.map(l=>l.id))+1:1;}
+function bindCls(d){if(!d)return 'bind-ok';const days=Math.ceil((new Date(d)-new Date())/864e5);if(days<0)return 'bind-expired';if(days<30)return 'bind-soon';if(days<90)return 'bind-medium';return 'bind-ok';}
+function bindLbl(d){if(!d)return '—';const days=Math.ceil((new Date(d)-new Date())/864e5);if(days<0)return 'Utgången ('+Math.abs(days)+'d)';return days+' dagar';}
+function getIndLabel(ind){return{snickare:'🪟 Snickare',elektriker:'⚡ Elektriker',vvs:'🔧 VVS',målare:'🎨 Målare',plåtslagare:'🔩 Plåtslagare',golvläggare:'🏠 Golvläggare',takläggare:'🔧 Takläggare',bygg:'🏗️ Bygg',åkeri:'🚛 Åkeri',måleri:'🎨 Måleri',logistik:'📦 Logistik',el:'⚡ El',annat:'🏢 Övrigt'}[ind]||ind||'—';}
+function detectIndustry(n){if(!n)return 'annat';const x=n.toLowerCase();if(x.match(/åkeri|transport|frakt|lastbil|budtjänst/))return 'åkeri';if(x.match(/måleri|målare|färg|puts/))return 'måleri';if(x.match(/bygg|byggn|snickare|betong|schakt|mark/))return 'bygg';if(x.match(/logistik|lager|distribution|spedition/))return 'logistik';if(x.match(/cykel|bike|moped/))return 'cykel';if(x.match(/vvs|rör|plåt|kyl|värme/))return 'vvs';if(x.match(/el |elektriker|elinstallation/))return 'el';return 'annat';}
+function getSampleData(){
+ const add=d=>{const r=new Date();r.setDate(r.getDate()+d);return r.toISOString().slice(0,10);};
+ return [
+  {id:1,company:'Åkeri Stockholm AB',contact:'Anders Svensson',phone:'46701234567',orgnr:'556123-4567',operator:'Telenor',email:'',plan:'Företag Obeg',priceOrig:'399',priceDiscount:'',priceFinal:'299',bindingDate:add(-5),industry:'åkeri',portingDate:null,nextCallDate:null,status:'ny',note:'',vdName:'Anders Svensson',vdPhone:'46701234567',vdEmail:'',website:'',offerSent:false,offerOpened:false,history:[],lockedBy:null,lockedAt:null,seller:null,subs:[{phone:'46701234567',user:'Anders Svensson',portDate:'2022-04-15',end:add(-5),plan:'Företag Obeg'}],tb_amount:0,nyteck_count:0,forlang_count:0,deal_type:null},
+  {id:2,company:'Måleri Mäster AB',contact:'Lisa Målare',phone:'46702345678',orgnr:'556234-5678',operator:'Telenor',email:'',plan:'Företag 50GB',priceOrig:'299',priceDiscount:'',priceFinal:'199',bindingDate:add(18),industry:'måleri',portingDate:null,nextCallDate:null,status:'ny',note:'',vdName:'',vdPhone:'',vdEmail:'',website:'',offerSent:false,offerOpened:false,history:[],lockedBy:null,lockedAt:null,seller:null,subs:[{phone:'46702345678',user:'Lisa Målare',portDate:'2023-03-20',end:add(18),plan:'Företag 50GB'}],tb_amount:0,nyteck_count:0,forlang_count:0,deal_type:null},
+  {id:3,company:'Bygg & Betong AB',contact:'Johan Byggare',phone:'46703456789',orgnr:'556345-6789',operator:'Telia',email:'',plan:'',priceOrig:'',priceDiscount:'',priceFinal:'',bindingDate:add(45),industry:'bygg',portingDate:null,nextCallDate:null,status:'ny',note:'',vdName:'',vdPhone:'',vdEmail:'',website:'',offerSent:false,offerOpened:false,history:[],lockedBy:null,lockedAt:null,seller:null,subs:[{phone:'46703456789',user:'Johan Byggare',portDate:'',end:add(45),plan:''},{phone:'46703456790',user:'Anna Byggare',portDate:'',end:add(45),plan:''}],tb_amount:0,nyteck_count:0,forlang_count:0,deal_type:null},
+ ];
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
