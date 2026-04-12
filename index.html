@@ -27,13 +27,15 @@ body{font-family:'Inter',sans-serif;background:var(--BG);color:var(--TEXT);min-h
 .login-err{color:var(--RD);font-size:12px;margin-top:10px;display:none}
 #sb{position:fixed;left:0;top:0;bottom:0;width:var(--SBW);background:var(--P);color:#fff;display:flex;flex-direction:column;z-index:100;overflow-y:auto;overflow-x:hidden;transition:width .2s ease}
 #sb.mini{width:56px}
-#sb.mini .logo .t,#sb.mini .seller-pill,#sb.mini .sync-bar,#sb.mini .sec,#sb.mini .ni span,#sb.mini .ni .badge,#sb.mini .bottom .ni span{display:none}
+#sb.mini .seller-pill,#sb.mini .sync-bar,#sb.mini .sec{display:none}
 #sb.mini .logo{padding:16px 0;justify-content:center}
 #sb.mini .logo>div:first-child{justify-content:center}
-#sb.mini .logo button{display:none}
-#sb.mini .ni{padding:12px 0;justify-content:center;margin:0;border-left:none;border-radius:0}
-#sb.mini .ni i{margin:0}
+#sb.mini .logo .t,#sb.mini .logo button{display:none}
+#sb.mini .ni{padding:14px 0;justify-content:center;margin:0;border-left:none;border-radius:0;font-size:0;overflow:hidden;gap:0}
+#sb.mini .ni i{font-size:16px;margin:0;flex-shrink:0}
+#sb.mini .ni .badge{display:none}
 #sb.mini .bottom{padding:8px 0}
+#sb.mini .bottom .ni{font-size:0}
 #sb .logo{padding:22px 20px 14px;display:flex;align-items:center;gap:10px}
 #sb .logo .t{font-size:18px;font-weight:800;letter-spacing:-.04em;background:linear-gradient(135deg,#a5a8f8,#7c7ff2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 #sb .seller-pill{margin:0 14px 12px;background:linear-gradient(135deg,rgba(91,95,199,.15),rgba(124,127,242,.08));border:1px solid rgba(91,95,199,.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px}
