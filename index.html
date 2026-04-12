@@ -1111,12 +1111,12 @@ function renderKK(lead){
     ''+
    '</div>'+
    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'+
-    '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Kontaktperson</div><input value="'+esc(lead.vdName||lead.contact||'')+'" oninput="saveField('+lead.id+',\'vdName\',this.value)" placeholder="Namn" style="font-size:13px;font-weight:600;padding:8px 12px"></div>'+
+    '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Kontaktperson</div><input value="'+esc(lead.vdName||lead.contact||'')+'" oninput="saveField('+lead.id+',\'vdName\',this.value)" placeholder="Namn" style="padding:8px 12px"></div>'+
     '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">E-post</div><input value="'+esc(lead.vdEmail||lead.email||'')+'" oninput="saveField('+lead.id+',\'vdEmail\',this.value)" placeholder="namn@foretag.se" style="padding:8px 12px"></div>'+
    '</div>'+
    '<div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Telefon</div>'+
    '<div style="display:flex;gap:8px;align-items:center;margin-bottom:14px">'+
-    '<input value="'+esc(ph)+'" oninput="saveField('+lead.id+',\'vdPhone\',this.value)" placeholder="07X-XXX XX XX" style="font-size:15px;font-weight:700;padding:9px 14px;flex:1">'+
+    '<input value="'+esc(ph)+'" oninput="saveField('+lead.id+',\'vdPhone\',this.value)" placeholder="07X-XXX XX XX" style="padding:9px 14px;flex:1">'+
     (ph?'<a href="'+toTel(ph)+'" onclick="setCallingPhone(\''+esc(ph)+'\',\''+esc(lead.vdName||'')+'\')" style="padding:9px 20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap">Ring</a>':'')+
    '</div>'+
    '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
@@ -1182,7 +1182,7 @@ function renderInlineOutcome(lead){
  const el=document.getElementById('inline-outcome');if(!el)return;
  const ob='flex:1;padding:10px 8px;border:1px solid var(--BORDER);border-radius:8px;background:var(--W);cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:var(--TEXT);transition:border-color .12s';
  el.innerHTML=
-  '<div style="position:fixed;bottom:0;left:56px;right:0;background:var(--W);border-top:1px solid var(--BORDER);padding:14px 28px;z-index:50;display:flex;align-items:center;gap:10px" id="outcome-bar">'+
+  '<div style="position:fixed;bottom:0;left:56px;right:0;background:var(--W);border-top:1px solid var(--BORDER);padding:14px 28px 28px;z-index:50;display:flex;align-items:center;gap:10px" id="outcome-bar">'+
    '<button onclick="quickOutcome(\'nosvar\')" style="'+ob+'">Ej svar</button>'+
    '<button onclick="quickOutcome(\'ringsenare\')" style="'+ob+'">Ring senare</button>'+
    '<button onclick="quickOutcome(\'demo\')" style="'+ob+';border-color:#c4b5fd;background:#f5f3ff;color:#5b21b6;font-weight:700">Demo bokad</button>'+
