@@ -915,7 +915,7 @@ async function autoLoadPrioLeads(){
  if(leads.length>0)return;
  try{
   setSyncState('busy','Laddar Prio-leads...');
-  const res=await fetch('/prio_leads.json');
+  const res=await fetch('/prio_leads.json?v='+Date.now());
   if(!res.ok)return;
   const data=await res.json();
   if(!data||!data.length)return;
