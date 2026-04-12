@@ -106,12 +106,12 @@ body{min-height:100vh;background:#fff;font-family:'DM Sans',sans-serif;color:#1a
  </div>
 
  <p class="intro-big">Du jobbar med händerna. Inte med telefonen.</p>
- <p class="intro-sub">Prio finns till för att du ska kunna fokusera på det du gör bäst. Vi tar hand om samtalen, uppföljningen och allt runtomkring — så att inget faller mellan stolarna medan du är ute på jobb.</p>
+ <p class="intro-sub">Prio svarar åt dig när du inte kan. Dina kunder får svar, jobb bokas in, och du missar ingenting.</p>
 
  <div class="demo">
-  <div class="demo-label">HÖR SJÄLV HUR DET LÅTER</div>
-  <a href="tel:+46XXXXXXXXX" class="demo-num">XXX-XXX XX XX</a>
-  <div class="demo-sub">Ring och testa — 15 sekunder</div>
+  <div class="demo-label">RING OCH HÖR HUR DET LÅTER NÄR VI SVARAR ÅT DIG</div>
+  <a href="tel:+46708170438" class="demo-num">070-817 04 38</a>
+  <div class="demo-sub">Har du frågor? Ring Andrea direkt.</div>
  </div>
 
  <div class="divider"></div>
@@ -136,7 +136,6 @@ body{min-height:100vh;background:#fff;font-family:'DM Sans',sans-serif;color:#1a
 
  <div class="urgency">Halva uppstarten för de 10 första i Skåne.</div>
 
- <div class="compare">En anställd som sköter telefon och admin kostar 25 000 kr/mån.<br><span>Vi kostar från 2 990 kr/mån — dygnet runt, året runt.</span></div>
 
  <div class="steps">
   <div class="section-label">SÅ HÄR GÅR DET TILL</div>
@@ -175,26 +174,27 @@ body{min-height:100vh;background:#fff;font-family:'DM Sans',sans-serif;color:#1a
 <script>
 const params=new URLSearchParams(location.search);
 let company=params.get('namn')||'Företagsnamn';
-let note=params.get('note')||'du missar samtal varje dag när du är ute på jobb';
+let note=params.get('note')||'';
 const leadId=params.get('id')||'';
 let selected='pro';
 let accepted=false;
 
 const pkgs={
  bas:{name:'Prio',price:'2 990',setup:'4 990',tag:null,
-  short:'Missa aldrig ett samtal igen',
-  desc:'Du är ute på jobb. Telefonen ringer. Nån svarar åt dig, tar reda på vad det gäller och bokar in jobbet direkt i din kalender. Kunden får en bekräftelse. Du kollar telefonen på rasten och ser: "3 samtal idag, 2 jobb bokade, 1 vill att du ringer tillbaka." Inget faller mellan stolarna.'},
- pro:{name:'Prio Pro',price:'4 990',setup:'4 990',tag:'De flesta väljer den här',
-  short:'Slipp admin — fokusera på det du gör bäst',
-  desc:'Allt i Prio — plus att kunden som frågade om ett jobb för tre veckor sen men aldrig hörde av sig? Vi ringer honom åt dig. Nöjda kunder får en påminnelse att lägga omdöme. Nån vill ha pris? Ett förslag skickas innan du ens satt dig i bilen hem. Du har koll på allt i din egen Prio-portal.'},
+  short:'Nån svarar alltid',
+  desc:'Vi svarar i telefonen åt dig. Tar reda på vad kunden vill, bokar in jobbet och skickar bekräftelse. Du kollar telefonen på rasten och ser vad som hänt. Inga missade samtal, inga tappade jobb.'},
+ pro:{name:'Prio Pro',price:'4 990',setup:'4 990',tag:'Vanligaste valet',
+  short:'Vi sköter uppföljningen också',
+  desc:'Allt i Prio — plus att vi följer upp kunder som inte hört av sig, påminner nöjda kunder att lämna omdömen och skickar prisförslag åt dig. Du har koll på allt i en portal.'},
  total:{name:'Prio Total',price:'9 990',setup:'4 990',tag:null,
-  short:'Du jobbar — vi sköter allt annat',
-  desc:'Allt i Pro — plus att du får ett meddelande på morgonen: "Idag har du ett jobb i Landskrona kl 8 och ett i Helsingborg kl 13." Dina anställda vet var dom ska vara. När jobbet är klart skickas fakturan via Fortnox. Kvitton, bokföring, allt sköts. Du bygger. Vi tar hand om resten.'}
+  short:'Vi sköter allt runtomkring',
+  desc:'Allt i Pro — plus schema för dig och dina anställda, fakturering via Fortnox och en egen kontaktperson hos oss. Du bygger. Vi tar hand om resten.'}
 };
 
 function render(){
  document.getElementById('co-display').textContent=company;
- document.getElementById('note-display').textContent=note;
+ if(note){document.getElementById('note-display').textContent=note;document.querySelector('.note-box').style.display='';}
+ else{document.querySelector('.note-box').style.display='none';}
  // Packages
  let ph='';
  for(const[key,pkg]of Object.entries(pkgs)){
@@ -224,16 +224,6 @@ function render(){
 
 function selectPkg(key){selected=key;render();}
 function toggleAccept(){accepted=!accepted;render();}
-
-function editField(f){
- if(f==='co'){document.getElementById('co-display').style.display='none';const inp=document.getElementById('co-input');inp.style.display='';inp.value=company;inp.focus();}
- if(f==='note'){document.getElementById('note-display').style.display='none';const inp=document.getElementById('note-input');inp.style.display='';inp.value=note;inp.focus();}
-}
-function doneEdit(f){
- if(f==='co'){company=document.getElementById('co-input').value||company;document.getElementById('co-input').style.display='none';document.getElementById('co-display').style.display='';}
- if(f==='note'){note=document.getElementById('note-input').value||note;document.getElementById('note-input').style.display='none';document.getElementById('note-display').style.display='';}
- render();
-}
 
 function logEvent(type){
  try{
