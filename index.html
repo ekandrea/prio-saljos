@@ -25,8 +25,15 @@ body{font-family:'Inter',sans-serif;background:var(--BG);color:var(--TEXT);min-h
 .login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#5b5fc7,#7c7ff2);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
 .login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,95,199,.35)}
 .login-err{color:var(--RD);font-size:12px;margin-top:10px;display:none}
-#sb{position:fixed;left:0;top:0;bottom:0;width:var(--SBW);background:var(--P);color:#fff;display:flex;flex-direction:column;z-index:100;overflow-y:auto;transition:transform .25s}
-#sb.hidden{transform:translateX(-100%)}
+#sb{position:fixed;left:0;top:0;bottom:0;width:var(--SBW);background:var(--P);color:#fff;display:flex;flex-direction:column;z-index:100;overflow-y:auto;overflow-x:hidden;transition:width .2s ease}
+#sb.mini{width:56px}
+#sb.mini .logo .t,#sb.mini .seller-pill,#sb.mini .sync-bar,#sb.mini .sec,#sb.mini .ni span,#sb.mini .ni .badge,#sb.mini .bottom .ni span{display:none}
+#sb.mini .logo{padding:16px 0;justify-content:center}
+#sb.mini .logo>div:first-child{justify-content:center}
+#sb.mini .logo button{display:none}
+#sb.mini .ni{padding:12px 0;justify-content:center;margin:0;border-left:none;border-radius:0}
+#sb.mini .ni i{margin:0}
+#sb.mini .bottom{padding:8px 0}
 #sb .logo{padding:22px 20px 14px;display:flex;align-items:center;gap:10px}
 #sb .logo .t{font-size:18px;font-weight:800;letter-spacing:-.04em;background:linear-gradient(135deg,#a5a8f8,#7c7ff2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 #sb .seller-pill{margin:0 14px 12px;background:linear-gradient(135deg,rgba(91,95,199,.15),rgba(124,127,242,.08));border:1px solid rgba(91,95,199,.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px}
@@ -49,10 +56,9 @@ body{font-family:'Inter',sans-serif;background:var(--BG);color:var(--TEXT);min-h
 #sb .ni .badge{background:var(--ACC);color:#fff;font-size:9px;padding:2px 7px;border-radius:8px;margin-left:auto;font-weight:700}
 #sb .ni .badge.warn{background:var(--OR)}
 #sb .bottom{margin-top:auto;padding:12px;border-top:1px solid #111827}
-#hamburger{position:fixed;top:16px;left:var(--SBW);z-index:200;background:var(--W);color:var(--TEXT);border:1px solid var(--BORDER);border-radius:10px;padding:8px 10px;font-size:16px;cursor:pointer;transition:all .25s;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,.08);opacity:.7}
-#hamburger:hover{opacity:1;box-shadow:0 4px 12px rgba(0,0,0,.12)}
-.main{margin-left:var(--SBW);min-height:100vh;padding:32px 40px;transition:margin-left .25s}
-.main.expanded{margin-left:0}
+#hamburger{display:none!important}
+.main{margin-left:var(--SBW);min-height:100vh;padding:32px 40px;transition:margin-left .2s ease}
+.main.mini{margin-left:56px}
 .view{display:none;animation:fi .3s ease}.view.on{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .page-title{font-size:22px;font-weight:800;margin-bottom:24px;letter-spacing:-.03em;padding-left:42px;background:linear-gradient(135deg,var(--TEXT),var(--ACC));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -95,8 +101,8 @@ tr.clickable:hover{background:linear-gradient(135deg,#f5f3ff,#fafafc);cursor:poi
 .q-item .co{font-weight:700;font-size:13px}.q-item .meta{display:flex;gap:8px;align-items:center}
 .q-item .sc{background:linear-gradient(135deg,var(--ACC),var(--ACC2));color:#fff;padding:2px 9px;border-radius:7px;font-size:10px;font-weight:700}
 #d-active{display:none}#d-active.on{display:block}
-#bcb{position:fixed;bottom:0;left:var(--SBW);right:0;background:linear-gradient(180deg,rgba(255,255,255,.95),#fff);backdrop-filter:blur(12px);border-top:none;box-shadow:0 -4px 20px rgba(0,0,0,.08);padding:16px 0;display:flex;align-items:center;justify-content:center;gap:18px;z-index:50;transition:left .25s}
-#bcb.expanded{left:0}
+#bcb{position:fixed;bottom:0;left:var(--SBW);right:0;background:linear-gradient(180deg,rgba(255,255,255,.97),#fff);backdrop-filter:blur(12px);border-top:1px solid var(--BORDER);padding:12px 0;display:flex;align-items:center;justify-content:center;gap:16px;z-index:50;transition:left .2s ease;display:none}
+.main.mini~#bcb,#bcb{left:var(--SBW)}
 #d-active.on{padding-bottom:76px}
 .call-btn{width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;font-size:18px;transition:all .15s;display:flex;align-items:center;justify-content:center}
 .call-btn:hover{transform:scale(1.07)}.call-btn:active{transform:scale(.95)}
@@ -563,7 +569,7 @@ th,td{padding:8px 10px}
 </div>
 <button id="hamburger" onclick="toggleSidebar()" style="display:none">☰</button>
 <div id="sb">
- <div class="logo" style="justify-content:space-between"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px">⚡</span><div class="t">Säljös</div></div><button onclick="toggleSidebar()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#888;font-size:16px;padding:4px 8px;cursor:pointer;line-height:1">✕</button></div>
+ <div class="logo" style="justify-content:space-between"><div style="display:flex;align-items:center;gap:10px" onclick="if(document.getElementById('sb').classList.contains('mini'))toggleSidebar()" style="cursor:pointer"><span style="font-size:22px">⚡</span><div class="t">Säljös</div></div><button onclick="toggleSidebar()" style="background:rgba(255,255,255,.06);border:none;border-radius:6px;color:#555;font-size:14px;padding:6px 8px;cursor:pointer;line-height:1;transition:color .15s" onmouseenter="this.style.color='#ccc'" onmouseleave="this.style.color='#555'">◀</button></div>
  <div class="seller-pill"><div class="av" id="sb-av">A</div><div><div class="nm" id="sb-nm">Andy</div><div class="rl">Sales rep</div></div></div>
  <div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span class="sync-text" id="sync-text">Laddar...</span><button class="sync-btn" onclick="cloudSync()">Synka ↑↓</button></div>
  <div class="sec">Huvudmeny</div>
@@ -866,9 +872,9 @@ function toggleDialerFilter(){const f=document.getElementById('dialer-filter');f
 function clearDialerFilter(){document.getElementById('df-op').value='';document.getElementById('df-ind').value='';document.getElementById('df-bind-min').value='';document.getElementById('df-bind-max').value='';document.getElementById('df-status').value='';renderDialer();}
 function toggleSidebar(){
  sbVisible=!sbVisible;
- const sb=document.getElementById('sb'),main=document.getElementById('main'),bcb=document.getElementById('bcb'),hb=document.getElementById('hamburger');
- if(sbVisible){sb.classList.remove('hidden');main.classList.remove('expanded');bcb.classList.remove('expanded');hb.style.display='none';}
- else{sb.classList.add('hidden');main.classList.add('expanded');bcb.classList.add('expanded');hb.style.display='';hb.style.left='12px';}
+ const sb=document.getElementById('sb'),main=document.getElementById('main'),bcb=document.getElementById('bcb');
+ if(sbVisible){sb.classList.remove('mini');main.classList.remove('mini');if(bcb)bcb.style.left='var(--SBW)';}
+ else{sb.classList.add('mini');main.classList.add('mini');if(bcb)bcb.style.left='56px';}
 }
 function migrateOldData(){
  const oldKey='saljos_leads_v2';
@@ -1119,52 +1125,59 @@ function renderKK(lead){
  const greens=[c1,c2,c3].filter(c=>c==='g').length;
  const reds=[c1,c2,c3].filter(c=>c==='r').length;
  let verdict='';
- if(greens>=2)verdict='<span style="color:#22c55e;font-weight:800">RING</span>';
- else if(reds>=2)verdict='<span style="color:#ef4444;font-weight:800">SKIPPA</span>';
- else if(c1||c2||c3)verdict='<span style="color:#eab308;font-weight:800">KANSKE</span>';
+ if(greens>=2)verdict='<span style="background:#dcfce7;color:#166534;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">RING</span>';
+ else if(reds>=2)verdict='<span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">SKIPPA</span>';
+ else if(c1||c2||c3)verdict='<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">KANSKE</span>';
+ const ph=lead.vdPhone||lead.phone||'';
  document.getElementById('kk-area').innerHTML=
-  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:14px;padding:24px 28px;margin-bottom:16px">'+
-  '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px">'+
-  '<div><h2 style="font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:2px">'+esc(lead.company)+'</h2>'+
-  '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px">'+
-  '<span class="industry-badge">'+getIndLabel(lead.industry)+'</span>'+
-  (ort?'<span style="font-size:11px;color:var(--MUTED)">'+esc(ort)+'</span>':'')+
-  '<span style="font-size:11px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(lead.orgnr)||'')+'</span>'+
-  (verdict?' · '+verdict:'')+
-  '</div></div>'+
-  '<button class="btn btn-o btn-sm" onclick="stopDialer()">Tillbaka</button></div>'+
-  '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:2px">'+
-  '<a href="https://www.google.com/maps/search/'+encodeURIComponent((lead.company||'')+' '+(ort||'Skåne'))+'" target="_blank" class="link-btn" style="background:#dcfce7;color:#166534;border-color:#86efac;font-weight:700">Google Maps</a>'+
-  '<a href="https://www.allabolag.se/'+normOrg(lead.orgnr)+'" target="_blank" class="link-btn" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd;font-weight:700">Allabolag</a>'+
-  '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Hitta.se</a>'+
-  '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn">Merinfo</a>'+
-  '<a href="https://www.eniro.se/'+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Eniro</a>'+
-  '<button class="link-btn" style="background:var(--ACC);color:#fff;border:none" onclick="sendOffert('+lead.id+')">Skicka offert</button>'+
-  '</div></div>'+
-  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">'+
-  '<div>'+
-  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:18px;margin-bottom:12px">'+
-  '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:12px">Kontakt</div>'+
-  '<div style="display:flex;flex-direction:column;gap:10px">'+
-  '<div><label style="font-size:9px;color:var(--ACC);font-weight:700;text-transform:uppercase;letter-spacing:.04em">Namn</label><input value="'+esc(lead.vdName||lead.contact||'')+'" oninput="saveField('+lead.id+',\'vdName\',this.value)" placeholder="Kontaktperson" style="font-size:14px;font-weight:600;padding:8px 12px"></div>'+
-  '<div><label style="font-size:9px;color:var(--ACC);font-weight:700;text-transform:uppercase;letter-spacing:.04em">Telefon</label><div style="display:flex;gap:6px"><input value="'+esc(lead.vdPhone||lead.phone||'')+'" oninput="saveField('+lead.id+',\'vdPhone\',this.value)" placeholder="07X-XXX XX XX" style="font-size:14px;font-weight:700;padding:8px 12px">'+(lead.vdPhone||lead.phone?'<a href="'+toTel(lead.vdPhone||lead.phone)+'" class="btn btn-g btn-sm" style="border-radius:8px;padding:8px 14px;white-space:nowrap" onclick="setCallingPhone(\''+(lead.vdPhone||lead.phone)+'\',\''+(lead.vdName||'')+'\')">Ring</a>':'')+'</div></div>'+
-  '<div><label style="font-size:9px;color:var(--ACC);font-weight:700;text-transform:uppercase;letter-spacing:.04em">E-post</label><input value="'+esc(lead.vdEmail||lead.email||'')+'" oninput="saveField('+lead.id+',\'vdEmail\',this.value)" placeholder="namn@foretag.se" style="padding:8px 12px"></div>'+
-  '</div></div>'+
-  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:18px">'+
-  '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:8px">Verksamhet</div>'+
-  '<div style="font-size:11px;color:#666;line-height:1.5;max-height:70px;overflow-y:auto">'+esc(lead.note||lead.notes||'—')+'</div>'+
+  '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">'+
+   '<div>'+
+    '<h2 style="font-size:20px;font-weight:800;letter-spacing:-.02em;margin-bottom:3px">'+esc(lead.company)+'</h2>'+
+    '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+
+     '<span class="industry-badge">'+getIndLabel(lead.industry)+'</span>'+
+     (ort?'<span style="font-size:11px;color:var(--MUTED)">'+esc(ort)+'</span>':'')+
+     '<span style="font-size:10px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(lead.orgnr)||'')+'</span>'+
+     (verdict?' '+verdict:'')+
+    '</div>'+
+   '</div>'+
+   '<button class="btn btn-o btn-sm" onclick="stopDialer()" style="flex-shrink:0">Tillbaka</button>'+
   '</div>'+
-  '</div>'+
-  '<div>'+
-  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:18px;margin-bottom:12px">'+
-  '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:12px">Tre checkar</div>'+
-  '<div style="display:flex;flex-direction:column;gap:10px">'+
-  '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">1. Storlek</div><div style="font-size:10px;color:var(--MUTED)">2–10 anst = grön</div></div><div style="display:flex;gap:4px">'+rateBtn(lead.id,'check_size','g',c1)+rateBtn(lead.id,'check_size','y',c1)+rateBtn(lead.id,'check_size','r',c1)+'</div></div>'+
-  '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">2. Omsättning</div><div style="font-size:10px;color:var(--MUTED)">1–10 mkr = grön</div></div><div style="display:flex;gap:4px">'+rateBtn(lead.id,'check_revenue','g',c2)+rateBtn(lead.id,'check_revenue','y',c2)+rateBtn(lead.id,'check_revenue','r',c2)+'</div></div>'+
-  '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">3. Synlighet</div><div style="font-size:10px;color:var(--MUTED)">Hemsida + Google = grön</div></div><div style="display:flex;gap:4px">'+rateBtn(lead.id,'check_visible','g',c3)+rateBtn(lead.id,'check_visible','y',c3)+rateBtn(lead.id,'check_visible','r',c3)+'</div></div>'+
-  '</div></div>'+
-  (lastNote?'<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:12px;margin-bottom:12px"><div style="font-size:9px;color:#92400e;font-weight:700;text-transform:uppercase;margin-bottom:2px">Senast ('+esc(lastNote.date||'')+')</div><div style="font-size:11px;font-weight:600;color:#78350f">'+esc(lastNote.outcome||'')+'</div></div>':'')+
-  '</div>'+
+  '<div style="display:grid;grid-template-columns:1fr 320px;gap:20px">'+
+   '<div>'+
+    '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:20px;margin-bottom:14px">'+
+     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">'+
+      '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Kontaktperson</div><input value="'+esc(lead.vdName||lead.contact||'')+'" oninput="saveField('+lead.id+',\'vdName\',this.value)" placeholder="Namn" style="font-size:13px;font-weight:600;padding:9px 12px"></div>'+
+      '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">E-post</div><input value="'+esc(lead.vdEmail||lead.email||'')+'" oninput="saveField('+lead.id+',\'vdEmail\',this.value)" placeholder="namn@foretag.se" style="padding:9px 12px"></div>'+
+     '</div>'+
+     '<div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Telefon</div>'+
+     '<div style="display:flex;gap:8px;align-items:center">'+
+      '<input value="'+esc(ph)+'" oninput="saveField('+lead.id+',\'vdPhone\',this.value)" placeholder="07X-XXX XX XX" style="font-size:16px;font-weight:700;padding:10px 14px;flex:1;letter-spacing:.02em">'+
+      (ph?'<a href="'+toTel(ph)+'" onclick="setCallingPhone(\''+esc(ph)+'\',\''+esc(lead.vdName||'')+'\')" style="display:flex;align-items:center;gap:6px;padding:10px 20px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(34,197,94,.25);transition:all .15s">Ring</a>':'')+
+     '</div>'+
+     (!ph?'<div style="display:flex;gap:6px;margin-top:10px">'+
+      '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:8px">Hitta.se</a>'+
+      '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:8px">Merinfo</a>'+
+      '<a href="https://www.eniro.se/'+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:8px">Eniro</a>'+
+     '</div>':'')+
+    '</div>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+     '<a href="https://www.google.com/maps/search/'+encodeURIComponent((lead.company||'')+' '+(ort||'Skåne'))+'" target="_blank" class="link-btn">Google Maps</a>'+
+     '<a href="https://www.allabolag.se/'+normOrg(lead.orgnr)+'" target="_blank" class="link-btn">Allabolag</a>'+
+     '<a href="https://www.google.com/search?q='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Google</a>'+
+     '<button class="link-btn" style="background:var(--ACC);color:#fff;border:none" onclick="sendOffert('+lead.id+')">Skicka offert</button>'+
+    '</div>'+
+   '</div>'+
+   '<div>'+
+    '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:18px;margin-bottom:14px">'+
+     '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:14px">Kvalificering</div>'+
+     '<div style="display:flex;flex-direction:column;gap:12px">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">Storlek</div><div style="font-size:10px;color:var(--MUTED)">2–10 anst</div></div><div style="display:flex;gap:3px">'+rateBtn(lead.id,'check_size','g',c1)+rateBtn(lead.id,'check_size','y',c1)+rateBtn(lead.id,'check_size','r',c1)+'</div></div>'+
+      '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">Omsättning</div><div style="font-size:10px;color:var(--MUTED)">1–10 mkr</div></div><div style="display:flex;gap:3px">'+rateBtn(lead.id,'check_revenue','g',c2)+rateBtn(lead.id,'check_revenue','y',c2)+rateBtn(lead.id,'check_revenue','r',c2)+'</div></div>'+
+      '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">Synlighet</div><div style="font-size:10px;color:var(--MUTED)">Hemsida + Google</div></div><div style="display:flex;gap:3px">'+rateBtn(lead.id,'check_visible','g',c3)+rateBtn(lead.id,'check_visible','y',c3)+rateBtn(lead.id,'check_visible','r',c3)+'</div></div>'+
+     '</div>'+
+    '</div>'+
+    (lastNote?'<div style="background:#fafafc;border:1px solid var(--BORDER);border-radius:10px;padding:12px"><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;margin-bottom:2px">Senast '+esc(lastNote.date||'')+'</div><div style="font-size:11px;font-weight:600">'+esc(lastNote.outcome||'')+'</div></div>':'')+
+   '</div>'+
   '</div>';
  if(window.lucide)lucide.createIcons();
 }
