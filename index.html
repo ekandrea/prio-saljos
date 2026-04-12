@@ -1106,53 +1106,64 @@ function updateProgress(){
 function stopDialer(){dialerOn=false;dialerIdx=-1;document.getElementById('d-active').classList.remove('on');document.getElementById('d-idle').style.display='';document.getElementById('bcb').style.display='none';document.getElementById('progress-bar-area').style.display='none';const io=document.getElementById('inline-outcome');if(io)io.innerHTML='';renderDialer();updateBadges();}
 function nextDialerLead(){if(dialerIdx>=dialerQ.length){stopDialer();return;}const l=leads.find(l=>l.id===dialerQ[dialerIdx].id);if(!l){dialerIdx++;nextDialerLead();return;}lockLead(l.id);renderKK(l);renderInlineOutcome(l);document.getElementById('calling-lbl').textContent='';callingPhone='';}
 function skipLead(){const l=getCurLead();if(l)unlockLead(l.id);dialerIdx++;if(dialerIdx<dialerQ.length)nextDialerLead();else stopDialer();updateBadges();}
+function rateBtn(leadId,field,val,current){
+ const colors={g:'#22c55e',y:'#eab308',r:'#ef4444'};
+ const labels={g:'Grön',y:'Gul',r:'Röd'};
+ const active=current===val;
+ return '<button onclick="saveField('+leadId+',\''+field+'\',\''+val+'\');renderKK(leads.find(l=>l.id==='+leadId+'))" style="padding:4px 10px;border-radius:6px;border:1px solid '+(active?colors[val]:'#e5e7eb')+';background:'+(active?colors[val]+'20':'#fff')+';color:'+(active?colors[val]:'#999')+';font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">'+labels[val]+'</button>';
+}
 function renderKK(lead){
  const ort=lead.address?lead.address.split(',').pop().trim():(lead.city||'');
  const lastNote=lead.history&&lead.history.length?lead.history[lead.history.length-1]:'';
+ const c1=lead.check_size||'';const c2=lead.check_revenue||'';const c3=lead.check_visible||'';
+ const greens=[c1,c2,c3].filter(c=>c==='g').length;
+ const reds=[c1,c2,c3].filter(c=>c==='r').length;
+ let verdict='';
+ if(greens>=2)verdict='<span style="color:#22c55e;font-weight:800">RING</span>';
+ else if(reds>=2)verdict='<span style="color:#ef4444;font-weight:800">SKIPPA</span>';
+ else if(c1||c2||c3)verdict='<span style="color:#eab308;font-weight:800">KANSKE</span>';
  document.getElementById('kk-area').innerHTML=
-  '<div style="background:linear-gradient(135deg,#f8f7ff,#fff);border:1px solid #e8e6f0;border-radius:16px;padding:28px 32px;margin-bottom:20px;box-shadow:0 2px 12px rgba(91,95,199,.06)">'+
-  '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:20px">'+
-  '<div><h2 style="font-size:28px;font-weight:800;letter-spacing:-.03em;margin-bottom:4px;color:var(--TEXT)">'+esc(lead.company)+'</h2>'+
-  '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px">'+
-  '<span class="industry-badge" style="font-size:12px;padding:4px 12px">'+getIndLabel(lead.industry)+'</span>'+
-  (ort?'<span style="font-size:12px;color:var(--MUTED)">📍 '+esc(ort)+'</span>':'')+
-  '<span style="font-size:12px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(lead.orgnr)||'—')+'</span>'+
+  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:14px;padding:24px 28px;margin-bottom:16px">'+
+  '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px">'+
+  '<div><h2 style="font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:2px">'+esc(lead.company)+'</h2>'+
+  '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px">'+
+  '<span class="industry-badge">'+getIndLabel(lead.industry)+'</span>'+
+  (ort?'<span style="font-size:11px;color:var(--MUTED)">'+esc(ort)+'</span>':'')+
+  '<span style="font-size:11px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(lead.orgnr)||'')+'</span>'+
+  (verdict?' · '+verdict:'')+
   '</div></div>'+
-  '<button class="btn btn-o" onclick="stopDialer()" style="white-space:nowrap"><i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:-2px"></i> Tillbaka</button></div>'+
-  '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px">'+
-  '<a href="https://www.allabolag.se/'+normOrg(lead.orgnr)+'" target="_blank" class="link-btn" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd">📊 Allabolag</a>'+
-  '<a href="https://www.google.com/maps/search/'+encodeURIComponent((lead.company||'')+' '+(ort||''))+'" target="_blank" class="link-btn" style="background:#dcfce7;color:#166534;border-color:#86efac">📍 Google Maps</a>'+
-  '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn" style="background:#fef3c7;color:#92400e;border-color:#fcd34d">🔍 Merinfo</a>'+
-  '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">📞 Hitta.se</a>'+
-  '<a href="https://www.google.com/search?q='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Google</a>'+
-  '<button class="link-btn" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;font-weight:700" onclick="sendOffert('+lead.id+')">📄 Skicka offert</button>'+
+  '<button class="btn btn-o btn-sm" onclick="stopDialer()">Tillbaka</button></div>'+
+  '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:2px">'+
+  '<a href="https://www.google.com/maps/search/'+encodeURIComponent((lead.company||'')+' '+(ort||'Skåne'))+'" target="_blank" class="link-btn" style="background:#dcfce7;color:#166534;border-color:#86efac;font-weight:700">Google Maps</a>'+
+  '<a href="https://www.allabolag.se/'+normOrg(lead.orgnr)+'" target="_blank" class="link-btn" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd;font-weight:700">Allabolag</a>'+
+  '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Hitta.se</a>'+
+  '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn">Merinfo</a>'+
+  '<a href="https://www.eniro.se/'+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn">Eniro</a>'+
+  '<button class="link-btn" style="background:var(--ACC);color:#fff;border:none" onclick="sendOffert('+lead.id+')">Skicka offert</button>'+
   '</div></div>'+
-  '<div style="display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start">'+
-  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:14px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.04)">'+
-  '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:14px">Kontaktuppgifter</div>'+
-  '<div style="display:flex;flex-direction:column;gap:14px">'+
-  '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Kontaktperson</label><input value="'+esc(lead.vdName||lead.contact||'')+'" oninput="saveField('+lead.id+',\'vdName\',this.value)" placeholder="Namn..." style="font-size:15px;font-weight:600"></div>'+
-  '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Telefon</label><div style="display:flex;gap:6px;align-items:center"><input value="'+esc(lead.vdPhone||lead.phone||'')+'" oninput="saveField('+lead.id+',\'vdPhone\',this.value)" placeholder="07X-XXX XX XX" style="font-size:15px;font-weight:700">'+(lead.vdPhone||lead.phone?'<a href="'+toTel(lead.vdPhone||lead.phone)+'" class="btn btn-g btn-sm" style="border-radius:20px;padding:8px 16px;white-space:nowrap" onclick="setCallingPhone(\''+(lead.vdPhone||lead.phone)+'\',\''+(lead.vdName||'')+'\')"><i data-lucide="phone" style="width:14px;height:14px;vertical-align:-2px"></i> Ring</a>':'')+'</div></div>'+
-  '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">E-post</label><input value="'+esc(lead.vdEmail||lead.email||'')+'" oninput="saveField('+lead.id+',\'vdEmail\',this.value)" placeholder="namn@foretag.se"></div>'+
-  '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Ort / Adress</label><input value="'+esc(lead.address||lead.city||'')+'" oninput="saveField('+lead.id+',\'address\',this.value)" placeholder="Ort..."></div>'+
-  '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Antal anställda</label><input value="'+esc(lead.employees||'')+'" oninput="saveField('+lead.id+',\'employees\',this.value)" placeholder="t.ex. 3"></div>'+
-  '</div></div>'+
+  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">'+
   '<div>'+
-  (!(lead.vdPhone||lead.phone)?
-  '<div style="background:#fafafc;border:1px solid var(--BORDER);border-radius:10px;padding:16px;margin-bottom:14px">'+
-  '<div style="font-size:10px;color:var(--ACC);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Sök nummer</div>'+
-  '<div style="display:flex;flex-wrap:wrap;gap:6px">'+
-  '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:10px 14px">Hitta.se</a>'+
-  '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:10px 14px">Merinfo</a>'+
-  '<a href="https://www.eniro.se/'+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:10px 14px">Eniro</a>'+
-  '<a href="https://www.google.com/search?q='+encodeURIComponent((lead.company||'')+' telefon '+(ort||'Skåne'))+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:10px 14px">Google</a>'+
-  '</div></div>'
-  :'')+
-  '<div style="background:#fafafc;border:1px solid var(--BORDER);border-radius:10px;padding:16px;margin-bottom:14px">'+
-  '<div style="font-size:10px;color:var(--ACC);font-weight:700;text-transform:uppercase;margin-bottom:6px">Verksamhet</div>'+
-  '<div style="font-size:12px;color:var(--TEXT);line-height:1.5;max-height:80px;overflow-y:auto">'+esc(lead.note||lead.notes||'Ingen beskrivning')+'</div>'+
+  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:18px;margin-bottom:12px">'+
+  '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:12px">Kontakt</div>'+
+  '<div style="display:flex;flex-direction:column;gap:10px">'+
+  '<div><label style="font-size:9px;color:var(--ACC);font-weight:700;text-transform:uppercase;letter-spacing:.04em">Namn</label><input value="'+esc(lead.vdName||lead.contact||'')+'" oninput="saveField('+lead.id+',\'vdName\',this.value)" placeholder="Kontaktperson" style="font-size:14px;font-weight:600;padding:8px 12px"></div>'+
+  '<div><label style="font-size:9px;color:var(--ACC);font-weight:700;text-transform:uppercase;letter-spacing:.04em">Telefon</label><div style="display:flex;gap:6px"><input value="'+esc(lead.vdPhone||lead.phone||'')+'" oninput="saveField('+lead.id+',\'vdPhone\',this.value)" placeholder="07X-XXX XX XX" style="font-size:14px;font-weight:700;padding:8px 12px">'+(lead.vdPhone||lead.phone?'<a href="'+toTel(lead.vdPhone||lead.phone)+'" class="btn btn-g btn-sm" style="border-radius:8px;padding:8px 14px;white-space:nowrap" onclick="setCallingPhone(\''+(lead.vdPhone||lead.phone)+'\',\''+(lead.vdName||'')+'\')">Ring</a>':'')+'</div></div>'+
+  '<div><label style="font-size:9px;color:var(--ACC);font-weight:700;text-transform:uppercase;letter-spacing:.04em">E-post</label><input value="'+esc(lead.vdEmail||lead.email||'')+'" oninput="saveField('+lead.id+',\'vdEmail\',this.value)" placeholder="namn@foretag.se" style="padding:8px 12px"></div>'+
+  '</div></div>'+
+  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:18px">'+
+  '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:8px">Verksamhet</div>'+
+  '<div style="font-size:11px;color:#666;line-height:1.5;max-height:70px;overflow-y:auto">'+esc(lead.note||lead.notes||'—')+'</div>'+
   '</div>'+
-  (lastNote?'<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:14px;margin-bottom:14px"><div style="font-size:10px;color:#92400e;font-weight:700;text-transform:uppercase;margin-bottom:4px">Senaste händelse ('+esc(lastNote.date||'')+')</div><div style="font-size:12px;font-weight:600;color:#78350f">'+esc(lastNote.outcome||'')+'</div>'+(lastNote.note?'<div style="font-size:11px;color:#92400e;margin-top:4px">'+esc(lastNote.note)+'</div>':'')+'</div>':'')+
+  '</div>'+
+  '<div>'+
+  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:18px;margin-bottom:12px">'+
+  '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:12px">Tre checkar</div>'+
+  '<div style="display:flex;flex-direction:column;gap:10px">'+
+  '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">1. Storlek</div><div style="font-size:10px;color:var(--MUTED)">2–10 anst = grön</div></div><div style="display:flex;gap:4px">'+rateBtn(lead.id,'check_size','g',c1)+rateBtn(lead.id,'check_size','y',c1)+rateBtn(lead.id,'check_size','r',c1)+'</div></div>'+
+  '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">2. Omsättning</div><div style="font-size:10px;color:var(--MUTED)">1–10 mkr = grön</div></div><div style="display:flex;gap:4px">'+rateBtn(lead.id,'check_revenue','g',c2)+rateBtn(lead.id,'check_revenue','y',c2)+rateBtn(lead.id,'check_revenue','r',c2)+'</div></div>'+
+  '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">3. Synlighet</div><div style="font-size:10px;color:var(--MUTED)">Hemsida + Google = grön</div></div><div style="display:flex;gap:4px">'+rateBtn(lead.id,'check_visible','g',c3)+rateBtn(lead.id,'check_visible','y',c3)+rateBtn(lead.id,'check_visible','r',c3)+'</div></div>'+
+  '</div></div>'+
+  (lastNote?'<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:12px;margin-bottom:12px"><div style="font-size:9px;color:#92400e;font-weight:700;text-transform:uppercase;margin-bottom:2px">Senast ('+esc(lastNote.date||'')+')</div><div style="font-size:11px;font-weight:600;color:#78350f">'+esc(lastNote.outcome||'')+'</div></div>':'')+
   '</div>'+
   '</div>';
  if(window.lucide)lucide.createIcons();
