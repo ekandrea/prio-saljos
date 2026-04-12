@@ -953,10 +953,25 @@ async function cloudPull(){
   }
   if(localLeads.length){leads=localLeads;migrateLeads();setSyncState('ok','Lokal data ('+leads.length+')');cloudPush();return;}
   leads=[];saveLocal();setSyncState('ok','Inga leads ännu');
+  await autoLoadPrioLeads();
  }catch(e){
   if(localLeads.length){leads=localLeads;migrateLeads();setSyncState('ok','Lokal data ('+leads.length+')');}
-  else{leads=[];saveLocal();setSyncState('err','Kunde inte ansluta');}
+  else{leads=[];saveLocal();setSyncState('err','Kunde inte ansluta');await autoLoadPrioLeads();}
  }
+}
+async function autoLoadPrioLeads(){
+ if(leads.length>0)return;
+ try{
+  setSyncState('busy','Laddar Prio-leads...');
+  const res=await fetch('/prio_leads.json');
+  if(!res.ok)return;
+  const data=await res.json();
+  if(!data||!data.length)return;
+  leads=data;
+  migrateLeads();saveData();updateBadges();
+  setSyncState('ok',data.length+' Prio-leads laddade');
+  showNotif(data.length+' hantverkare i Skåne laddade!','Gå till Prospektpool för att aktivera leads');
+ }catch(e){console.log('Kunde inte ladda prio_leads.json',e);}
 }
 async function cloudPush(){
  setSyncState('busy','Sparar...');
