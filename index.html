@@ -106,18 +106,7 @@ tr.clickable:hover{background:linear-gradient(135deg,#f5f3ff,#fafafc);cursor:poi
 #bcb{position:fixed;bottom:0;left:var(--SBW);right:0;background:linear-gradient(180deg,rgba(255,255,255,.97),#fff);backdrop-filter:blur(12px);border-top:1px solid var(--BORDER);padding:12px 0;display:flex;align-items:center;justify-content:center;gap:16px;z-index:50;transition:left .2s ease;display:none}
 .main.mini~#bcb,#bcb{left:var(--SBW)}
 #d-active.on{padding-bottom:76px}
-.call-btn{width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;font-size:18px;transition:all .15s;display:flex;align-items:center;justify-content:center}
-.call-btn:hover{transform:scale(1.07)}.call-btn:active{transform:scale(.95)}
-.cbring{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;box-shadow:0 2px 12px rgba(34,197,94,.25)}
-.cbmute{background:#f4f4f8;color:#666;border:1px solid var(--BORDER)}.cbmute.active{background:rgba(251,191,36,.12);color:#d97706;border-color:rgba(251,191,36,.3)}
-.cbhang{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 2px 12px rgba(239,68,68,.2)}
-#bcb .divider{width:1px;height:24px;background:var(--BORDER)}
-#bcb .calling-lbl{color:var(--MUTED);font-size:12px;font-weight:500}
-.fab-container{position:fixed;bottom:26px;right:36px;z-index:80;display:flex;gap:10px}
-.fab-outcome{border:none;border-radius:12px;padding:14px 28px;font-size:13px;font-weight:700;font-family:inherit;background:linear-gradient(135deg,var(--ACC),var(--ACC2));color:#fff;box-shadow:0 4px 16px rgba(91,95,199,.3);cursor:pointer;transition:all .2s}
-.fab-outcome:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(91,95,199,.4)}
-.fab-skip{background:var(--W);border:1px solid var(--BORDER);color:var(--MUTED);border-radius:12px;padding:14px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.fab-skip:hover{border-color:var(--RD);color:var(--RD);background:#fef2f2;box-shadow:0 4px 12px rgba(239,68,68,.15)}
+#bcb{display:none!important}
 #outcome-overlay{position:fixed;inset:0;z-index:84;display:none}
 .float-panel{position:fixed;bottom:78px;right:36px;width:440px;max-height:72vh;background:var(--W);border-radius:16px;border:none;box-shadow:0 12px 48px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.05);z-index:85;overflow:hidden;display:flex;flex-direction:column;animation:panelUp .25s cubic-bezier(.34,1.56,.64,1)}
 @keyframes panelUp{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -791,37 +780,19 @@ th,td{padding:8px 10px}
  </div>
 </div>
 
-<div id="fab-area" style="display:none">
- <div class="fab-container">
-  <button class="fab-skip" onclick="skipLead()">⏭️ Hoppa över</button>
-  <button class="fab-outcome" onclick="toggleOutcomePanel()">📋 Utfall</button>
+<div id="fab-area" style="display:none"></div>
+<div id="outcome-overlay" onclick="closeOutcomePanel()" style="display:none"></div>
+<div id="panel-outcome" style="display:none"><div id="outcome-btns"></div></div>
+<div id="progress-bar-area" style="display:none;position:fixed;bottom:0;left:var(--SBW);right:0;background:#0c0c14;padding:8px 24px;z-index:49;display:flex;align-items:center;gap:16px;transition:left .2s">
+ <div style="flex:1;height:4px;background:#1e293b;border-radius:2px;overflow:hidden"><div id="progress-fill" style="height:100%;background:linear-gradient(90deg,var(--ACC),var(--G));border-radius:2px;transition:width .4s;width:0%"></div></div>
+ <div style="display:flex;gap:14px;font-size:11px;font-weight:600;color:#94a3b8;white-space:nowrap">
+  <span>Samtal: <span id="p-calls" style="color:#fff">0</span></span>
+  <span>Offerter: <span id="p-offers" style="color:#f59e0b">0</span></span>
+  <span>Ordrar: <span id="p-orders" style="color:#22c55e">0</span></span>
+  <span><span id="p-pos">0</span>/<span id="p-total">0</span></span>
  </div>
 </div>
-<div id="outcome-overlay" onclick="closeOutcomePanel()"></div>
-<div id="panel-outcome" class="float-panel" style="display:none">
- <div class="fp-header">Hur gick samtalet? <button onclick="closeOutcomePanel()">✕</button></div>
- <div class="fp-body">
-  <div id="outcome-btns"></div>
-  <div style="margin-top:12px"><div style="font-size:10px;font-weight:700;color:var(--MUTED);text-transform:uppercase;margin-bottom:5px">Anteckningar</div><textarea id="note-ta" style="height:75px;resize:vertical;font-size:12px" oninput="saveNote()"></textarea></div>
-  <div style="margin-top:12px"><div style="font-size:10px;font-weight:700;color:var(--MUTED);text-transform:uppercase;margin-bottom:5px">Historik</div><div id="hist-list"></div></div>
- </div>
-</div>
-<div id="progress-bar-area" style="display:none;position:fixed;bottom:60px;left:var(--SBW);right:0;background:linear-gradient(135deg,#0c0c14,#151530);padding:10px 24px;z-index:49;align-items:center;gap:16px;transition:left .25s">
- <div style="flex:1;height:6px;background:#1e293b;border-radius:3px;overflow:hidden"><div id="progress-fill" style="height:100%;background:linear-gradient(90deg,var(--ACC),var(--G));border-radius:3px;transition:width .4s;width:0%"></div></div>
- <div style="display:flex;gap:16px;font-size:12px;font-weight:700;color:#fff;white-space:nowrap">
-  <span>Samtal: <span id="p-calls">0</span></span>
-  <span style="color:#f59e0b">Offerter: <span id="p-offers">0</span></span>
-  <span style="color:var(--G)">Ordrar: <span id="p-orders">0</span></span>
-  <span style="color:var(--MUTED);font-weight:500"><span id="p-pos">0</span> av <span id="p-total">0</span></span>
- </div>
-</div>
-<div id="bcb" style="display:none">
- <button class="call-btn cbmute" onclick="toggleMute()" id="mute-btn">🎤</button>
- <button class="call-btn cbhang" onclick="hangUp()">📞</button>
- <span class="divider"></span>
- <span id="calling-lbl" class="calling-lbl"></span>
- <button class="call-btn cbring" onclick="makeCall()" style="margin-left:8px">📞</button>
-</div>
+<div id="bcb" style="display:none"><span id="calling-lbl"></span></div>
 <div id="qv-overlay" onclick="closeQuickView()"></div>
 <div id="quick-view" class="quick-view">
  <div class="qv-header"><div><h4 id="qv-name">—</h4><div id="qv-org" style="font-size:11px;color:#7c3aed;margin-top:2px">—</div></div><button onclick="closeQuickView()">✕</button></div>
@@ -1221,25 +1192,26 @@ function renderOutcomes(lead){
 function renderInlineOutcome(lead){
  const el=document.getElementById('inline-outcome');if(!el)return;
  el.innerHTML=
-  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:14px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.04)">'+
-  '<div style="font-size:13px;font-weight:800;margin-bottom:16px;color:var(--TEXT)">Hur gick samtalet?</div>'+
-  '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px">'+
-  '<button class="oc-btn" onclick="quickOutcome(\'nosvar\')" style="padding:18px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px"><i data-lucide="phone-missed" style="width:22px;height:22px;color:var(--MUTED)"></i><span style="font-weight:700;font-size:12px">Inget svar</span><span style="font-size:10px;color:var(--MUTED)">Åter om 2h</span></button>'+
-  '<button class="oc-btn" onclick="quickOutcome(\'ringsenare\')" style="padding:18px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px"><i data-lucide="calendar-clock" style="width:22px;height:22px;color:var(--ACC)"></i><span style="font-weight:700;font-size:12px">Ring senare</span><span style="font-size:10px;color:var(--MUTED)">Välj datum</span></button>'+
-  '<button class="oc-btn" onclick="quickOutcome(\'demo\')" style="padding:18px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;border-color:#c4b5fd;background:linear-gradient(135deg,#f5f3ff,#ede9fe)"><i data-lucide="headphones" style="width:22px;height:22px;color:#7c3aed"></i><span style="font-weight:700;font-size:12px;color:#5b21b6">Demo bokad</span><span style="font-size:10px;color:var(--MUTED)">Kund ska höra AI</span></button>'+
-  '<button class="oc-btn" onclick="quickOutcome(\'offert\')" style="padding:18px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px"><i data-lucide="file-text" style="width:22px;height:22px;color:#f59e0b"></i><span style="font-weight:700;font-size:12px">Skicka offert</span><span style="font-size:10px;color:var(--MUTED)">Offert till kund</span></button>'+
-  '<button class="oc-btn green" onclick="quickOutcome(\'order\')" style="padding:18px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;border-color:var(--G);background:linear-gradient(135deg,#f0fdf4,#dcfce7)"><i data-lucide="trophy" style="width:22px;height:22px;color:#059669"></i><span style="font-weight:700;font-size:12px;color:#065f46">STÄNGD!</span><span style="font-size:10px;color:#059669">Kund sa ja</span></button>'+
+  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:20px;margin-top:16px">'+
+  '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">'+
+   '<span style="font-size:12px;font-weight:700;color:var(--TEXT)">Utfall</span>'+
+   '<button class="btn btn-o btn-sm" onclick="skipLead()" style="padding:6px 14px;font-size:11px">Hoppa &rarr;</button>'+
   '</div>'+
-  '<div style="display:flex;gap:10px;align-items:start">'+
-  '<div style="flex:1"><textarea id="note-ta" placeholder="Anteckning..." style="height:50px;resize:vertical;font-size:12px;border-radius:10px" oninput="saveNote()"></textarea></div>'+
-  '<button class="btn btn-o btn-sm" onclick="skipLead()" style="white-space:nowrap;padding:14px 16px"><i data-lucide="skip-forward" style="width:14px;height:14px;vertical-align:-2px"></i> Hoppa</button>'+
+  '<div style="display:flex;gap:8px;margin-bottom:12px">'+
+   '<button onclick="quickOutcome(\'nosvar\')" style="flex:1;padding:10px 8px;border:1px solid var(--BORDER);border-radius:8px;background:var(--W);cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:var(--TEXT);transition:all .12s" onmouseenter="this.style.borderColor=\'var(--ACC)\'" onmouseleave="this.style.borderColor=\'var(--BORDER)\'">Ej svar</button>'+
+   '<button onclick="quickOutcome(\'ringsenare\')" style="flex:1;padding:10px 8px;border:1px solid var(--BORDER);border-radius:8px;background:var(--W);cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:var(--TEXT);transition:all .12s" onmouseenter="this.style.borderColor=\'var(--ACC)\'" onmouseleave="this.style.borderColor=\'var(--BORDER)\'">Ring senare</button>'+
+   '<button onclick="quickOutcome(\'demo\')" style="flex:1;padding:10px 8px;border:1px solid #c4b5fd;border-radius:8px;background:#f5f3ff;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;color:#5b21b6;transition:all .12s">Demo bokad</button>'+
+   '<button onclick="quickOutcome(\'offert\')" style="flex:1;padding:10px 8px;border:1px solid #fcd34d;border-radius:8px;background:#fffbeb;cursor:pointer;font-family:inherit;font-size:11px;font-weight:600;color:#92400e;transition:all .12s">Offert</button>'+
+   '<button onclick="quickOutcome(\'order\')" style="flex:1;padding:10px 8px;border:1px solid #86efac;border-radius:8px;background:#f0fdf4;cursor:pointer;font-family:inherit;font-size:11px;font-weight:700;color:#166534;transition:all .12s">Stängd</button>'+
   '</div>'+
-  '<details style="margin-top:10px"><summary style="font-size:11px;color:var(--MUTED);cursor:pointer;font-weight:600">Fler alternativ + historik</summary>'+
+  '<textarea id="note-ta" placeholder="Anteckning..." style="height:40px;resize:vertical;font-size:12px;border-radius:8px;margin-bottom:8px" oninput="saveNote()"></textarea>'+
+  '<details><summary style="font-size:10px;color:var(--MUTED);cursor:pointer;font-weight:600">Fler alternativ + historik</summary>'+
   '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">';
  let extra='';
  for(let g in OUTCOMES){OUTCOMES[g].forEach(o=>{extra+='<button class="oc-btn '+(o.cls||'')+'" onclick="handleOutcome(\''+esc(o.t)+'\','+o.h+',\''+o.u+'\','+o.ret+')" style="font-size:10px;padding:4px 8px">'+esc(o.t)+'</button>';});}
  el.innerHTML=el.innerHTML+extra+'</div><div style="margin-top:10px" id="hist-list"></div></details></div>';
- if(lead.note)document.getElementById('note-ta').value=lead.note;
+ const userNote=lead.userNote||'';
+ if(userNote)document.getElementById('note-ta').value=userNote;
  renderHistory(lead);
  if(window.lucide)lucide.createIcons();
 }
@@ -1495,7 +1467,7 @@ function setCallingPhone(ph,user){callingPhone=ph;document.getElementById('calli
 function saveField(id,field,val){const l=leads.find(l=>l.id===id);if(!l)return;l[field]=val;saveLocal();}
 function openSite(id){const l=leads.find(l=>l.id===id);if(l&&l.website){let u=l.website;if(!u.startsWith('http'))u='https://'+u;window.open(u,'_blank');}}
 function renderHistory(lead){document.getElementById('hist-list').innerHTML=lead.history&&lead.history.length?lead.history.slice().reverse().map(e=>'<div class="hist-item"><span class="hd">'+e.date+'</span> — <strong>'+esc(e.outcome)+'</strong>'+(e.note?' — '+esc(e.note):'')+'</div>').join(''):'<div style="color:var(--MUTED);font-size:12px">Ingen historik.</div>';}
-function saveNote(){const l=getCurLead();if(!l)return;l.note=document.getElementById('note-ta').value;saveLocal();}
+function saveNote(){const l=getCurLead();if(!l)return;l.userNote=document.getElementById('note-ta').value;saveLocal();}
 function getCurLead(){if(!dialerOn||dialerIdx<0||dialerIdx>=dialerQ.length)return null;return leads.find(l=>l.id===dialerQ[dialerIdx].id);}
 function openKK(id){const lead=leads.find(l=>l.id===id);if(!lead)return;dialerQ=[lead];dialerIdx=0;dialerOn=true;callingPhone='';go('dialer');document.getElementById('d-idle').style.display='none';document.getElementById('d-active').classList.add('on');document.getElementById('fab-area').style.display='block';document.getElementById('bcb').style.display='flex';nextDialerLead();}
 function showNotif(title,sub){const el=document.createElement('div');el.className='notif';el.innerHTML='<strong style="font-size:12px">'+esc(title)+'</strong>'+(sub?'<div style="font-size:11px;color:var(--MUTED);margin-top:2px">'+esc(sub)+'</div>':'');el.onclick=()=>el.remove();document.getElementById('notif-area').appendChild(el);setTimeout(()=>el.remove(),4000);}
