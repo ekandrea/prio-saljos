@@ -563,7 +563,7 @@ th,td{padding:8px 10px}
 </div>
 <button id="hamburger" onclick="toggleSidebar()" style="display:none">☰</button>
 <div id="sb">
- <div class="logo"><span style="font-size:22px">⚡</span><div class="t">Säljös</div></div>
+ <div class="logo" style="justify-content:space-between"><div style="display:flex;align-items:center;gap:10px"><span style="font-size:22px">⚡</span><div class="t">Säljös</div></div><button onclick="toggleSidebar()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#888;font-size:16px;padding:4px 8px;cursor:pointer;line-height:1">✕</button></div>
  <div class="seller-pill"><div class="av" id="sb-av">A</div><div><div class="nm" id="sb-nm">Andy</div><div class="rl">Sales rep</div></div></div>
  <div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span class="sync-text" id="sync-text">Laddar...</span><button class="sync-btn" onclick="cloudSync()">Synka ↑↓</button></div>
  <div class="sec">Huvudmeny</div>
@@ -607,38 +607,19 @@ th,td{padding:8px 10px}
   <div class="pipeline-section"><h4>❌ Förlorade</h4><div class="pipeline-grid" id="my-lost"></div></div>
  </div>
  <div class="view" id="v-leads">
-  <div class="page-title">🌊 Leads</div>
-  <div class="leads-tabs">
-   <button class="leads-tab active" id="tab-aktiva" onclick="switchLeadsTab('aktiva')">📋 Aktiva leads</button>
-   <button class="leads-tab" id="tab-prospekt" onclick="switchLeadsTab('prospekt')">🎯 Prospektpool <span id="prospekt-badge" style="background:var(--ACC);color:#fff;font-size:9px;padding:1px 6px;border-radius:6px;margin-left:4px">0</span></button>
+  <div class="page-title">🌊 Alla Leads <span style="font-size:14px;font-weight:400;color:var(--MUTED)" id="leads-total-count"></span></div>
+  <div class="filter-row">
+   <input id="search-inp" placeholder="Sök företag, org-nr, telefon..." oninput="filterLeads()" style="max-width:260px">
+   <select id="ind-filter" onchange="filterLeads()" style="max-width:160px;width:auto"><option value="">Alla branscher</option><option value="snickare">🪟 Snickare</option><option value="elektriker">⚡ Elektriker</option><option value="vvs">🔧 VVS</option><option value="målare">🎨 Målare</option><option value="plåtslagare">🔩 Plåtslagare</option><option value="golvläggare">🏠 Golvläggare</option><option value="takläggare">🔧 Takläggare</option><option value="bygg">🏗️ Bygg</option></select>
+   <select id="ort-filter" onchange="filterLeads()" style="max-width:160px;width:auto"><option value="">Alla orter</option></select>
+   <button class="btn btn-bv btn-sm" onclick="importPrioFile()">📁 Importera</button>
   </div>
-  <div id="leads-aktiva">
-   <div class="filter-row">
-    <input id="search-inp" placeholder="Sök bolagsnamn, org-nr, telefon..." oninput="filterLeads()" style="max-width:260px">
-    <input type="date" id="reg-from" onchange="filterLeads()" style="max-width:150px;width:auto">
-    <input type="date" id="reg-to" onchange="filterLeads()" style="max-width:150px;width:auto">
-    <button class="btn btn-p btn-sm" onclick="toggleTarget()">⭐ Prio</button>
-   </div>
-   <div class="filter-row" id="status-filters"></div>
-   <div class="filter-row" id="op-filters"></div>
-   <div class="card" style="padding:0;overflow-x:auto">
-    <table><thead><tr><th>Företag</th><th>Bransch</th><th>Ort</th><th>Telefon</th><th>Kontakt</th><th>Status</th><th>Poäng</th></tr></thead><tbody id="leads-tb"></tbody></table>
-   </div>
-   <div style="display:flex;justify-content:center;gap:12px;padding:12px" id="pag-row"></div>
+  <div class="filter-row" id="status-filters"></div>
+  <div class="filter-row" id="op-filters"></div>
+  <div class="card" style="padding:0;overflow-x:auto">
+   <table><thead><tr><th>Företag</th><th>Bransch</th><th>Ort</th><th>Telefon</th><th>Kontakt</th><th>Status</th><th>Poäng</th></tr></thead><tbody id="leads-tb"></tbody></table>
   </div>
-  <div id="leads-prospekt" style="display:none">
-   <div class="filter-row">
-    <input id="prospekt-search" placeholder="Sök bolagsnamn, org-nr..." oninput="renderProspekt()" style="max-width:260px">
-    <select id="prospekt-ind" onchange="renderProspekt()" style="max-width:160px;width:auto"><option value="">Alla branscher</option><option value="snickare">🪟 Snickare</option><option value="elektriker">⚡ Elektriker</option><option value="vvs">🔧 VVS</option><option value="målare">🎨 Målare</option><option value="plåtslagare">🔩 Plåtslagare</option><option value="golvläggare">🏠 Golvläggare</option><option value="takläggare">🔧 Takläggare</option><option value="bygg">🏗️ Övrigt bygg</option></select>
-    <select id="prospekt-ort" onchange="renderProspekt()" style="max-width:160px;width:auto"><option value="">Alla orter</option></select>
-    <select id="prospekt-status" onchange="renderProspekt()" style="max-width:140px;width:auto"><option value="">Alla status</option><option value="ny">Ny</option><option value="ringd">Ringd</option><option value="intresserad">Intresserad</option><option value="ej_intresserad">Ej intresserad</option><option value="återkom">Återkom</option></select>
-    <button class="btn btn-p btn-sm" onclick="aktivera20()">⚡ Aktivera 20 st → Dialer</button>
-   </div>
-   <div class="card" style="padding:0;overflow-x:auto">
-    <table><thead><tr><th><input type="checkbox" id="prospekt-all" onchange="prospektCheckAll(this.checked)" style="width:auto"></th><th>Företag</th><th>Org-nr</th><th>Bransch</th><th>Ort</th><th>Registrerat</th><th></th></tr></thead><tbody id="prospekt-tb"></tbody></table>
-   </div>
-   <div style="display:flex;justify-content:space-between;align-items:center;padding:12px"><span id="prospekt-count" style="font-size:12px;color:var(--MUTED)"></span><div style="display:flex;gap:8px"><button class="btn btn-bv btn-sm" onclick="importPrioFile()">📁 Importera prio_leads.txt</button><button class="btn btn-g btn-sm" onclick="aktiveraValda()">✅ Aktivera valda → Dialer</button></div></div>
-  </div>
+  <div style="display:flex;justify-content:center;gap:12px;padding:12px" id="pag-row"></div>
  </div>
  
  <!-- NYTT: Mörkt Dashboard -->
@@ -1027,7 +1008,7 @@ function lockExp(l){return !l.lockedAt||(Date.now()-new Date(l.lockedAt).getTime
 function lockStatus(l){if(!l.lockedBy)return 'free';if(lockExp(l))return 'exp';if(l.lockedBy===currentSeller)return 'mine';return 'other';}
 function lockCleanup(){let ch=false;leads.forEach(l=>{if(l.lockedBy&&lockExp(l)){l.lockedBy=null;l.lockedAt=null;ch=true;}});if(ch)saveLocal();}
 function scoreLead(l){
- if(l.status==='prospekt')return -1;
+ //prospekt nu i vanliga listan
  if(!l.phone||l.phone.trim()==='')return -1;
  let s=0,today=new Date();
  if(l.bindingDate){const d=Math.ceil((new Date(l.bindingDate)-today)/864e5);if(d<0)s+=100;else if(d<14)s+=80;else if(d<30)s+=60;else if(d<60)s+=40;else if(d<90)s+=20;}
@@ -1038,7 +1019,7 @@ function scoreLead(l){
  const ls=lockStatus(l);if(ls==='other')return -1000;if(ls==='mine')s+=25;
  return s;
 }
-function scoredLeads(){return leads.filter(l=>!['blacklist','order','prospekt'].includes(l.status)).map(l=>({...l,score:scoreLead(l)})).filter(l=>l.score>0).sort((a,b)=>b.score-a.score);}
+function scoredLeads(){return leads.filter(l=>!['blacklist','order'].includes(l.status)).map(l=>({...l,score:scoreLead(l)})).filter(l=>l.score>0).sort((a,b)=>b.score-a.score);}
 function targetLeads(){return scoredLeads().filter(l=>TARGET.includes(l.industry));}
 
 // =============================================
@@ -1069,7 +1050,7 @@ function applyDialerFilters(arr){
 
 function getAutopilotQueue(){
  const now=new Date();
- const callbacks=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=now&&!['blacklist','order','prospekt','avslutad','inte_intresserad'].includes(l.status));
+ const callbacks=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=now&&!['blacklist','order','avslutad','inte_intresserad'].includes(l.status));
  const offers=leads.filter(l=>['offert','apg'].includes(l.status)&&l.seller===currentSeller);
  const scored=scoredLeads().filter(l=>!callbacks.find(c=>c.id===l.id)&&!offers.find(o=>o.id===l.id));
  return {callbacks,offers,scored,total:callbacks.length+offers.length+scored.length};
@@ -1367,7 +1348,7 @@ function aktiveraValda(){const ids=[...document.querySelectorAll('.prospekt-cb:c
 function aktivera20(){const p=leads.filter(l=>l.status==='prospekt').slice(0,20);if(!p.length){showNotif('Inga prospekt kvar','');return;}p.forEach(l=>l.status='ny');saveData();renderProspekt();updateBadges();showNotif(p.length+' aktiverade → Dialer','⚡');}
 function prospektCheckAll(val){document.querySelectorAll('.prospekt-cb').forEach(cb=>cb.checked=val);}
 function renderPipeline(){
- const myCB=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=new Date()&&!['blacklist','order','prospekt'].includes(l.status));
+ const myCB=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=new Date()&&!['blacklist','order'].includes(l.status));
  document.getElementById('my-callbacks').innerHTML=myCB.length?myCB.map(pCard).join(''):'<div style="color:var(--MUTED);padding:20px">Inga återkomster.</div>';
  const myOff=leads.filter(l=>l.status==='offert');
  document.getElementById('my-offers').innerHTML=myOff.length?myOff.map(pCard).join(''):'<div style="color:var(--MUTED);padding:20px">Inga offerter ute.</div>';
@@ -1383,19 +1364,26 @@ function renderPipeline(){
 function fmtDate(d){if(!d)return'';try{const dt=new Date(d);if(isNaN(dt))return d;return dt.toLocaleDateString('sv-SE',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}catch{return d;}}
 function pCard(l){const note=l.history.length?l.history[l.history.length-1].note:'';return '<div class="pipeline-card" onclick="openKK('+l.id+')"><div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px"><div><div style="font-weight:700;font-size:14px">'+esc(l.company)+'</div><div style="display:flex;gap:8px;align-items:center;margin-top:4px"><span class="industry-badge">'+getIndLabel(l.industry)+'</span><span style="font-size:11px;color:var(--MUTED)">'+fmtPhone(l.phone)+'</span></div></div><span class="st-badge st-'+l.status+'">'+SN[l.status]+'</span></div>'+(note?'<div style="font-size:11px;color:#666;font-style:italic;margin-bottom:8px;padding:8px 10px;background:#fafafc;border-radius:6px">"'+esc(note.substring(0,55))+(note.length>55?'...':'')+'"</div>':'')+(l.nextCallDate?'<div style="font-size:11px;color:var(--ACC);margin-bottom:10px;font-weight:600"><i data-lucide="calendar" style="width:12px;height:12px;vertical-align:-2px"></i> '+fmtDate(l.nextCallDate)+'</div>':'')+'<div style="display:flex;gap:8px"><button class="btn btn-p btn-sm" onclick="event.stopPropagation();openKK('+l.id+')" style="flex:1">Öppna</button><button class="btn btn-pts btn-sm" onclick="event.stopPropagation();sendOffert('+l.id+')">📄 Offert</button><button class="btn btn-o btn-sm" onclick="event.stopPropagation();unlockLead('+l.id+');renderPipeline()"><i data-lucide="unlock" style="width:13px;height:13px"></i></button></div></div>';}
 function filterLeads(){curPage=0;renderLeads();}
+function initOrtFilter(){
+ const sel=document.getElementById('ort-filter');if(!sel||sel.options.length>1)return;
+ SKANE_KOMMUNER.forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;sel.appendChild(o);});
+}
 function renderLeads(){
- const sts=['alla','ny','ring_senare','offert','order','avslutad','inte_intresserad','ej_svar'];
+ initOrtFilter();
+ const sts=['alla','ny','prospekt','ring_senare','offert','apg','order','inte_intresserad','ej_svar'];
  document.getElementById('status-filters').innerHTML=sts.map(s=>'<button class="ftab '+(stFilter===s?'active':'')+'" onclick="stFilter=\''+s+'\';renderLeads()">'+(s==='alla'?'Alla':(SN[s]||s))+'</button>').join('');
  document.getElementById('op-filters').innerHTML='';
  const q=(document.getElementById('search-inp').value||'').toLowerCase();
  const fromD=document.getElementById('reg-from')?.value||'',toD=document.getElementById('reg-to')?.value||'';
  let filtered=leads.filter(l=>{
-  if(l.status==='blacklist'||l.status==='prospekt')return false;
+  if(l.status==='blacklist')return false;
   if(stFilter!=='alla'&&l.status!==stFilter)return false;
   //operator filter removed for Prio
   if(showTarget&&!TARGET.includes(l.industry))return false;
-  if(fromD&&l.bindingDate&&l.bindingDate<fromD)return false;
-  if(toD&&l.bindingDate&&l.bindingDate>toD)return false;
+  const indF=document.getElementById('ind-filter')?.value||'';
+  if(indF&&l.industry!==indF)return false;
+  const ortF=document.getElementById('ort-filter')?.value||'';
+  if(ortF){const addr=((l.address||'')+(l.city||'')).toLowerCase();if(!addr.includes(ortF.toLowerCase()))return false;}
   if(q){const s=(l.company+' '+l.orgnr+' '+l.phone+' '+l.contact+' '+(l.subs||[]).map(s=>s.phone+' '+s.user).join(' ')).toLowerCase();if(!s.includes(q))return false;}
   return true;
  }).map(l=>({...l,score:scoreLead(l)})).sort((a,b)=>b.score-a.score);
@@ -1451,7 +1439,7 @@ function go(v){
  document.getElementById('nav-'+v)?.classList.add('active');
  if(v==='dialer')renderDialer();
  if(v==='pipeline')renderPipeline();
- if(v==='leads'){if(activeLeadsTab==='aktiva')renderLeads();else renderProspekt();}
+ if(v==='leads')renderLeads();
  if(v==='dash')renderDash();
  if(v==='bolagsverket'){initSNI();setBVDates();}
  if(v!=='dialer'){document.getElementById('bcb').style.display='none';document.getElementById('fab-area').style.display='none';if(dialerOn)stopDialer();}
@@ -1460,12 +1448,11 @@ function go(v){
 }
 function updateBadges(){
  document.getElementById('b-dialer').textContent=scoredLeads().length;
- document.getElementById('b-leads').textContent=leads.filter(l=>!['blacklist','prospekt'].includes(l.status)).length;
- const cb=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=new Date()&&!['blacklist','order','prospekt'].includes(l.status)).length;
- const pipe=leads.filter(l=>l.lockedBy===currentSeller&&!['blacklist','order','prospekt'].includes(l.status)).length+cb+leads.filter(l=>['offert','apg'].includes(l.status)&&l.seller===currentSeller).length;
+ document.getElementById('b-leads').textContent=leads.filter(l=>l.status!=='blacklist').length;
+ const cb=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=new Date()&&!['blacklist','order'].includes(l.status)).length;
+ const pipe=leads.filter(l=>l.lockedBy===currentSeller&&!['blacklist','order'].includes(l.status)).length+cb+leads.filter(l=>['offert','apg'].includes(l.status)&&l.seller===currentSeller).length;
  document.getElementById('b-pipeline').textContent=pipe;
- const prospektCount=leads.filter(l=>l.status==='prospekt').length;
- const pb=document.getElementById('prospekt-badge');if(pb)pb.textContent=prospektCount;
+ const tc=document.getElementById('leads-total-count');if(tc)tc.textContent='('+leads.filter(l=>l.status!=='blacklist').length+')';
  renderPipeline();
 }
 function makeCall(){const l=getCurLead();if(!l)return;const ph=callingPhone||l.phone;document.getElementById('calling-lbl').textContent=fmtPhone(ph);window.open(toTel(ph),'_self');}
@@ -1547,12 +1534,12 @@ function importPrioFile(){
     const cleanOrg=orgNr.replace(/[\s\-]/g,'');
     if(leads.some(l=>normOrg(l.orgnr)===cleanOrg)){skipped++;continue;}
     const ind=detectPrioIndustry(verksamhet||foretag);
-    leads.push({id:nextId(),company:foretag,contact:'',phone:'',orgnr:cleanOrg,operator:'',email:'',plan:'',priceOrig:'',priceDiscount:'',priceFinal:'',bindingDate:null,industry:ind,portingDate:null,nextCallDate:null,status:'prospekt',note:verksamhet||'',notes:verksamhet||'',vdName:'',vdPhone:'',vdEmail:'',website:'',address:adress||'',city:'',employees:'',offerSent:false,offerOpened:false,history:regDatum?[{date:regDatum,outcome:'Registrerat hos Bolagsverket',note:'',seller:'system'}]:[],lockedBy:null,lockedAt:null,seller:null,subs:[],tb_amount:0,nyteck_count:0,forlang_count:0,deal_type:null});
+    leads.push({id:nextId(),company:foretag,contact:'',phone:'',orgnr:cleanOrg,operator:'',email:'',plan:'',priceOrig:'',priceDiscount:'',priceFinal:'',bindingDate:null,industry:ind,portingDate:null,nextCallDate:null,status:'ny',note:verksamhet||'',notes:verksamhet||'',vdName:'',vdPhone:'',vdEmail:'',website:'',address:adress||'',city:'',employees:'',offerSent:false,offerOpened:false,history:regDatum?[{date:regDatum,outcome:'Registrerat hos Bolagsverket',note:'',seller:'system'}]:[],lockedBy:null,lockedAt:null,seller:null,subs:[],tb_amount:0,nyteck_count:0,forlang_count:0,deal_type:null});
     added++;
    }
    saveData();updateBadges();renderProspekt();
    alert('Prio-import klar!\n\n'+added+' nya leads importerade\n'+skipped+' redan i systemet');
-   switchLeadsTab('prospekt');
+   go('leads');
   };
   r.readAsText(f,'UTF-8');
  };
