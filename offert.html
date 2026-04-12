@@ -225,14 +225,24 @@ function doneEdit(f){
  render();
 }
 
+function logEvent(type){
+ try{
+  fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({event:type,company,leadId,pkg:pkgs[selected]?.name||selected})
+  }).catch(()=>{});
+ }catch(e){}
+}
+
 function submit(){
  if(!accepted)return;
  document.getElementById('offer-view').style.display='none';
  document.getElementById('done-view').style.display='flex';
  document.getElementById('done-title').textContent='Välkommen, '+company+'.';
+ logEvent('accepted');
  if(window.opener)window.opener.postMessage({type:'prio-offert-accepted',leadId,pkg:selected},'*');
 }
 
+logEvent('opened');
 render();
 </script>
 </body>
