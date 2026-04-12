@@ -1140,10 +1140,21 @@ function renderKK(lead){
   '<div><label style="font-size:10px;color:var(--ACC);font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Antal anställda</label><input value="'+esc(lead.employees||'')+'" oninput="saveField('+lead.id+',\'employees\',this.value)" placeholder="t.ex. 3"></div>'+
   '</div></div>'+
   '<div>'+
-  '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:14px">Info & anteckningar</div>'+
+  (!(lead.vdPhone||lead.phone)?
+  '<div style="background:linear-gradient(135deg,#fef2f2,#fff1f2);border:2px solid #fca5a5;border-radius:14px;padding:24px;margin-bottom:14px;text-align:center">'+
+  '<div style="font-size:28px;margin-bottom:8px">📞</div>'+
+  '<div style="font-size:16px;font-weight:800;color:#dc2626;margin-bottom:4px">HITTA NUMMER</div>'+
+  '<div style="font-size:12px;color:#991b1b;margin-bottom:16px">Telefon saknas — sök och fyll i ovan</div>'+
+  '<div style="display:flex;flex-direction:column;gap:8px">'+
+  '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" style="display:block;padding:14px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px">📞 Sök på Hitta.se →</a>'+
+  '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" style="display:block;padding:14px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px">🔍 Sök på Merinfo →</a>'+
+  '<a href="https://www.eniro.se/'+encodeURIComponent(lead.company||'')+'" target="_blank" style="display:block;padding:14px;background:linear-gradient(135deg,#d97706,#f59e0b);color:#fff;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px">📋 Sök på Eniro →</a>'+
+  '<a href="https://www.google.com/search?q='+encodeURIComponent((lead.company||'')+' telefon '+(ort||'Skåne'))+'" target="_blank" style="display:block;padding:12px;background:#f4f4f8;color:var(--TEXT);border-radius:10px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid var(--BORDER)">Google: "'+esc(lead.company)+' telefon"</a>'+
+  '</div></div>'
+  :'')+
   '<div style="background:#fafafc;border:1px solid var(--BORDER);border-radius:10px;padding:16px;margin-bottom:14px">'+
   '<div style="font-size:10px;color:var(--ACC);font-weight:700;text-transform:uppercase;margin-bottom:6px">Verksamhet</div>'+
-  '<div style="font-size:12px;color:var(--TEXT);line-height:1.5;max-height:100px;overflow-y:auto">'+esc(lead.note||lead.notes||'Ingen beskrivning')+'</div>'+
+  '<div style="font-size:12px;color:var(--TEXT);line-height:1.5;max-height:80px;overflow-y:auto">'+esc(lead.note||lead.notes||'Ingen beskrivning')+'</div>'+
   '</div>'+
   (lastNote?'<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:14px;margin-bottom:14px"><div style="font-size:10px;color:#92400e;font-weight:700;text-transform:uppercase;margin-bottom:4px">Senaste händelse ('+esc(lastNote.date||'')+')</div><div style="font-size:12px;font-weight:600;color:#78350f">'+esc(lastNote.outcome||'')+'</div>'+(lastNote.note?'<div style="font-size:11px;color:#92400e;margin-top:4px">'+esc(lastNote.note)+'</div>':'')+'</div>':'')+
   '</div>'+
