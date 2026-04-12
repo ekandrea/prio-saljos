@@ -859,6 +859,7 @@ function updateSellerUI(){
  document.title='Säljös ⚡ — '+n;
 }
 function init(){
+ if(new URLSearchParams(window.location.search).has('reset')){localStorage.clear();window.history.replaceState({},'','/');location.reload();return;}
  if(window.lucide)lucide.createIcons();
  if(sessionStorage.getItem('saljos_auth')==='1'){
   currentSeller=sessionStorage.getItem('saljos_seller')||'Andy';
