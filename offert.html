@@ -67,6 +67,19 @@ body{min-height:100vh;background:#fff;font-family:'DM Sans',sans-serif;color:#1a
 .accept-text{font-size:13px;color:#555;line-height:1.6}
 .cta{display:block;width:100%;background:#e5e5e5;color:#bbb;text-align:center;padding:18px;border-radius:10px;font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif;border:none;cursor:default;transition:all .2s}
 .cta.on{background:#1a1a1a;color:#fff;cursor:pointer}
+.cta.on:active{transform:scale(.98)}
+@media(max-width:480px){
+ .wrap{padding:20px 16px 32px}
+ .co-name{font-size:20px}
+ .pk{padding:16px 14px}
+ .pk.sel{padding:15px 13px}
+ .pk-desc{font-size:12px}
+ .intro-big{font-size:16px}
+ .demo-num{font-size:18px}
+ .cta{padding:16px;font-size:15px}
+ .accept-box{width:26px;height:26px}
+ .accept-text{font-size:14px}
+}
 .footer-text{text-align:center;font-size:12px;color:#ccc;margin-top:8px}
 .footer-logo{margin-top:28px;padding-top:16px;border-top:1px solid #f0f0f0;text-align:center;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;color:#e8e8e8;letter-spacing:4px}
 .done{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
@@ -79,20 +92,17 @@ body{min-height:100vh;background:#fff;font-family:'DM Sans',sans-serif;color:#1a
 <body>
 
 <div id="offer-view">
-<div class="topbar">PRIO OFFERT</div>
 <div class="wrap">
  <div class="head">
   <div><div class="logo">PRIO</div><div class="logo-bar"></div></div>
-  <div class="head-right">Andrea Ekeberg<br>070-817 04 37<br>andy.ekeberg@gmail.com</div>
+  <div class="head-right">Andrea Ekeberg<br>070-817 04 38<br>andy.ekeberg@gmail.com</div>
  </div>
 
- <div id="co-display" class="co-name" onclick="editField('co')"></div>
- <input id="co-input" class="co-input" style="display:none" onblur="doneEdit('co')" onkeydown="if(event.key==='Enter')doneEdit('co')">
+ <div id="co-display" style="font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;margin-bottom:18px"></div>
 
  <div class="note-box">
   <div class="note-label">SOM VI PRATADE OM</div>
-  <p id="note-display" class="note-text" onclick="editField('note')"></p>
-  <input id="note-input" class="note-input" style="display:none" onblur="doneEdit('note')" onkeydown="if(event.key==='Enter')doneEdit('note')">
+  <p id="note-display" class="note-text"></p>
  </div>
 
  <p class="intro-big">Du jobbar med händerna. Inte med telefonen.</p>
@@ -144,7 +154,7 @@ body{min-height:100vh;background:#fff;font-family:'DM Sans',sans-serif;color:#1a
  </div>
 
  <button class="cta" id="cta-btn" onclick="submit()">Kör igång</button>
- <p class="footer-text">Frågor? Ring Andrea: 070-817 04 37</p>
+ <p class="footer-text">Frågor? Ring Andrea: 070-817 04 38</p>
  <div class="footer-logo">PRIO</div>
 </div>
 </div>
@@ -159,7 +169,7 @@ body{min-height:100vh;background:#fff;font-family:'DM Sans',sans-serif;color:#1a
   <div class="step"><div class="step-num" style="background:#1a1a1a;color:#fff">2</div><span class="step-text">Vi sätter upp allt — du behöver inte göra nåt</span></div>
   <div class="step"><div class="step-num" style="background:#1a1a1a;color:#fff">3</div><span class="step-text">Du är igång inom 48 timmar</span></div>
  </div>
- <p style="font-size:12px;color:#aaa">Frågor? Ring Andrea: 070-817 04 37</p>
+ <p style="font-size:12px;color:#aaa">Frågor? Ring Andrea: 070-817 04 38</p>
 </div>
 
 <script>
