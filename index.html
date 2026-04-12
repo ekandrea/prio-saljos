@@ -568,7 +568,6 @@ th,td{padding:8px 10px}
  <div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span class="sync-text" id="sync-text">Laddar...</span><button class="sync-btn" onclick="cloudSync()">Synka ↑↓</button></div>
  <div class="sec">Huvudmeny</div>
  <div class="ni active" onclick="go('dialer')" id="nav-dialer"><i data-lucide="zap" style="width:16px;height:16px"></i> Dialer <span class="badge" id="b-dialer">0</span></div>
- <div class="ni" onclick="go('pipeline')" id="nav-pipeline"><i data-lucide="git-branch" style="width:16px;height:16px"></i> Pipeline <span class="badge warn" id="b-pipeline">0</span></div>
  <div class="ni" onclick="go('leads')" id="nav-leads"><i data-lucide="users" style="width:16px;height:16px"></i> Leads <span class="badge" id="b-leads">0</span></div>
  <div class="ni" onclick="go('dash')" id="nav-dash"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i> Dashboard</div>
  <div class="sec">Verktyg</div>
@@ -1008,8 +1007,7 @@ function lockExp(l){return !l.lockedAt||(Date.now()-new Date(l.lockedAt).getTime
 function lockStatus(l){if(!l.lockedBy)return 'free';if(lockExp(l))return 'exp';if(l.lockedBy===currentSeller)return 'mine';return 'other';}
 function lockCleanup(){let ch=false;leads.forEach(l=>{if(l.lockedBy&&lockExp(l)){l.lockedBy=null;l.lockedAt=null;ch=true;}});if(ch)saveLocal();}
 function scoreLead(l){
- //prospekt nu i vanliga listan
- if(!l.phone||l.phone.trim()==='')return -1;
+ //alla leads i dialern, utan nummer = lägre poäng
  let s=0,today=new Date();
  if(l.bindingDate){const d=Math.ceil((new Date(l.bindingDate)-today)/864e5);if(d<0)s+=100;else if(d<14)s+=80;else if(d<30)s+=60;else if(d<60)s+=40;else if(d<90)s+=20;}
  if(TARGET.includes(l.industry))s+=50;
@@ -1019,7 +1017,7 @@ function scoreLead(l){
  const ls=lockStatus(l);if(ls==='other')return -1000;if(ls==='mine')s+=25;
  return s;
 }
-function scoredLeads(){return leads.filter(l=>!['blacklist','order'].includes(l.status)).map(l=>({...l,score:scoreLead(l)})).filter(l=>l.score>0).sort((a,b)=>b.score-a.score);}
+function scoredLeads(){return leads.filter(l=>!['blacklist','order','inte_intresserad'].includes(l.status)).map(l=>({...l,score:scoreLead(l)})).filter(l=>l.score>=-1).sort((a,b)=>b.score-a.score);}
 function targetLeads(){return scoredLeads().filter(l=>TARGET.includes(l.industry));}
 
 // =============================================
@@ -1141,15 +1139,13 @@ function renderKK(lead){
   '</div></div>'+
   '<div>'+
   (!(lead.vdPhone||lead.phone)?
-  '<div style="background:linear-gradient(135deg,#fef2f2,#fff1f2);border:2px solid #fca5a5;border-radius:14px;padding:24px;margin-bottom:14px;text-align:center">'+
-  '<div style="font-size:28px;margin-bottom:8px">📞</div>'+
-  '<div style="font-size:16px;font-weight:800;color:#dc2626;margin-bottom:4px">HITTA NUMMER</div>'+
-  '<div style="font-size:12px;color:#991b1b;margin-bottom:16px">Telefon saknas — sök och fyll i ovan</div>'+
-  '<div style="display:flex;flex-direction:column;gap:8px">'+
-  '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" style="display:block;padding:14px;background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px">📞 Sök på Hitta.se →</a>'+
-  '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" style="display:block;padding:14px;background:linear-gradient(135deg,#059669,#10b981);color:#fff;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px">🔍 Sök på Merinfo →</a>'+
-  '<a href="https://www.eniro.se/'+encodeURIComponent(lead.company||'')+'" target="_blank" style="display:block;padding:14px;background:linear-gradient(135deg,#d97706,#f59e0b);color:#fff;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px">📋 Sök på Eniro →</a>'+
-  '<a href="https://www.google.com/search?q='+encodeURIComponent((lead.company||'')+' telefon '+(ort||'Skåne'))+'" target="_blank" style="display:block;padding:12px;background:#f4f4f8;color:var(--TEXT);border-radius:10px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid var(--BORDER)">Google: "'+esc(lead.company)+' telefon"</a>'+
+  '<div style="background:#fafafc;border:1px solid var(--BORDER);border-radius:10px;padding:16px;margin-bottom:14px">'+
+  '<div style="font-size:10px;color:var(--ACC);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Sök nummer</div>'+
+  '<div style="display:flex;flex-wrap:wrap;gap:6px">'+
+  '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:10px 14px">Hitta.se</a>'+
+  '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:10px 14px">Merinfo</a>'+
+  '<a href="https://www.eniro.se/'+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:10px 14px">Eniro</a>'+
+  '<a href="https://www.google.com/search?q='+encodeURIComponent((lead.company||'')+' telefon '+(ort||'Skåne'))+'" target="_blank" class="link-btn" style="flex:1;text-align:center;padding:10px 14px">Google</a>'+
   '</div></div>'
   :'')+
   '<div style="background:#fafafc;border:1px solid var(--BORDER);border-radius:10px;padding:16px;margin-bottom:14px">'+
@@ -1369,7 +1365,7 @@ function renderPipeline(){
  document.getElementById('my-closed').innerHTML=myClosed.length?myClosed.map(pCard).join(''):'<div style="color:var(--MUTED);padding:20px">Inga stängda ännu.</div>';
  const myLost=leads.filter(l=>l.status==='inte_intresserad').slice(0,5);
  document.getElementById('my-lost').innerHTML=myLost.length?myLost.map(pCard).join(''):'<div style="color:var(--MUTED);padding:20px">Inga förlorade.</div>';
- document.getElementById('b-pipeline').textContent=myCB.length+myOff.length+myDemos.length;
+ const _bp=document.getElementById('b-pipeline');if(_bp)_bp.textContent=myCB.length+myOff.length+myDemos.length;
  if(window.lucide)lucide.createIcons();
 }
 function fmtDate(d){if(!d)return'';try{const dt=new Date(d);if(isNaN(dt))return d;return dt.toLocaleDateString('sv-SE',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}catch{return d;}}
@@ -1462,7 +1458,7 @@ function updateBadges(){
  document.getElementById('b-leads').textContent=leads.filter(l=>l.status!=='blacklist').length;
  const cb=leads.filter(l=>l.nextCallDate&&new Date(l.nextCallDate)<=new Date()&&!['blacklist','order'].includes(l.status)).length;
  const pipe=leads.filter(l=>l.lockedBy===currentSeller&&!['blacklist','order'].includes(l.status)).length+cb+leads.filter(l=>['offert','apg'].includes(l.status)&&l.seller===currentSeller).length;
- document.getElementById('b-pipeline').textContent=pipe;
+ const _bp=document.getElementById('b-pipeline');if(_bp)_bp.textContent=pipe;
  const tc=document.getElementById('leads-total-count');if(tc)tc.textContent='('+leads.filter(l=>l.status!=='blacklist').length+')';
  renderPipeline();
 }
