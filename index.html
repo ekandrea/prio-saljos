@@ -783,15 +783,7 @@ th,td{padding:8px 10px}
 <div id="fab-area" style="display:none"></div>
 <div id="outcome-overlay" onclick="closeOutcomePanel()" style="display:none"></div>
 <div id="panel-outcome" style="display:none"><div id="outcome-btns"></div></div>
-<div id="progress-bar-area" style="display:none;position:fixed;bottom:0;left:var(--SBW);right:0;background:#0c0c14;padding:8px 24px;z-index:49;display:flex;align-items:center;gap:16px;transition:left .2s">
- <div style="flex:1;height:4px;background:#1e293b;border-radius:2px;overflow:hidden"><div id="progress-fill" style="height:100%;background:linear-gradient(90deg,var(--ACC),var(--G));border-radius:2px;transition:width .4s;width:0%"></div></div>
- <div style="display:flex;gap:14px;font-size:11px;font-weight:600;color:#94a3b8;white-space:nowrap">
-  <span>Samtal: <span id="p-calls" style="color:#fff">0</span></span>
-  <span>Offerter: <span id="p-offers" style="color:#f59e0b">0</span></span>
-  <span>Ordrar: <span id="p-orders" style="color:#22c55e">0</span></span>
-  <span><span id="p-pos">0</span>/<span id="p-total">0</span></span>
- </div>
-</div>
+<div id="progress-bar-area" style="display:none"><span id="progress-fill"></span><span id="p-calls">0</span><span id="p-offers">0</span><span id="p-orders">0</span><span id="p-pos">0</span><span id="p-total">0</span></div>
 <div id="bcb" style="display:none"><span id="calling-lbl"></span></div>
 <div id="qv-overlay" onclick="closeQuickView()"></div>
 <div id="quick-view" class="quick-view">
