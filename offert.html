@@ -4,205 +4,236 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Prio — Offert</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:#0e0e0e;color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased}
-.wrap{max-width:720px;margin:0 auto;padding:32px 20px 60px}
-
-/* Header */
-.head{padding:48px 0 40px;text-align:center;border-bottom:1px solid #222}
-.logo{font-size:32px;font-weight:900;letter-spacing:6px;color:#fff;margin-bottom:4px}
-.logo-bar{width:28px;height:2px;background:#C49A3C;margin:6px auto 16px}
-.tagline{font-size:13px;color:#666;letter-spacing:1px}
-.for-name{font-size:16px;font-weight:700;color:#C49A3C;margin-top:20px}
-.guarantee-pill{display:inline-block;margin-top:14px;padding:6px 18px;border:1px solid #333;border-radius:99px;font-size:11px;font-weight:600;color:#888;letter-spacing:.5px}
-
-/* Packages */
-.pkgs{display:flex;flex-direction:column;gap:2px;margin:40px 0 32px;border-radius:16px;overflow:hidden}
-.pk{background:#161616;padding:28px 28px;cursor:pointer;transition:all .15s;border-left:3px solid transparent;position:relative}
-.pk:hover{background:#1a1a1a}
-.pk.sel{background:#1c1a14;border-left-color:#C49A3C}
-.pk-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.pk-name{font-size:17px;font-weight:800;letter-spacing:.5px}
-.pk-price{text-align:right}
-.pk-price b{font-size:22px;font-weight:900}
-.pk-price span{font-size:12px;color:#666}
-.pk-tag{position:absolute;top:12px;right:16px;background:#C49A3C;color:#0e0e0e;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:3px}
-.pk-feat{display:flex;flex-wrap:wrap;gap:6px}
-.pk-feat span{font-size:11px;color:#777;padding:3px 10px;background:#111;border-radius:4px}
-.pk.sel .pk-feat span{background:#252015;color:#C49A3C}
-
-/* Setup */
-.setup{background:#161616;border-radius:12px;padding:24px;margin-bottom:32px;display:flex;justify-content:space-between;align-items:center}
-.setup-left{font-size:13px;color:#888}
-.setup-left b{color:#fff;font-size:16px;display:block;margin-bottom:2px}
-.split-btns{display:flex;gap:6px}
-.sp-btn{padding:8px 16px;border-radius:6px;border:1px solid #333;background:transparent;color:#888;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .12s}
-.sp-btn.on{background:#C49A3C;color:#0e0e0e;border-color:#C49A3C}
-.sp-btn:hover:not(.on){border-color:#555;color:#ccc}
-
-/* Summary */
-.sum{background:#161616;border-radius:12px;padding:24px;margin-bottom:32px;display:none}
-.sum.show{display:block}
-.sum-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#888}
-.sum-row b{color:#fff}
-.sum-total{display:flex;justify-content:space-between;padding:14px 0 0;margin-top:10px;border-top:1px solid #222;font-size:16px;font-weight:800}
-.sum-total span:last-child{color:#C49A3C}
-
-/* CTA */
-.cta{width:100%;padding:16px;background:#C49A3C;color:#0e0e0e;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:all .15s}
-.cta:hover{background:#d4aa4c}
-.cta:disabled{background:#333;color:#666;cursor:not-allowed}
-
-/* Footer */
-.foot{text-align:center;padding:40px 0 20px;font-size:11px;color:#444;line-height:1.8}
-
-/* Success */
-.success{display:none;text-align:center;padding:80px 20px}
-.success.show{display:block}
-.success h2{font-size:24px;font-weight:800;margin:20px 0 8px}
-.success p{color:#888;font-size:14px}
-
-@media(min-width:640px){
- .pkgs{flex-direction:row;gap:0;border-radius:16px}
- .pk{flex:1;border-left:none;border-bottom:3px solid transparent}
- .pk.sel{border-bottom-color:#C49A3C;border-left:none}
-}
+body{min-height:100vh;background:#fff;font-family:'DM Sans',sans-serif;color:#1a1a1a}
+.wrap{padding:28px 22px 40px;max-width:460px;margin:0 auto}
+.topbar{background:#f7f6f3;padding:8px 20px;font-size:10px;color:#aaa;text-align:center;letter-spacing:1px;border-bottom:1px solid #eee}
+.head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.logo{font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;letter-spacing:5px}
+.logo-bar{width:24px;height:2px;background:#C49A3C;margin-top:4px}
+.head-right{font-size:11px;color:#aaa;text-align:right;line-height:1.7}
+.co-name{font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;cursor:pointer;border-bottom:1px dashed #ccc;display:inline-block;padding-bottom:2px;margin-bottom:18px}
+.co-input{font-family:'Outfit',sans-serif;font-size:22px;font-weight:700;color:#1a1a1a;background:#f9f6f0;border:1px solid #C49A3C;border-radius:6px;padding:6px 10px;outline:none;width:100%;margin-bottom:18px}
+.note-box{background:#f9f6f0;border-radius:8px;padding:12px 14px;margin-bottom:20px;border-left:3px solid #C49A3C}
+.note-label{font-size:10px;color:#bbb;margin-bottom:4px;letter-spacing:.5px}
+.note-text{font-size:14px;color:#555;cursor:pointer;margin:0}
+.note-input{font-size:14px;color:#555;background:transparent;border:none;border-bottom:1px solid #C49A3C;outline:none;width:100%;padding:2px 0;font-family:'DM Sans',sans-serif}
+.intro-big{font-size:17px;line-height:1.8;font-weight:500;margin:0 0 6px}
+.intro-sub{font-size:14px;line-height:1.8;color:#777;margin:0 0 16px}
+.demo{background:#1a1a1a;border-radius:10px;padding:14px 18px;margin-bottom:22px;text-align:center}
+.demo-label{font-size:10px;color:rgba(255,255,255,.4);margin-bottom:4px;letter-spacing:.5px}
+.demo-num{font-size:20px;font-weight:800;color:#fff;font-family:'Outfit',sans-serif;text-decoration:none;letter-spacing:1px}
+.demo-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:4px}
+.divider{height:1px;background:#eee;margin-bottom:20px}
+.section-label{font-size:11px;color:#bbb;margin-bottom:10px;letter-spacing:.5px}
+.pkgs{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.pk{border:1px solid #e8e8e8;border-radius:12px;padding:18px 16px;cursor:pointer;background:#fff;transition:all .15s;position:relative}
+.pk.sel{border:2px solid #1a1a1a;padding:17px 15px;background:#fafaf7}
+.pk-tag{position:absolute;top:-9px;right:12px;background:#C49A3C;color:#fff;font-size:9px;font-weight:700;padding:3px 10px;border-radius:3px}
+.pk-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px}
+.pk-name{font-size:15px;font-weight:700}
+.pk-price{font-family:'Outfit',sans-serif;font-size:17px;font-weight:800}
+.pk-price span{font-size:11px;font-weight:400;color:#aaa}
+.pk-short{font-size:11px;color:#C49A3C;font-weight:600;margin-bottom:8px}
+.pk-desc{font-size:12.5px;color:#777;line-height:1.7;margin:0}
+.always{padding:14px 16px;background:#fafafa;border-radius:8px;margin-bottom:18px;border:1px solid #eee}
+.always-item{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px}
+.always-item:last-child{margin-bottom:0}
+.always-check{color:#C49A3C;font-size:12px;line-height:1.5;flex-shrink:0}
+.always-text{font-size:12px;color:#777;line-height:1.55}
+.guarantee{text-align:center;padding:14px 16px;margin-bottom:18px;background:#f0faf0;border-radius:8px;border:1px solid #d4e8d4}
+.guarantee-title{font-size:14px;font-weight:600;color:#2a7a2a}
+.guarantee-sub{font-size:12px;color:#6aaa6a;margin-top:3px}
+.cost{background:#f9f6f0;border-radius:10px;padding:18px;margin-bottom:16px}
+.cost-row{display:flex;justify-content:space-between;margin-bottom:6px}
+.cost-label{font-size:14px;color:#666}
+.cost-val{font-size:14px;font-weight:600}
+.cost-line{height:1px;background:#e5dcc8;margin:10px 0}
+.cost-note{font-size:12px;color:#aaa}
+.urgency{text-align:center;padding:8px;margin-bottom:16px;font-size:13px;color:#C49A3C;font-weight:600}
+.compare{text-align:center;font-size:13px;color:#bbb;margin-bottom:16px;line-height:1.7}
+.compare span{color:#888}
+.steps{padding:14px 16px;border:1px solid #eee;border-radius:8px;margin-bottom:18px}
+.step{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.step:last-child{margin-bottom:0}
+.step-num{width:20px;height:20px;border-radius:50%;background:#f0f0f0;font-size:10px;font-weight:700;display:flex;color:#888;align-items:center;justify-content:center;flex-shrink:0}
+.step-text{font-size:13px;color:#666}
+.terms{font-size:11px;color:#ccc;line-height:1.7;margin-bottom:16px;text-align:center}
+.accept{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;cursor:pointer;padding:0 4px}
+.accept-box{width:22px;height:22px;border-radius:5px;flex-shrink:0;margin-top:1px;border:2px solid #ccc;background:#fff;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.accept-box.on{border-color:#1a1a1a;background:#1a1a1a}
+.accept-text{font-size:13px;color:#555;line-height:1.6}
+.cta{display:block;width:100%;background:#e5e5e5;color:#bbb;text-align:center;padding:18px;border-radius:10px;font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif;border:none;cursor:default;transition:all .2s}
+.cta.on{background:#1a1a1a;color:#fff;cursor:pointer}
+.footer-text{text-align:center;font-size:12px;color:#ccc;margin-top:8px}
+.footer-logo{margin-top:28px;padding-top:16px;border-top:1px solid #f0f0f0;text-align:center;font-family:'Outfit',sans-serif;font-size:12px;font-weight:800;color:#e8e8e8;letter-spacing:4px}
+.done{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
+.done-check{width:48px;height:48px;border-radius:50%;background:#f0faf0;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px;color:#2a7a2a}
+.done h1{font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;margin-bottom:12px}
+.done p{font-size:15px;color:#666;line-height:1.8;max-width:300px;margin-bottom:24px}
+.done-steps{background:#f9f6f0;border-radius:10px;padding:18px 22px;max-width:300px;width:100%;text-align:left;margin-bottom:24px}
 </style>
 </head>
 <body>
-<div class="wrap" id="offer-form">
+
+<div id="offer-view">
+<div class="topbar">PRIO OFFERT</div>
+<div class="wrap">
  <div class="head">
-  <div class="logo">PRIO</div>
-  <div class="logo-bar"></div>
-  <div class="tagline">AI-TELEFONIST FÖR HANTVERKARE</div>
-  <div class="for-name" id="customer-name"></div>
-  <div class="guarantee-pill">30 dagars nöjdhetsgaranti &middot; Ingen bindningstid</div>
+  <div><div class="logo">PRIO</div><div class="logo-bar"></div></div>
+  <div class="head-right">Andy<br>073-XXX XX XX</div>
  </div>
 
- <div class="pkgs">
-  <div class="pk" onclick="selectPkg('prio')">
-   <div class="pk-top">
-    <div class="pk-name">Prio</div>
-    <div class="pk-price"><b>2 990 kr</b> <span>/mån</span></div>
-   </div>
-   <div class="pk-feat">
-    <span>Svarar dygnet runt</span>
-    <span>Bokar jobb</span>
-    <span>Bekräftelse till kund</span>
-   </div>
-  </div>
+ <div id="co-display" class="co-name" onclick="editField('co')"></div>
+ <input id="co-input" class="co-input" style="display:none" onblur="doneEdit('co')" onkeydown="if(event.key==='Enter')doneEdit('co')">
 
-  <div class="pk" onclick="selectPkg('pro')">
-   <div class="pk-tag">POPULÄRAST</div>
-   <div class="pk-top">
-    <div class="pk-name">Prio Pro</div>
-    <div class="pk-price"><b>4 990 kr</b> <span>/mån</span></div>
-   </div>
-   <div class="pk-feat">
-    <span>Allt i Prio</span>
-    <span>Ringer gamla kunder</span>
-    <span>Samlar omdömen</span>
-    <span>Prisförslag</span>
-    <span>Kundportal</span>
-   </div>
-  </div>
-
-  <div class="pk" onclick="selectPkg('total')">
-   <div class="pk-top">
-    <div class="pk-name">Prio Total</div>
-    <div class="pk-price"><b>9 990 kr</b> <span>/mån</span></div>
-   </div>
-   <div class="pk-feat">
-    <span>Allt i Pro</span>
-    <span>Schemahantering</span>
-    <span>Fortnox</span>
-    <span>Dedikerad kontaktperson</span>
-   </div>
-  </div>
+ <div class="note-box">
+  <div class="note-label">SOM VI PRATADE OM</div>
+  <p id="note-display" class="note-text" onclick="editField('note')"></p>
+  <input id="note-input" class="note-input" style="display:none" onblur="doneEdit('note')" onkeydown="if(event.key==='Enter')doneEdit('note')">
  </div>
 
- <div class="setup">
-  <div class="setup-left"><b>Uppstart: 4 990 kr</b>Kan delas på 3 månader</div>
-  <div class="split-btns">
-   <button class="sp-btn on" onclick="setSplit(1)">Direkt</button>
-   <button class="sp-btn" onclick="setSplit(3)">3 mån</button>
-  </div>
+ <p class="intro-big">Du jobbar med händerna. Inte med telefonen.</p>
+ <p class="intro-sub">Prio finns till för att du ska kunna fokusera på det du gör bäst. Vi tar hand om samtalen, uppföljningen och allt runtomkring — så att inget faller mellan stolarna medan du är ute på jobb.</p>
+
+ <div class="demo">
+  <div class="demo-label">HÖR SJÄLV HUR DET LÅTER</div>
+  <a href="tel:+46XXXXXXXXX" class="demo-num">XXX-XXX XX XX</a>
+  <div class="demo-sub">Ring och testa — 15 sekunder</div>
  </div>
 
- <div class="sum" id="summary">
-  <div class="sum-row"><span>Paket</span><b id="sum-pkg">—</b></div>
-  <div class="sum-row"><span>Per månad</span><b id="sum-monthly">—</b></div>
-  <div class="sum-row"><span>Uppstart</span><b id="sum-setup">—</b></div>
-  <div class="sum-total"><span>Första fakturan</span><span id="sum-first">—</span></div>
+ <div class="divider"></div>
+ <div class="section-label">VÄLJ VAD SOM PASSAR DIG</div>
+
+ <div class="pkgs" id="pkgs"></div>
+
+ <div class="always">
+  <div class="section-label">INGÅR ALLTID — OAVSETT VAD DU VÄLJER</div>
+  <div class="always-item"><span class="always-check">&#10003;</span><span class="always-text">Svarar dygnet runt — kvällar, helger, semestrar, röda dagar</span></div>
+  <div class="always-item"><span class="always-check">&#10003;</span><span class="always-text">Din egen Prio-portal där du ser allt samlat</span></div>
+  <div class="always-item"><span class="always-check">&#10003;</span><span class="always-text">Vi sätter upp allt åt dig — du behöver inte lära dig nåt nytt</span></div>
+  <div class="always-item"><span class="always-check">&#10003;</span><span class="always-text">Ring eller skriv till oss om du har frågor — vi finns här</span></div>
  </div>
 
- <button class="cta" id="cta-btn" disabled onclick="submitOrder()">Välj paket</button>
-
- <div class="foot">
-  PRIO &middot; AI-telefonist för hantverkare<br>
-  30 dagars nöjdhetsgaranti &middot; Ingen bindningstid &middot; Avsluta när du vill
+ <div class="guarantee">
+  <div class="guarantee-title">30 dagars garanti</div>
+  <div class="guarantee-sub">Funkar det inte betalar du ingenting. Noll risk.</div>
  </div>
+
+ <div class="cost" id="cost-box"></div>
+
+ <div class="urgency">Halva uppstarten för de 10 första i Skåne.</div>
+
+ <div class="compare">En anställd som sköter telefon och admin kostar 25 000 kr/mån.<br><span>Vi kostar från 2 990 kr/mån — dygnet runt, året runt.</span></div>
+
+ <div class="steps">
+  <div class="section-label">SÅ HÄR GÅR DET TILL</div>
+  <div class="step"><div class="step-num">1</div><span class="step-text">Du väljer vad som passar dig</span></div>
+  <div class="step"><div class="step-num">2</div><span class="step-text">Andy ringer dig inom 24 timmar</span></div>
+  <div class="step"><div class="step-num">3</div><span class="step-text">Vi sätter upp allt — du behöver inte göra nåt</span></div>
+  <div class="step"><div class="step-num">4</div><span class="step-text">Du är igång inom 48 timmar</span></div>
+ </div>
+
+ <div class="terms">Avtal 24 månader. Uppsägning 3 månader före avtalstidens utgång.</div>
+
+ <div class="accept" onclick="toggleAccept()">
+  <div class="accept-box" id="accept-box"></div>
+  <span class="accept-text" id="accept-text"></span>
+ </div>
+
+ <button class="cta" id="cta-btn" onclick="submit()">Kör igång</button>
+ <p class="footer-text">Frågor? Ring Andy: 073-XXX XX XX</p>
+ <div class="footer-logo">PRIO</div>
+</div>
 </div>
 
-<div class="wrap success" id="success-view">
- <div style="font-size:48px">✓</div>
- <h2>Tack, vi hörs snart.</h2>
- <p id="success-text">Vi kontaktar dig inom 24 timmar för att komma igång.</p>
- <div style="margin-top:40px;background:#161616;border-radius:12px;padding:24px;text-align:left">
-  <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:#C49A3C;letter-spacing:1px">VAD HÄNDER NU</div>
-  <div style="font-size:13px;color:#888;line-height:2">
-   1. Vi kontaktar dig inom 24h<br>
-   2. Vi sätter upp din AI-telefonist<br>
-   3. Du kopplar om ditt nummer<br>
-   4. Prio svarar på alla samtal
-  </div>
+<div id="done-view" class="done" style="display:none">
+ <div class="done-check">&#10003;</div>
+ <h1 id="done-title"></h1>
+ <p>Nu tar vi hand om det.</p>
+ <div class="done-steps">
+  <div class="section-label">NÄSTA STEG</div>
+  <div class="step"><div class="step-num" style="background:#1a1a1a;color:#fff">1</div><span class="step-text">Andy ringer dig inom 24 timmar</span></div>
+  <div class="step"><div class="step-num" style="background:#1a1a1a;color:#fff">2</div><span class="step-text">Vi sätter upp allt — du behöver inte göra nåt</span></div>
+  <div class="step"><div class="step-num" style="background:#1a1a1a;color:#fff">3</div><span class="step-text">Du är igång inom 48 timmar</span></div>
  </div>
+ <p style="font-size:12px;color:#aaa">Frågor? Ring Andy: 073-XXX XX XX</p>
 </div>
 
 <script>
-const params=new URLSearchParams(window.location.search);
-const namn=params.get('namn')||params.get('name')||'';
+const params=new URLSearchParams(location.search);
+let company=params.get('namn')||'Företagsnamn';
+let note=params.get('note')||'du missar samtal varje dag när du är ute på jobb';
 const leadId=params.get('id')||'';
-if(namn)document.getElementById('customer-name').textContent='Offert till '+namn;
+let selected='pro';
+let accepted=false;
 
-let selectedPkg=null;
-let splitMonths=1;
-const prices={prio:2990,pro:4990,total:9990};
-const labels={prio:'Prio',pro:'Prio Pro',total:'Prio Total'};
+const pkgs={
+ bas:{name:'Prio',price:'2 990',setup:'4 990',tag:null,
+  short:'Missa aldrig ett samtal igen',
+  desc:'Du är ute på jobb. Telefonen ringer. Nån svarar åt dig, tar reda på vad det gäller och bokar in jobbet direkt i din kalender. Kunden får en bekräftelse. Du kollar telefonen på rasten och ser: "3 samtal idag, 2 jobb bokade, 1 vill att du ringer tillbaka." Inget faller mellan stolarna.'},
+ pro:{name:'Prio Pro',price:'4 990',setup:'4 990',tag:'De flesta väljer den här',
+  short:'Slipp admin — fokusera på det du gör bäst',
+  desc:'Allt i Prio — plus att kunden som frågade om ett jobb för tre veckor sen men aldrig hörde av sig? Vi ringer honom åt dig. Nöjda kunder får en påminnelse att lägga omdöme. Nån vill ha pris? Ett förslag skickas innan du ens satt dig i bilen hem. Du har koll på allt i din egen Prio-portal.'},
+ total:{name:'Prio Total',price:'9 990',setup:'4 990',tag:null,
+  short:'Du jobbar — vi sköter allt annat',
+  desc:'Allt i Pro — plus att du får ett meddelande på morgonen: "Idag har du ett jobb i Landskrona kl 8 och ett i Helsingborg kl 13." Dina anställda vet var dom ska vara. När jobbet är klart skickas fakturan via Fortnox. Kvitton, bokföring, allt sköts. Du bygger. Vi tar hand om resten.'}
+};
 
-function selectPkg(pkg){
- selectedPkg=pkg;
- document.querySelectorAll('.pk').forEach(p=>p.classList.remove('sel'));
- event.currentTarget.closest('.pk').classList.add('sel');
- document.getElementById('summary').classList.add('show');
- updateSummary();
- document.getElementById('cta-btn').disabled=false;
- document.getElementById('cta-btn').textContent='Godkänn — '+labels[pkg];
+function render(){
+ document.getElementById('co-display').textContent=company;
+ document.getElementById('note-display').textContent=note;
+ // Packages
+ let ph='';
+ for(const[key,pkg]of Object.entries(pkgs)){
+  const sel=selected===key;
+  ph+='<div class="pk'+(sel?' sel':'')+'" onclick="selectPkg(\''+key+'\')">';
+  if(pkg.tag)ph+='<div class="pk-tag">'+pkg.tag+'</div>';
+  ph+='<div class="pk-top"><span class="pk-name">'+pkg.name+'</span><span class="pk-price">'+pkg.price+' <span>kr/mån</span></span></div>';
+  ph+='<div class="pk-short">'+pkg.short+'</div>';
+  ph+='<p class="pk-desc">'+pkg.desc+'</p></div>';
+ }
+ document.getElementById('pkgs').innerHTML=ph;
+ // Cost
+ const p=pkgs[selected];
+ document.getElementById('cost-box').innerHTML=
+  '<div class="section-label">VAD DET KOSTAR</div>'+
+  '<div class="cost-row"><span class="cost-label">'+p.name+' — varje månad</span><span class="cost-val">'+p.price+' kr</span></div>'+
+  '<div class="cost-row"><span class="cost-label">Uppstart — en gång</span><span class="cost-val">'+p.setup+' kr</span></div>'+
+  '<div class="cost-line"></div><div class="cost-note">Uppstarten kan delas på 3 månader.</div>';
+ // Accept
+ const box=document.getElementById('accept-box');
+ box.className='accept-box'+(accepted?' on':'');
+ box.innerHTML=accepted?'<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6.5L5 9L9.5 3.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>':'';
+ document.getElementById('accept-text').textContent='Jag vill köra igång med '+p.name+' för '+company+'.';
+ const btn=document.getElementById('cta-btn');
+ btn.className='cta'+(accepted?' on':'');
 }
-function setSplit(m){
- splitMonths=m;
- document.querySelectorAll('.sp-btn').forEach(b=>b.classList.remove('on'));
- event.currentTarget.classList.add('on');
- updateSummary();
+
+function selectPkg(key){selected=key;render();}
+function toggleAccept(){accepted=!accepted;render();}
+
+function editField(f){
+ if(f==='co'){document.getElementById('co-display').style.display='none';const inp=document.getElementById('co-input');inp.style.display='';inp.value=company;inp.focus();}
+ if(f==='note'){document.getElementById('note-display').style.display='none';const inp=document.getElementById('note-input');inp.style.display='';inp.value=note;inp.focus();}
 }
-function updateSummary(){
- if(!selectedPkg)return;
- const mo=prices[selectedPkg];
- const sp=Math.ceil(4990/splitMonths);
- document.getElementById('sum-pkg').textContent=labels[selectedPkg];
- document.getElementById('sum-monthly').textContent=mo.toLocaleString('sv-SE')+' kr';
- document.getElementById('sum-setup').textContent=splitMonths>1?sp.toLocaleString('sv-SE')+' kr/mån x '+splitMonths:'4 990 kr';
- document.getElementById('sum-first').textContent=(mo+sp).toLocaleString('sv-SE')+' kr';
+function doneEdit(f){
+ if(f==='co'){company=document.getElementById('co-input').value||company;document.getElementById('co-input').style.display='none';document.getElementById('co-display').style.display='';}
+ if(f==='note'){note=document.getElementById('note-input').value||note;document.getElementById('note-input').style.display='none';document.getElementById('note-display').style.display='';}
+ render();
 }
-function submitOrder(){
- if(!selectedPkg)return;
- document.getElementById('offer-form').style.display='none';
- document.getElementById('success-view').classList.add('show');
- document.getElementById('success-text').textContent='Vi hör av oss inom 24 timmar.';
- if(window.opener){window.opener.postMessage({type:'prio-offert-accepted',leadId,pkg:selectedPkg,split:splitMonths},'*');}
+
+function submit(){
+ if(!accepted)return;
+ document.getElementById('offer-view').style.display='none';
+ document.getElementById('done-view').style.display='flex';
+ document.getElementById('done-title').textContent='Välkommen, '+company+'.';
+ if(window.opener)window.opener.postMessage({type:'prio-offert-accepted',leadId,pkg:selected},'*');
 }
+
+render();
 </script>
 </body>
 </html>
