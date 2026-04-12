@@ -1532,13 +1532,18 @@ function importPrioFile(){
 }
 function sendOffert(id){
  const l=leads.find(l=>l.id===id);if(!l)return;
- const base=window.location.href.replace(/\/[^\/]*$/,'/offert.html');
+ const base='https://saljos-main.vercel.app/offert';
  const url=base+'?namn='+encodeURIComponent(l.company)+'&id='+id;
- navigator.clipboard.writeText(url).then(()=>showNotif('Offertlänk kopierad!','Klistra in i SMS/mail')).catch(()=>{});
- window.open(url,'_blank');
+ const ph=l.vdPhone||l.phone||'';
+ const msg='Hej! Här är offerten vi pratade om: '+url;
+ if(ph){
+  window.open('sms:'+ph+'?body='+encodeURIComponent(msg),'_self');
+ }else{
+  navigator.clipboard.writeText(url).then(()=>showNotif('Länk kopierad — klistra in i SMS','Inget nummer ifyllt')).catch(()=>{});
+ }
  l.offerSent=true;
  if(l.status!=='order')l.status='offert';
- l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad',note:'Länk: '+url,seller:currentSeller});
+ l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via SMS',note:url,seller:currentSeller});
  saveData();updateBadges();
 }
 window.addEventListener('message',function(e){
