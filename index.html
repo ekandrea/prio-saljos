@@ -889,6 +889,7 @@ async function startApp(){
  if(savedGoal)document.getElementById('daily-goal').value=savedGoal;
  setInterval(lockCleanup,60000);
  setInterval(()=>saveData(),30000);
+ setInterval(checkOffertEvents,5000);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(panelOpen)closeOutcomePanel();if(qvLeadId)closeQuickView();if(document.getElementById('tb-modal').style.display==='flex')skipTB();}});
  await cloudPull();updateBadges();renderDialer();
 }
@@ -1634,6 +1635,27 @@ window.addEventListener('message',function(e){
   if(l){l.status='order';l.offerOpened=true;l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert godkänd: '+e.data.pkg,note:'',seller:currentSeller});saveData();updateBadges();showNotif('OFFERT GODKÄND!',l.company+' valde '+e.data.pkg);celebrate();}
  }
 });
+function checkOffertEvents(){
+ try{
+  const raw=localStorage.getItem('prio_offert_events');if(!raw)return;
+  const events=JSON.parse(raw);if(!events.length)return;
+  let changed=false;
+  events.forEach(ev=>{
+   const l=leads.find(l=>l.id===parseInt(ev.leadId));if(!l)return;
+   if(ev.event==='opened'&&!l.offerOpened){
+    l.offerOpened=true;l.offerOpenedAt=ev.time;
+    showNotif('Kund öppnade offert!',l.company);changed=true;
+   }
+   if(ev.event==='accepted'&&l.status!=='order'){
+    l.status='order';l.offerOpened=true;
+    l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Kund godkände offert: '+(ev.pkg||''),note:'',seller:currentSeller});
+    showNotif('KUND GODKÄNDE OFFERT!',l.company+' valde '+(ev.pkg||''));celebrate();changed=true;
+   }
+  });
+  localStorage.removeItem('prio_offert_events');
+  if(changed){saveData();updateBadges();const cur=getCurLead();if(cur)renderKK(cur);}
+ }catch(e){}
+}
 function exportData(){const b=new Blob([JSON.stringify({leads,exportDate:new Date().toISOString()},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='saljos_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();}
 function importDataFile(){const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{try{const d=JSON.parse(e.target.result);if(d.leads){leads=d.leads;migrateLeads();saveData();updateBadges();alert('Återställt! '+leads.length+' leads.');go('leads');}else alert('Ogiltig fil.');}catch{alert('Kunde inte läsa.');}};r.readAsText(f);};i.click();}
 function clearAllData(){if(!confirm('Rensa ALL lokal data?'))return;localStorage.removeItem(localKey());leads=[];saveLocal();updateBadges();go('dialer');}
