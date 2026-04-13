@@ -1464,7 +1464,7 @@ function renderLeads(){
  const pages=Math.ceil(filtered.length/PAGE);
  if(curPage>=pages)curPage=Math.max(0,pages-1);
  const paged=filtered.slice(curPage*PAGE,(curPage+1)*PAGE);
- document.getElementById('leads-tb').innerHTML=paged.map(l=>{const ort=l.address?l.address.split(',').pop().trim():(l.city||'');return '<tr class="clickable" onclick="openKK('+l.id+')"><td><strong>'+esc(l.company)+'</strong>'+(TARGET.includes(l.industry)?' <span class="priority-target">⭐</span>':'')+'<div style="font-size:11px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(l.orgnr)||'')+'</div></td><td><span class="industry-badge">'+getIndLabel(l.industry)+'</span></td><td style="font-size:12px">'+esc(ort||'—')+'</td><td>'+fmtPhone(l.phone||l.vdPhone)+'</td><td style="font-size:12px">'+esc(l.vdName||l.contact||'—')+'</td><td><span class="st-badge st-'+l.status+'">'+(SN[l.status]||l.status)+'</span>'+(l.offerSent?' <span style="background:#ede9fe;color:#5b21b6;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700">OFFERT</span>':'')+'</td><td><strong style="color:var(--ACC)">'+(l.score>0?l.score:'—')+'</strong></td></tr>';}).join('')||'<tr><td colspan="7" class="empty">Inga leads</td></tr>';
+ document.getElementById('leads-tb').innerHTML=paged.map(l=>{const ort=l.address?l.address.split(',').pop().trim():(l.city||'');return '<tr class="clickable" onclick="viewLead('+l.id+')"><td><strong>'+esc(l.company)+'</strong>'+(TARGET.includes(l.industry)?' <span class="priority-target">⭐</span>':'')+'<div style="font-size:11px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(l.orgnr)||'')+'</div></td><td><span class="industry-badge">'+getIndLabel(l.industry)+'</span></td><td style="font-size:12px">'+esc(ort||'—')+'</td><td>'+fmtPhone(l.phone||l.vdPhone)+'</td><td style="font-size:12px">'+esc(l.vdName||l.contact||'—')+'</td><td><span class="st-badge st-'+l.status+'">'+(SN[l.status]||l.status)+'</span>'+(l.offerSent?' <span style="background:#ede9fe;color:#5b21b6;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700">OFFERT</span>':'')+'</td><td><strong style="color:var(--ACC)">'+(l.score>0?l.score:'—')+'</strong></td></tr>';}).join('')||'<tr><td colspan="7" class="empty">Inga leads</td></tr>';
  let ph='';if(pages>1){ph='<button class="btn btn-o btn-sm" onclick="curPage--;renderLeads()" '+(curPage===0?'disabled':'')+'>← Föregående</button><span style="padding:8px 16px;font-size:12px;color:var(--MUTED)">Sida '+(curPage+1)+' av '+pages+'</span><button class="btn btn-o btn-sm" onclick="curPage++;renderLeads()" '+(curPage>=pages-1?'disabled':'')+'>Nästa →</button>';}
  document.getElementById('pag-row').innerHTML=ph;
 }
@@ -1542,6 +1542,39 @@ function renderHistory(lead){document.getElementById('hist-list').innerHTML=lead
 function saveNote(){const l=getCurLead();if(!l)return;l.userNote=document.getElementById('note-ta').value;saveLocal();}
 function getCurLead(){if(!dialerOn||dialerIdx<0||dialerIdx>=dialerQ.length)return null;return leads.find(l=>l.id===dialerQ[dialerIdx].id);}
 function openKK(id){const lead=leads.find(l=>l.id===id);if(!lead)return;dialerQ=[lead];dialerIdx=0;dialerOn=true;callingPhone='';go('dialer');document.getElementById('d-idle').style.display='none';document.getElementById('d-active').classList.add('on');document.getElementById('fab-area').style.display='block';document.getElementById('bcb').style.display='flex';nextDialerLead();}
+function viewLead(id){
+ const lead=leads.find(l=>l.id===id);if(!lead)return;
+ const ort=lead.address?lead.address.split(',').pop().trim():(lead.city||'');
+ const ph=lead.vdPhone||lead.phone||'';
+ const c1=lead.check_size||'',c2=lead.check_revenue||'',c3=lead.check_visible||'';
+ const d=document.createElement('div');d.className='overlay';d.id='lead-modal';
+ d.innerHTML='<div class="modal" style="max-width:700px;max-height:85vh;overflow-y:auto;position:relative">'+
+  '<button onclick="document.getElementById(\'lead-modal\').remove()" style="position:absolute;top:16px;right:20px;background:#f4f4f8;border:1px solid var(--BORDER);width:32px;height:32px;border-radius:8px;font-size:16px;cursor:pointer;color:var(--MUTED);display:flex;align-items:center;justify-content:center;z-index:1">✕</button>'+
+  '<h3 style="margin-bottom:4px">'+esc(lead.company)+'</h3>'+
+  '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:16px">'+
+   '<span class="industry-badge">'+getIndLabel(lead.industry)+'</span>'+
+   (ort?'<span style="font-size:11px;color:var(--MUTED)">'+esc(ort)+'</span>':'')+
+   '<span style="font-size:10px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(lead.orgnr)||'')+'</span>'+
+   '<span class="st-badge st-'+lead.status+'">'+(SN[lead.status]||lead.status)+'</span>'+
+   (lead.offerSent?' <span style="background:#ede9fe;color:#5b21b6;padding:2px 8px;border-radius:5px;font-size:10px;font-weight:700">OFFERT</span>':'')+
+  '</div>'+
+  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">'+
+   '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;margin-bottom:3px">Kontaktperson</div><input value="'+esc(lead.vdName||lead.contact||'')+'" oninput="saveField('+id+',\'vdName\',this.value)" placeholder="Namn" style="padding:8px 12px"></div>'+
+   '<div><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;margin-bottom:3px">E-post</div><input value="'+esc(lead.vdEmail||lead.email||'')+'" oninput="saveField('+id+',\'vdEmail\',this.value)" placeholder="namn@foretag.se" style="padding:8px 12px"></div>'+
+  '</div>'+
+  '<div style="margin-bottom:16px"><div style="font-size:9px;color:var(--MUTED);font-weight:700;text-transform:uppercase;margin-bottom:3px">Telefon</div><div style="display:flex;gap:8px"><input value="'+esc(ph)+'" oninput="saveField('+id+',\'vdPhone\',this.value)" placeholder="07X-XXX XX XX" style="padding:8px 12px;flex:1">'+(ph?'<a href="'+toTel(ph)+'" style="padding:8px 16px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none">Ring</a>':'')+'</div></div>'+
+  '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">'+
+   '<a href="https://www.google.com/maps/search/'+encodeURIComponent((lead.company||'')+' '+(ort||'Skåne'))+'" target="_blank" class="link-btn" style="background:#e8f5e9;color:#1b5e20;border-color:#a5d6a7">Google Maps</a>'+
+   '<a href="https://www.allabolag.se/'+normOrg(lead.orgnr)+'" target="_blank" class="link-btn" style="background:#e3f2fd;color:#0d47a1;border-color:#90caf9">Allabolag</a>'+
+   '<a href="https://www.hitta.se/sök?vad='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="background:#fff3e0;color:#e65100;border-color:#ffcc80">Hitta.se</a>'+
+   '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn" style="background:#fce4ec;color:#b71c1c;border-color:#f48fb1">Merinfo</a>'+
+   '<button class="link-btn" style="background:#C49A3C;color:#fff;border:none;cursor:pointer" onclick="document.getElementById(\'lead-modal\').remove();sendOffert('+id+')">Skicka offert</button>'+
+  '</div>'+
+  (lead.offerSent?'<div style="background:#fafafc;border:1px solid var(--BORDER);border-radius:10px;padding:12px;margin-bottom:16px"><div style="font-size:10px;font-weight:700;color:var(--MUTED);text-transform:uppercase;margin-bottom:8px">Offert-status</div><div style="font-size:11px;color:#555">'+esc(lead.offerMethod||'Skickad')+' — '+esc(lead.offerSentAt||'')+'<br>'+(lead.offerOpened?'<span style="color:#22c55e;font-weight:600">Kund har öppnat</span>':'<span style="color:#999">Väntar på att kund öppnar</span>')+'</div></div>':'')+
+  (lead.history&&lead.history.length?'<div style="font-size:10px;font-weight:700;color:var(--MUTED);text-transform:uppercase;margin-bottom:6px">Historik</div><div style="font-size:11px;color:#666">'+lead.history.slice().reverse().slice(0,5).map(e=>'<div style="padding:4px 0;border-bottom:1px solid #f4f4f8">'+esc(e.date)+' — <strong>'+esc(e.outcome)+'</strong></div>').join('')+'</div>':'')+
+ '</div>';
+ document.body.appendChild(d);
+}
 function showNotif(title,sub){const el=document.createElement('div');el.className='notif';el.innerHTML='<strong style="font-size:12px">'+esc(title)+'</strong>'+(sub?'<div style="font-size:11px;color:var(--MUTED);margin-top:2px">'+esc(sub)+'</div>':'');el.onclick=()=>el.remove();document.getElementById('notif-area').appendChild(el);setTimeout(()=>el.remove(),4000);}
 function celebrate(){
  const c=document.createElement('div');
@@ -1708,7 +1741,7 @@ function renderOfferter(){
   if(l.status==='order')st='<span style="color:#22c55e;font-weight:700">Godkänd</span>';
   else if(l.offerOpened)st='<span style="color:#f59e0b;font-weight:700">Öppnad</span>';
   else st='<span style="color:var(--MUTED)">Väntar</span>';
-  return '<tr class="clickable" onclick="openKK('+l.id+')"><td><strong>'+esc(l.company)+'</strong></td><td><span class="industry-badge">'+getIndLabel(l.industry)+'</span></td><td>'+esc(l.vdName||l.contact||'—')+'</td><td style="font-size:11px">'+esc(l.offerMethod||'—')+'<br><span style="color:var(--MUTED)">'+esc(l.offerSentAt||'')+'</span></td><td>'+st+'</td><td><button class="btn btn-o btn-sm" onclick="event.stopPropagation();openKK('+l.id+')">Öppna</button></td></tr>';
+  return '<tr class="clickable" onclick="viewLead('+l.id+')"><td><strong>'+esc(l.company)+'</strong></td><td><span class="industry-badge">'+getIndLabel(l.industry)+'</span></td><td>'+esc(l.vdName||l.contact||'—')+'</td><td style="font-size:11px">'+esc(l.offerMethod||'—')+'<br><span style="color:var(--MUTED)">'+esc(l.offerSentAt||'')+'</span></td><td>'+st+'</td><td><button class="btn btn-o btn-sm" onclick="event.stopPropagation();viewLead('+l.id+')">Öppna</button></td></tr>';
  }).join(''):'<tr><td colspan="6" class="empty">Inga offerter skickade ännu</td></tr>';
  const bo=document.getElementById('b-offerter');if(bo)bo.textContent=offerts.length;
 }
