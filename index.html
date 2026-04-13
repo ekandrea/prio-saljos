@@ -9,21 +9,21 @@
 <style>
 :root{--P:#0c0c14;--BG:#f8f8fa;--W:#fff;--R:12px;--G:#22c55e;--RD:#ef4444;--OR:#f59e0b;--AM:#eab308;--ACC:#5b5fc7;--ACC2:#7c7ff2;--SBW:260px;--TEXT:#111;--MUTED:#8b8fa3;--BORDER:#e8e8ee;--ME:#10b981}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:var(--BG);color:var(--TEXT);min-height:100vh;font-size:13px;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',sans-serif;background:#f5f5f3;color:var(--TEXT);min-height:100vh;font-size:13px;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
 #login-screen{position:fixed;inset:0;background:linear-gradient(165deg,#0c0c14 0%,#151530 50%,#1e1450 100%);z-index:9999;display:flex;align-items:center;justify-content:center}
 #login-screen::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(91,95,199,.15),transparent 70%);border-radius:50%}
 #login-screen::after{content:'';position:absolute;bottom:-10%;left:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(124,127,242,.1),transparent 70%);border-radius:50%}
 .login-box{background:var(--W);border-radius:24px;padding:52px 48px;width:400px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08)}
 .login-logo{font-size:48px;margin-bottom:6px}
 .login-box h2{font-size:26px;font-weight:800;letter-spacing:-.04em;margin-bottom:4px}
-.login-box .sub{font-size:12px;color:var(--MUTED);margin-bottom:32px}
+.login-box .sub{font-size:11px;color:#999;margin-bottom:32px;letter-spacing:.5px}
 .login-box .user-pill{background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:1px solid #c4b5fd;border-radius:12px;padding:14px 20px;margin-bottom:24px;text-align:left}
 .login-box .user-pill .label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#7c3aed;margin-bottom:4px}
 .login-box .user-pill .name{font-size:18px;font-weight:800;color:#5b21b6;letter-spacing:-.02em}
 .login-box input{padding:13px 16px;font-size:14px;text-align:center;width:100%;border:1px solid var(--BORDER);border-radius:10px;outline:none;transition:border-color .15s;margin-bottom:14px;font-family:inherit}
 .login-box input:focus{border-color:var(--ACC);box-shadow:0 0 0 3px rgba(91,95,199,.1)}
-.login-btn{width:100%;padding:14px;background:linear-gradient(135deg,#5b5fc7,#7c7ff2);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
-.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,95,199,.35)}
+.login-btn{width:100%;padding:14px;background:#1a1a1a;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+.login-btn:hover{background:#333}
 .login-err{color:var(--RD);font-size:12px;margin-top:10px;display:none}
 #sb{position:fixed;left:0;top:0;bottom:0;width:var(--SBW);background:var(--P);color:#fff;display:flex;flex-direction:column;z-index:100;overflow-y:auto;overflow-x:hidden;transition:width .2s ease}
 #sb.mini{width:56px}
@@ -54,7 +54,7 @@ body{font-family:'Inter',sans-serif;background:var(--BG);color:var(--TEXT);min-h
 #sb .sec{padding:8px 16px 3px;font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#2a2a3a;margin-top:8px;font-weight:700}
 #sb .ni{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;border-left:3px solid transparent;transition:all .2s;font-size:13px;color:#777;font-weight:500;border-radius:0 8px 8px 0;margin-right:8px}
 #sb .ni:hover{background:rgba(255,255,255,.06);color:#ccc}
-#sb .ni.active{border-left-color:var(--ACC2);background:linear-gradient(135deg,rgba(91,95,199,.15),rgba(124,127,242,.08));color:#fff;font-weight:600}
+#sb .ni.active{border-left-color:#C49A3C;background:rgba(196,154,60,.08);color:#fff;font-weight:600}
 #sb .ni .badge{background:var(--ACC);color:#fff;font-size:9px;padding:2px 7px;border-radius:8px;margin-left:auto;font-weight:700}
 #sb .ni .badge.warn{background:var(--OR)}
 #sb .bottom{margin-top:auto;padding:12px;border-top:1px solid #111827}
@@ -63,7 +63,7 @@ body{font-family:'Inter',sans-serif;background:var(--BG);color:var(--TEXT);min-h
 .main.mini{margin-left:56px}
 .view{display:none;animation:fi .3s ease}.view.on{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.page-title{font-size:22px;font-weight:800;margin-bottom:24px;letter-spacing:-.03em;padding-left:42px;background:linear-gradient(135deg,var(--TEXT),var(--ACC));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-title{font-size:18px;font-weight:800;margin-bottom:24px;letter-spacing:-.02em;color:var(--TEXT)}
 .op{display:inline-block;padding:2px 9px;border-radius:7px;font-size:10px;font-weight:700}
 .op-telenor{background:#dbeafe;color:#1e40af}.op-tre{background:#ede9fe;color:#5b21b6}.op-telia{background:#f3e8ff;color:#6d28d9}.op-tele2{background:#e0e7ff;color:#3730a3}.op-okänd{background:#f3f4f6;color:#555}
 .st-badge{display:inline-block;padding:2px 9px;border-radius:7px;font-size:10px;font-weight:600}
@@ -71,11 +71,11 @@ body{font-family:'Inter',sans-serif;background:var(--BG);color:var(--TEXT);min-h
 .priority-target{background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:1px 7px;border-radius:5px;font-size:9px;font-weight:700}
 .industry-badge{background:#e0e7ff;color:#3730a3;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:600}
 .sub-count{display:inline-block;background:#dbeafe;color:#1e40af;padding:1px 7px;border-radius:6px;font-size:10px;margin-left:6px;font-weight:700}
-.card{background:var(--W);border-radius:14px;border:1px solid var(--BORDER);padding:20px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card{background:#fff;border-radius:10px;border:1px solid #e8e8e8;padding:20px;margin-bottom:14px}
 .btn{border:none;border-radius:8px;cursor:pointer;font-weight:600;font-family:inherit;padding:9px 18px;font-size:12px;transition:all .15s}
 .btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.12)}
 .btn:active{transform:translateY(0);box-shadow:none}
-.btn-p{background:var(--ACC);color:#fff}.btn-g{background:var(--G);color:#fff}.btn-r{background:var(--RD);color:#fff}
+.btn-p{background:#1a1a1a;color:#fff}.btn-g{background:var(--G);color:#fff}.btn-r{background:var(--RD);color:#fff}
 .btn-o{background:var(--W);border:1px solid var(--BORDER);color:var(--TEXT)}
 .btn-bv{background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff}
 .btn-pts{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
@@ -549,8 +549,9 @@ th,td{padding:8px 10px}
 <body>
 <div id="login-screen">
  <div class="login-box">
-  <div class="login-logo">⚡</div>
-  <h2>Säljös</h2>
+  <div style="font-size:28px;font-weight:900;letter-spacing:4px;margin-bottom:4px">P</div>
+  <div style="width:20px;height:2px;background:#C49A3C;margin:0 auto 12px"></div>
+  <h2 style="font-size:20px">Säljös</h2>
   <div class="sub">Prio SäljOS — sälj till hantverkare</div>
   <input type="text" id="login-name" placeholder="Ditt namn" onkeydown="if(event.key==='Enter')document.getElementById('login-pw').focus()" autocomplete="name">
   <input type="password" id="login-pw" placeholder="Lösenord" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="current-password">
@@ -579,16 +580,11 @@ th,td{padding:8px 10px}
 <div class="main" id="main">
  <div class="view on" id="v-dialer">
   <div id="d-idle" style="min-height:calc(100vh - 56px);display:flex;flex-direction:column">
-   <div style="background:linear-gradient(165deg,#0c0c14 0%,#151530 50%,#1e1450 100%);border-radius:16px;padding:48px 52px;position:relative;overflow:hidden">
-    <div style="position:absolute;top:-20%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(91,95,199,.12),transparent 70%);border-radius:50%"></div>
-    <div style="position:relative;z-index:1">
-     <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:6px" id="greeting-text">God morgon</div>
-     <h1 style="font-size:32px;font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:20px" id="seller-greeting">Andrea</h1>
-     <div id="today-summary" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:28px"></div>
-     <button class="start-btn start-btn-g" onclick="startAutopilot()" style="font-size:16px;padding:18px 48px;border-radius:14px">
-      ▶ BÖRJA DAGEN
-     </button>
-    </div>
+   <div style="padding:40px 0">
+    <div style="font-size:13px;color:#999;margin-bottom:4px" id="greeting-text">God morgon</div>
+    <h1 style="font-size:26px;font-weight:800;color:var(--TEXT);letter-spacing:-.02em;margin-bottom:24px" id="seller-greeting">Andrea</h1>
+    <div id="today-summary" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px"></div>
+    <button onclick="startAutopilot()" style="padding:14px 36px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:all .15s" onmouseenter="this.style.background='#333'" onmouseleave="this.style.background='#1a1a1a'">Börja dagen</button>
    </div>
    <div id="q-preview" style="margin-top:20px"></div>
   </div>
@@ -1048,9 +1044,9 @@ function renderDialer(){
  if(sg){const raw=currentSeller||'andy';sg.textContent=raw.charAt(0).toUpperCase()+raw.slice(1)+' 👋';}
  const sum=document.getElementById('today-summary');
  if(sum)sum.innerHTML=
-  '<div style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.25);border-radius:12px;padding:14px 20px;min-width:140px"><div style="font-size:28px;font-weight:800;color:#ef4444">'+q.callbacks.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Återkomster</div></div>'+
-  '<div style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:14px 20px;min-width:140px"><div style="font-size:28px;font-weight:800;color:#f59e0b">'+q.offers.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Offerter att följa upp</div></div>'+
-  '<div style="background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.25);border-radius:12px;padding:14px 20px;min-width:140px"><div style="font-size:28px;font-weight:800;color:#22c55e">'+q.scored.length+'</div><div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Leads redo</div></div>';
+  '<div style="border:1px solid #e5e5e5;border-radius:10px;padding:16px 22px;min-width:130px;background:#fff"><div style="font-size:24px;font-weight:800;color:#1a1a1a">'+q.callbacks.length+'</div><div style="font-size:11px;color:#999;margin-top:2px">Återkomster</div></div>'+
+  '<div style="border:1px solid #e5e5e5;border-radius:10px;padding:16px 22px;min-width:130px;background:#fff"><div style="font-size:24px;font-weight:800;color:#1a1a1a">'+q.offers.length+'</div><div style="font-size:11px;color:#999;margin-top:2px">Offerter</div></div>'+
+  '<div style="border:1px solid #e5e5e5;border-radius:10px;padding:16px 22px;min-width:130px;background:#fff"><div style="font-size:24px;font-weight:800;color:#1a1a1a">'+q.scored.length+'</div><div style="font-size:11px;color:#999;margin-top:2px">Leads</div></div>';
  const preview=document.getElementById('q-preview');
  if(preview&&q.callbacks.length){
   preview.innerHTML='<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:10px">Först ut — återkomster</div>'+q.callbacks.slice(0,3).map(l=>qItem({...l,score:scoreLead(l)})).join('');
