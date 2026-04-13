@@ -9,7 +9,7 @@
 <style>
 :root{--P:#111;--BG:#f5f5f3;--W:#fff;--R:8px;--G:#22c55e;--RD:#dc2626;--OR:#d97706;--AM:#ca8a04;--ACC:#1a1a1a;--ACC2:#333;--SBW:240px;--TEXT:#1a1a1a;--MUTED:#999;--BORDER:#e5e5e5;--ME:#059669;--GOLD:#C49A3C}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#0e0e0e 0%,#1a1508 80px,#2a2010 160px,#f5f5f3 280px,#f5f5f3 100%);color:var(--TEXT);min-height:100vh;font-size:13px;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',sans-serif;background:#f5f5f3;color:var(--TEXT);min-height:100vh;font-size:13px;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
 #login-screen{position:fixed;inset:0;background:#111;z-index:9999;display:flex;align-items:center;justify-content:center}
 #login-screen::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(91,95,199,.15),transparent 70%);border-radius:50%}
 #login-screen::after{content:'';position:absolute;bottom:-10%;left:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(124,127,242,.1),transparent 70%);border-radius:50%}
@@ -226,7 +226,7 @@ th,td{padding:8px 10px}
 
 /* === MÖRKT DASHBOARD-TEMA === */
 .dashboard-dark-theme {
-  background: linear-gradient(180deg, #0a0f1c 0%, #050810 100%);
+  background: #0a0f1c;
   min-height: 100vh;
   color: #fff;
   font-family: 'Inter', sans-serif;
@@ -238,7 +238,7 @@ th,td{padding:8px 10px}
   align-items: center;
   margin-bottom: 28px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(59,130,246,0.2);
+  border-bottom: 1px solid rgba(255,255,255,.06);
 }
 .dashboard-dark-theme .dash-title {
   font-size: 22px;
@@ -258,8 +258,8 @@ th,td{padding:8px 10px}
   margin-bottom: 28px;
 }
 .dashboard-dark-theme .kpi-card {
-  background: linear-gradient(145deg, #111827 0%, #0b1220 100%);
-  border: 1px solid rgba(59,130,246,0.2);
+  background: #111827;
+  border: 1px solid rgba(255,255,255,.06);
   border-radius: 16px;
   padding: 28px;
   position: relative;
@@ -318,8 +318,8 @@ th,td{padding:8px 10px}
   margin-top: 6px;
 }
 .dashboard-dark-theme .activity-section {
-  background: linear-gradient(145deg, #111827 0%, #0b1220 100%);
-  border: 1px solid rgba(59,130,246,0.2);
+  background: #111827;
+  border: 1px solid rgba(255,255,255,.06);
   border-radius: 16px;
   padding: 28px;
 }
@@ -580,7 +580,7 @@ th,td{padding:8px 10px}
 <div class="main" id="main">
  <div class="view on" id="v-dialer">
   <div id="d-idle" style="min-height:calc(100vh - 56px);display:flex;flex-direction:column">
-   <div style="padding:40px 0">
+   <div style="padding:48px 40px;margin:-32px -40px 0;background:linear-gradient(180deg,#0e0e0e 0%,#1a1508 60%,#2a2010 85%,#f5f5f3 100%);border-radius:0 0 16px 0;min-height:280px">
     <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:4px" id="greeting-text">God morgon</div>
     <h1 style="font-size:26px;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:24px" id="seller-greeting">Andrea.</h1>
     <div id="today-summary" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px"></div>
