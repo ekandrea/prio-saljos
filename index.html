@@ -1612,7 +1612,9 @@ async function doSendOffert(id,method){
  const msg='Hej! Här är offerten vi pratade om: '+url;
  const now=new Date().toISOString().slice(0,16).replace('T',' ');
  if(method==='sms'&&ph){
-  window.open('sms:'+ph+'?body='+encodeURIComponent(msg),'_self');
+  const isMobile=/iPhone|iPad|Android/i.test(navigator.userAgent);
+  if(isMobile){window.open('sms:'+ph+'?body='+encodeURIComponent(msg),'_self');}
+  else{navigator.clipboard.writeText(msg).then(()=>alert('SMS-text kopierad!\\n\\nÖppna SMS på telefonen och klistra in.\\n\\nTill: '+ph)).catch(()=>{});}
   l.offerSent=true;l.offerSentAt=now;l.offerMethod='SMS till '+ph;
   if(l.status!=='order')l.status='offert';
   l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via SMS',note:ph,seller:currentSeller});
@@ -1636,25 +1638,26 @@ window.addEventListener('message',function(e){
  }
 });
 function checkOffertEvents(){
- try{
-  const raw=localStorage.getItem('prio_offert_events');if(!raw)return;
-  const events=JSON.parse(raw);if(!events.length)return;
-  let changed=false;
-  events.forEach(ev=>{
-   const l=leads.find(l=>l.id===parseInt(ev.leadId));if(!l)return;
-   if(ev.event==='opened'&&!l.offerOpened){
-    l.offerOpened=true;l.offerOpenedAt=ev.time;
-    showNotif('Kund öppnade offert!',l.company);changed=true;
-   }
-   if(ev.event==='accepted'&&l.status!=='order'){
-    l.status='order';l.offerOpened=true;
-    l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Kund godkände offert: '+(ev.pkg||''),note:'',seller:currentSeller});
-    showNotif('KUND GODKÄNDE OFFERT!',l.company+' valde '+(ev.pkg||''));celebrate();changed=true;
-   }
-  });
-  localStorage.removeItem('prio_offert_events');
-  if(changed){saveData();updateBadges();const cur=getCurLead();if(cur)renderKK(cur);}
- }catch(e){}
+ const sentLeads=leads.filter(l=>l.offerSent&&!l.offerOpened);
+ if(!sentLeads.length)return;
+ sentLeads.forEach(l=>{
+  fetch('/api/offert-track?id='+l.id+'&seller='+encodeURIComponent(currentSeller))
+   .then(r=>r.json())
+   .then(d=>{
+    if(d.offerOpened&&!l.offerOpened){
+     l.offerOpened=true;
+     showNotif('Kund öppnade offert!',l.company);
+     saveData();updateBadges();
+     const cur=getCurLead();if(cur&&cur.id===l.id)renderKK(cur);
+    }
+    if(d.status==='order'&&l.status!=='order'){
+     l.status='order';l.offerOpened=true;
+     l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Kund godkände offert',note:'',seller:currentSeller});
+     showNotif('KUND GODKÄNDE!',l.company);celebrate();
+     saveData();updateBadges();
+    }
+   }).catch(()=>{});
+ });
 }
 function exportData(){const b=new Blob([JSON.stringify({leads,exportDate:new Date().toISOString()},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='saljos_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();}
 function importDataFile(){const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{try{const d=JSON.parse(e.target.result);if(d.leads){leads=d.leads;migrateLeads();saveData();updateBadges();alert('Återställt! '+leads.length+' leads.');go('leads');}else alert('Ogiltig fil.');}catch{alert('Kunde inte läsa.');}};r.readAsText(f);};i.click();}

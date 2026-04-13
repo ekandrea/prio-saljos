@@ -229,12 +229,9 @@ function toggleAccept(){accepted=!accepted;render();}
 
 function logEvent(type){
  try{
-  fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({event:type,company,leadId,pkg:pkgs[selected]?.name||selected})
-  }).catch(()=>{});
-  const events=JSON.parse(localStorage.getItem('prio_offert_events')||'[]');
-  events.push({leadId,event:type,company,pkg:pkgs[selected]?.name||'',time:new Date().toISOString()});
-  localStorage.setItem('prio_offert_events',JSON.stringify(events));
+  const body={event:type,company,leadId,pkg:pkgs[selected]?.name||selected};
+  fetch('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).catch(()=>{});
+  fetch('/api/offert-track',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).catch(()=>{});
  }catch(e){}
 }
 
