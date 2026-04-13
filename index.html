@@ -603,7 +603,7 @@ th,td{padding:8px 10px}
   <div class="page-title">Leads <span style="font-size:14px;font-weight:400;color:var(--MUTED)" id="leads-total-count"></span></div>
   <div class="filter-row">
    <input id="search-inp" placeholder="Sök företag, org-nr, telefon..." oninput="filterLeads()" style="max-width:260px">
-   <select id="ind-filter" onchange="filterLeads()" style="max-width:160px;width:auto"><option value="">Alla branscher</option><option value="snickare">🪟 Snickare</option><option value="elektriker">⚡ Elektriker</option><option value="vvs">🔧 VVS</option><option value="målare">🎨 Målare</option><option value="plåtslagare">🔩 Plåtslagare</option><option value="golvläggare">🏠 Golvläggare</option><option value="takläggare">🔧 Takläggare</option><option value="bygg">🏗️ Bygg</option></select>
+   <select id="ind-filter" onchange="filterLeads()" style="max-width:160px;width:auto"><option value="">Alla branscher</option><option value="snickare">🪟 Snickare</option><option value="elektriker">⚡ Elektriker</option><option value="vvs">🔧 VVS</option><option value="målare">🎨 Målare</option><option value="plåtslagare">🔩 Plåtslagare</option><option value="golvläggare">🏠 Golvläggare</option><option value="takläggare">🔧 Takläggare</option><option value="bygg">Bygg</option><option value="bilverkstad">Bilverkstad</option></select>
    <select id="ort-filter" onchange="filterLeads()" style="max-width:160px;width:auto"><option value="">Alla orter</option></select>
    <button class="btn btn-bv btn-sm" onclick="importPrioFile()">📁 Importera</button>
   </div>
@@ -1787,7 +1787,7 @@ function esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/
 function nextId(){return leads.length?Math.max(...leads.map(l=>l.id))+1:1;}
 function bindCls(d){if(!d)return 'bind-ok';const days=Math.ceil((new Date(d)-new Date())/864e5);if(days<0)return 'bind-expired';if(days<30)return 'bind-soon';if(days<90)return 'bind-medium';return 'bind-ok';}
 function bindLbl(d){if(!d)return '—';const days=Math.ceil((new Date(d)-new Date())/864e5);if(days<0)return 'Utgången ('+Math.abs(days)+'d)';return days+' dagar';}
-function getIndLabel(ind){return{snickare:'🪟 Snickare',elektriker:'⚡ Elektriker',vvs:'🔧 VVS',målare:'🎨 Målare',plåtslagare:'🔩 Plåtslagare',golvläggare:'🏠 Golvläggare',takläggare:'🔧 Takläggare',bygg:'🏗️ Bygg',åkeri:'🚛 Åkeri',måleri:'🎨 Måleri',logistik:'📦 Logistik',el:'⚡ El',annat:'🏢 Övrigt'}[ind]||ind||'—';}
+function getIndLabel(ind){return{snickare:'Snickare',elektriker:'Elektriker',vvs:'VVS',målare:'Målare',plåtslagare:'Plåtslagare',golvläggare:'Golvläggare',takläggare:'Takläggare',bygg:'Bygg',bilverkstad:'Bilverkstad',åkeri:'Åkeri',måleri:'Måleri',logistik:'Logistik',el:'El',annat:'Övrigt'}[ind]||ind||'—';}
 function detectIndustry(n){if(!n)return 'annat';const x=n.toLowerCase();if(x.match(/åkeri|transport|frakt|lastbil|budtjänst/))return 'åkeri';if(x.match(/måleri|målare|färg|puts/))return 'måleri';if(x.match(/bygg|byggn|snickare|betong|schakt|mark/))return 'bygg';if(x.match(/logistik|lager|distribution|spedition/))return 'logistik';if(x.match(/cykel|bike|moped/))return 'cykel';if(x.match(/vvs|rör|plåt|kyl|värme/))return 'vvs';if(x.match(/el |elektriker|elinstallation/))return 'el';return 'annat';}
 function getSampleData(){
  const add=d=>{const r=new Date();r.setDate(r.getDate()+d);return r.toISOString().slice(0,10);};
