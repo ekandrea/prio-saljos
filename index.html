@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Säljös ⚡</title>
+<title>Prio — Säljös</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
-:root{--P:#0c0c14;--BG:#f8f8fa;--W:#fff;--R:12px;--G:#22c55e;--RD:#ef4444;--OR:#f59e0b;--AM:#eab308;--ACC:#5b5fc7;--ACC2:#7c7ff2;--SBW:260px;--TEXT:#111;--MUTED:#8b8fa3;--BORDER:#e8e8ee;--ME:#10b981}
+:root{--P:#111;--BG:#f5f5f3;--W:#fff;--R:8px;--G:#22c55e;--RD:#dc2626;--OR:#d97706;--AM:#ca8a04;--ACC:#1a1a1a;--ACC2:#333;--SBW:240px;--TEXT:#1a1a1a;--MUTED:#999;--BORDER:#e5e5e5;--ME:#059669;--GOLD:#C49A3C}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:#f5f5f3;color:var(--TEXT);min-height:100vh;font-size:13px;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
-#login-screen{position:fixed;inset:0;background:linear-gradient(165deg,#0c0c14 0%,#151530 50%,#1e1450 100%);z-index:9999;display:flex;align-items:center;justify-content:center}
+#login-screen{position:fixed;inset:0;background:#111;z-index:9999;display:flex;align-items:center;justify-content:center}
 #login-screen::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(91,95,199,.15),transparent 70%);border-radius:50%}
 #login-screen::after{content:'';position:absolute;bottom:-10%;left:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(124,127,242,.1),transparent 70%);border-radius:50%}
 .login-box{background:var(--W);border-radius:24px;padding:52px 48px;width:400px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08)}
@@ -37,11 +37,11 @@ body{font-family:'Inter',sans-serif;background:#f5f5f3;color:var(--TEXT);min-hei
 #sb.mini .bottom{padding:8px 0}
 #sb.mini .bottom .ni{font-size:0}
 #sb .logo{padding:22px 20px 14px;display:flex;align-items:center;gap:10px}
-#sb .logo .t{font-size:18px;font-weight:800;letter-spacing:-.04em;background:linear-gradient(135deg,#a5a8f8,#7c7ff2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-#sb .seller-pill{margin:0 14px 12px;background:linear-gradient(135deg,rgba(91,95,199,.15),rgba(124,127,242,.08));border:1px solid rgba(91,95,199,.2);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px}
-#sb .seller-pill .av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--ACC),var(--ACC2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
-#sb .seller-pill .nm{font-size:13px;font-weight:700;color:#fff}
-#sb .seller-pill .rl{font-size:10px;color:#666;margin-top:1px}
+#sb .logo .t{font-size:16px;font-weight:700;letter-spacing:-.02em;color:#fff}
+#sb .seller-pill{margin:0 14px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:8px}
+#sb .seller-pill .av{width:28px;height:28px;border-radius:50%;background:var(--GOLD);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#1a1a1a;flex-shrink:0}
+#sb .seller-pill .nm{font-size:13px;font-weight:600;color:#fff}
+#sb .seller-pill .rl{font-size:10px;color:#555;margin-top:1px}
 .sync-bar{margin:0 14px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px}
 .sync-dot{width:8px;height:8px;border-radius:50%;background:#333;flex-shrink:0;transition:all .4s}
 .sync-dot.ok{background:var(--G);box-shadow:0 0 6px rgba(34,197,94,.5)}
@@ -81,12 +81,12 @@ body{font-family:'Inter',sans-serif;background:#f5f5f3;color:var(--TEXT);min-hei
 .btn-pts{background:linear-gradient(135deg,#059669,#10b981);color:#fff}
 .btn-sm{padding:5px 11px;font-size:11px}
 input,textarea,select{font-family:inherit;border:1px solid var(--BORDER);border-radius:10px;padding:10px 14px;font-size:13px;outline:none;transition:all .2s;width:100%;background:var(--W);color:var(--TEXT)}
-input:focus,textarea:focus,select:focus{border-color:var(--ACC);box-shadow:0 0 0 4px rgba(91,95,199,.1)}
+input:focus,textarea:focus,select:focus{border-color:#1a1a1a;box-shadow:none}
 table{width:100%;border-collapse:collapse}
-th{text-align:left;padding:12px 14px;font-size:10px;color:var(--MUTED);border-bottom:2px solid #eeeef4;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:#fafafc}
+th{text-align:left;padding:12px 14px;font-size:10px;color:#999;border-bottom:1px solid #e5e5e5;font-weight:600;text-transform:uppercase;letter-spacing:.08em;background:#fff}
 td{padding:12px 14px;border-bottom:1px solid #f4f4f8;font-size:13px}
 tr.clickable{transition:all .15s}
-tr.clickable:hover{background:linear-gradient(135deg,#f5f3ff,#fafafc);cursor:pointer;transform:scale(1.002)}
+tr.clickable:hover{background:#fafaf8;cursor:pointer}
 #d-idle .left{background:linear-gradient(165deg,#0c0c14,#151530 50%,#1e1450);color:#fff;padding:64px 52px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
 #d-idle .left::before{content:'';position:absolute;top:-30%;right:-20%;width:500px;height:500px;background:radial-gradient(circle,rgba(91,95,199,.12),transparent 70%);border-radius:50%}
 #d-idle .left>*{position:relative;z-index:1}
@@ -124,7 +124,7 @@ tr.clickable:hover{background:linear-gradient(135deg,#f5f3ff,#fafafc);cursor:poi
 .next-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,95,199,.35)}
 .filter-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
 .ftab{padding:6px 14px;border-radius:8px;border:1px solid var(--BORDER);background:var(--W);cursor:pointer;font-size:11px;font-weight:600;font-family:inherit;transition:all .2s;color:var(--MUTED)}
-.ftab.active{background:linear-gradient(135deg,var(--ACC),var(--ACC2));color:#fff;border-color:var(--ACC);box-shadow:0 2px 8px rgba(91,95,199,.25)}.ftab:hover:not(.active){border-color:var(--ACC);color:var(--ACC);background:#f5f3ff}
+.ftab.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}.ftab:hover:not(.active){border-color:#999;color:#555}
 .dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
 .dash-kpi{background:var(--W);border-radius:16px;border:1px solid var(--BORDER);padding:24px;text-align:center;position:relative;overflow:hidden;transition:transform .15s}
 .dash-kpi:hover{transform:translateY(-2px)}
@@ -241,10 +241,10 @@ th,td{padding:8px 10px}
   border-bottom: 1px solid rgba(59,130,246,0.2);
 }
 .dashboard-dark-theme .dash-title {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 800;
-  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
-  -webkit-background-clip: text;
+  color: #fff;
+  -webkit-background-clip: unset;
   -webkit-text-fill-color: transparent;
 }
 .dashboard-dark-theme .dash-date {
@@ -592,15 +592,15 @@ th,td{padding:8px 10px}
   <div id="d-active"><div id="kk-area"></div><div id="inline-outcome" style="margin-top:16px"></div></div>
  </div>
  <div class="view" id="v-pipeline">
-  <div class="page-title">🤝 Pipeline</div>
-  <div class="pipeline-section"><h4>🔴 Återkomst</h4><div class="pipeline-grid" id="my-callbacks"></div></div>
-  <div class="pipeline-section"><h4>📋 Offert skickad</h4><div class="pipeline-grid" id="my-offers"></div></div>
-  <div class="pipeline-section"><h4>🤝 Demo bokad</h4><div class="pipeline-grid" id="my-demos"></div></div>
-  <div class="pipeline-section"><h4>✅ Stängda</h4><div class="pipeline-grid" id="my-closed"></div></div>
-  <div class="pipeline-section"><h4>❌ Förlorade</h4><div class="pipeline-grid" id="my-lost"></div></div>
+  <div class="page-title">Pipeline</div>
+  <div class="pipeline-section"><h4>Återkomst</h4><div class="pipeline-grid" id="my-callbacks"></div></div>
+  <div class="pipeline-section"><h4>Offert skickad</h4><div class="pipeline-grid" id="my-offers"></div></div>
+  <div class="pipeline-section"><h4>Demo bokad</h4><div class="pipeline-grid" id="my-demos"></div></div>
+  <div class="pipeline-section"><h4>Stängda</h4><div class="pipeline-grid" id="my-closed"></div></div>
+  <div class="pipeline-section"><h4>Förlorade</h4><div class="pipeline-grid" id="my-lost"></div></div>
  </div>
  <div class="view" id="v-leads">
-  <div class="page-title">🌊 Alla Leads <span style="font-size:14px;font-weight:400;color:var(--MUTED)" id="leads-total-count"></span></div>
+  <div class="page-title">Leads <span style="font-size:14px;font-weight:400;color:var(--MUTED)" id="leads-total-count"></span></div>
   <div class="filter-row">
    <input id="search-inp" placeholder="Sök företag, org-nr, telefon..." oninput="filterLeads()" style="max-width:260px">
    <select id="ind-filter" onchange="filterLeads()" style="max-width:160px;width:auto"><option value="">Alla branscher</option><option value="snickare">🪟 Snickare</option><option value="elektriker">⚡ Elektriker</option><option value="vvs">🔧 VVS</option><option value="målare">🎨 Målare</option><option value="plåtslagare">🔩 Plåtslagare</option><option value="golvläggare">🏠 Golvläggare</option><option value="takläggare">🔧 Takläggare</option><option value="bygg">🏗️ Bygg</option></select>
@@ -616,7 +616,7 @@ th,td{padding:8px 10px}
  </div>
  
  <div class="view" id="v-offerter">
-  <div class="page-title">📄 Offerter</div>
+  <div class="page-title">Offerter</div>
   <div class="card" style="padding:0;overflow-x:auto">
    <table><thead><tr><th>Företag</th><th>Bransch</th><th>Kontakt</th><th>Skickad</th><th>Status</th><th></th></tr></thead><tbody id="offerter-tb"></tbody></table>
   </div>
@@ -624,13 +624,13 @@ th,td{padding:8px 10px}
  <!-- NYTT: Mörkt Dashboard -->
  <div class="view dashboard-dark-theme" id="v-dash">
   <div class="dash-header">
-   <h1 class="dash-title">📊 PRIO DASHBOARD</h1>
+   <h1 class="dash-title">Dashboard</h1>
    <span class="dash-date" id="dash-date"></span>
   </div>
   
   <div class="kpi-grid">
    <div class="kpi-card samtal" style="grid-column:span 2">
-    <div class="kpi-label">🔥 Samtal Idag</div>
+    <div class="kpi-label">Samtal idag</div>
     <div class="kpi-value" style="font-size:72px" id="calls-value">0</div>
     <div class="goal-container" style="margin-top:12px">
      <div class="goal-bar"><div class="goal-progress" id="calls-progress" style="width:0%"></div></div>
@@ -638,40 +638,40 @@ th,td{padding:8px 10px}
     </div>
    </div>
    <div class="kpi-card ordrar">
-    <div class="kpi-label">📞 Demos Bokade</div>
+    <div class="kpi-label">Demos bokade</div>
     <div class="kpi-value" id="demos-value">0</div>
     <div class="kpi-sub" id="demos-sub">Denna vecka</div>
    </div>
    <div class="kpi-card offerter">
-    <div class="kpi-label">📋 Offerter Ute</div>
+    <div class="kpi-label">Offerter ute</div>
     <div class="kpi-value" id="offers-value">0</div>
     <div class="kpi-sub">Väntar på svar</div>
    </div>
    <div class="kpi-card tb">
-    <div class="kpi-label">💰 Stängda Kunder</div>
+    <div class="kpi-label">Stängda kunder</div>
     <div class="kpi-value" id="closed-value">0</div>
     <div class="kpi-sub" id="closed-sub">Totalt</div>
    </div>
    <div class="kpi-card aterkomster">
-    <div class="kpi-label">🔔 Återkomster</div>
+    <div class="kpi-label">Återkomster</div>
     <div class="kpi-value" id="reminders-value">0</div>
     <div class="kpi-sub" id="reminders-text">Inga väntande</div>
    </div>
   </div>
 
   <div class="activity-section">
-   <h2 class="section-title"><span>📈</span> Aktivitet Senaste 14 Dagarna</h2>
+   <h2 class="section-title">Aktivitet — 14 dagar</h2>
    <div class="activity-chart" id="activity-chart"></div>
   </div>
  </div>
  
  <div class="view" id="v-sok">
-  <div class="page-title">🔍 Sök</div>
+  <div class="page-title">Sök</div>
   <input id="sok-inp" placeholder="Sök på bolagsnamn, org-nr eller telefon..." oninput="doSearch(this.value)" style="font-size:15px;padding:14px 20px;margin-bottom:20px">
   <div id="sok-res"></div>
  </div>
  <div class="view" id="v-bolagsverket">
-  <div class="page-title">🏛️ Bolagsverket</div>
+  <div class="page-title">Bolagsverket</div>
   <div class="card" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-color:#bfdbfe;margin-bottom:20px">
    <div style="display:flex;align-items:center;gap:14px">
     <div style="font-size:32px">🏛️</div>
@@ -700,7 +700,7 @@ th,td{padding:8px 10px}
   <div id="bv-results"></div>
  </div>
  <div class="view" id="v-settings">
-  <div class="page-title">⚙️ Inställningar</div>
+  <div class="page-title">Inställningar</div>
   <div class="settings-section"><h4>🎯 Dagligt samtalsmål</h4><div style="display:flex;align-items:center;gap:12px"><input type="number" id="daily-goal" value="50" min="1" max="500" style="max-width:100px" oninput="localStorage.setItem('saljos_goal',this.value);renderDash()"><span style="font-size:12px;color:var(--MUTED)">samtal per dag</span></div></div>
   <div class="settings-section"><h4>🔌 API-status</h4><button class="btn btn-o btn-sm" onclick="checkAllApis()" style="margin-bottom:12px">🔄 Kontrollera alla</button><div id="api-status-grid" style="display:flex;flex-direction:column;gap:8px"><div class="status-info">Klicka "Kontrollera alla".</div></div></div>
   <div class="settings-section"><h4>💾 Datahantering</h4><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-p" onclick="cloudSync()">☁️ Synka nu</button><button class="btn btn-o" onclick="exportData()">⬇️ Exportera backup</button><button class="btn btn-o" onclick="importDataFile()">⬆️ Återställ från backup</button><button class="btn btn-r" onclick="clearAllData()" style="margin-left:auto">🗑️ Rensa lokal data</button></div></div>
