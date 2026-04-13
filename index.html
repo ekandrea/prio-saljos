@@ -1035,6 +1035,7 @@ function getAutopilotQueue(){
 }
 function renderDialer(){
  if(dialerOn)return;
+ if(!dialerOn&&resumeDialer())return;
  const q=getAutopilotQueue();
  const hour=new Date().getHours();
  const greet=hour<10?'God morgon':hour<17?'Hej':'God kväll';
@@ -1058,18 +1059,31 @@ function qItem(l){return '<div class="q-item" onclick="openFromQueue('+l.id+')">
 function claimNextTarget(){const t=targetLeads();if(!t.length){showNotif('Inga prioriterade leads!','');return;}if(lockLead(t[0].id))openKK(t[0].id);else{showNotif('Försök igen!','');renderDialer();}}
 function openFromQueue(id){const l=leads.find(l=>l.id===id);if(!l)return;const ls=lockStatus(l);if(ls==='other'){showNotif('Låst av '+l.lockedBy+'!','');return;}if(ls==='free'||ls==='exp')lockLead(id);openKK(id);}
 
-function startAutopilot(){
+function startAutopilot(resumeId){
  const q=getAutopilotQueue();
  dialerQ=[...q.callbacks,...q.offers,...q.scored].map(l=>({...l,score:scoreLead(l)}));
  if(!dialerQ.length){showNotif('Inga leads att ringa!','');return;}
- dialerIdx=0;dialerOn=true;
+ if(resumeId){const idx=dialerQ.findIndex(l=>l.id===resumeId);dialerIdx=idx>=0?idx:0;}
+ else{dialerIdx=0;}
+ dialerOn=true;
  document.getElementById('d-idle').style.display='none';
  document.getElementById('d-active').classList.add('on');
  document.getElementById('bcb').style.display='flex';
  document.getElementById('progress-bar-area').style.display='flex';
- sessionCalls=0;sessionOffers=0;sessionOrders=0;
+ if(!resumeId){sessionCalls=0;sessionOffers=0;sessionOrders=0;}
  updateProgress();
  nextDialerLead();
+ saveDialerState();
+}
+function saveDialerState(){
+ if(dialerOn&&dialerIdx>=0&&dialerQ[dialerIdx]){
+  localStorage.setItem('prio_dialer',JSON.stringify({leadId:dialerQ[dialerIdx].id,on:true,calls:sessionCalls,offers:sessionOffers,orders:sessionOrders}));
+ }else{localStorage.removeItem('prio_dialer');}
+}
+function resumeDialer(){
+ const raw=localStorage.getItem('prio_dialer');if(!raw)return false;
+ try{const s=JSON.parse(raw);if(s.on&&s.leadId){sessionCalls=s.calls||0;sessionOffers=s.offers||0;sessionOrders=s.orders||0;startAutopilot(s.leadId);return true;}}catch(e){}
+ return false;
 }
 function startDialer(){startAutopilot();}
 
@@ -1083,8 +1097,8 @@ function updateProgress(){
  const pct=dialerQ.length?Math.round(((dialerIdx+1)/dialerQ.length)*100):0;
  document.getElementById('progress-fill').style.width=pct+'%';
 }
-function stopDialer(){dialerOn=false;dialerIdx=-1;sessionStorage.removeItem('dialerIdx');document.getElementById('d-active').classList.remove('on');document.getElementById('d-idle').style.display='';document.getElementById('bcb').style.display='none';document.getElementById('progress-bar-area').style.display='none';const io=document.getElementById('inline-outcome');if(io)io.innerHTML='';renderDialer();updateBadges();}
-function nextDialerLead(){if(dialerIdx>=dialerQ.length){stopDialer();return;}const l=leads.find(l=>l.id===dialerQ[dialerIdx].id);if(!l){dialerIdx++;nextDialerLead();return;}lockLead(l.id);renderKK(l);renderInlineOutcome(l);document.getElementById('calling-lbl').textContent='';callingPhone='';}
+function stopDialer(){dialerOn=false;dialerIdx=-1;localStorage.removeItem('prio_dialer');document.getElementById('d-active').classList.remove('on');document.getElementById('d-idle').style.display='';document.getElementById('bcb').style.display='none';document.getElementById('progress-bar-area').style.display='none';const io=document.getElementById('inline-outcome');if(io)io.innerHTML='';renderDialer();updateBadges();}
+function nextDialerLead(){if(dialerIdx>=dialerQ.length){stopDialer();return;}const l=leads.find(l=>l.id===dialerQ[dialerIdx].id);if(!l){dialerIdx++;nextDialerLead();return;}lockLead(l.id);renderKK(l);renderInlineOutcome(l);document.getElementById('calling-lbl').textContent='';callingPhone='';saveDialerState();}
 function skipLead(){const l=getCurLead();if(l)unlockLead(l.id);dialerIdx++;if(dialerIdx<dialerQ.length)nextDialerLead();else stopDialer();updateBadges();}
 function rateBtn(leadId,field,val,current){
  const colors={g:'#22c55e',y:'#eab308',r:'#ef4444'};
