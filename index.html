@@ -1096,6 +1096,45 @@ function renderKK(lead){
  const ph=lead.vdPhone||lead.phone||'';
  const regYear=lead.history&&lead.history[0]&&lead.history[0].date?lead.history[0].date.substring(0,4):'';
  document.getElementById('kk-area').innerHTML=
+  '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:18px;margin-bottom:16px">'+
+   '<details>'+
+    '<summary style="font-size:12px;font-weight:700;cursor:pointer;color:var(--ACC);user-select:none">Manus</summary>'+
+    '<div style="margin-top:14px;font-size:12px;line-height:1.7;color:#555">'+
+     '<div style="background:#1a1a1a;color:#C49A3C;padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:8px">STEG 1 &middot; OPPNING</div>'+
+     '<div style="padding:8px 12px;background:#f9f6f0;border-left:3px solid #C49A3C;border-radius:4px;margin-bottom:12px;font-style:italic">&quot;Hej, det ar Andy fran Prio. Jag jobbar med byggfirmor i Skane. Snabb fraga &mdash; hur manga samtal missar du en vanlig dag nar du ar ute pa jobb?&quot;</div>'+
+     '<div style="font-size:10px;color:#999;margin-bottom:12px">TYST. Lat honom svara.</div>'+
+     '<div style="background:#1a1a1a;color:#C49A3C;padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:8px">STEG 2 &middot; SMARTAN I KRONOR</div>'+
+     '<div style="padding:8px 12px;background:#f9f6f0;border-left:3px solid #C49A3C;border-radius:4px;margin-bottom:12px;font-style:italic">&quot;Dom flesta byggare jag pratar med missar 3-5 samtal om dagen. Varje samtal kan vara ett jobb vart 15, 20, kanske 50 tusen. Om du missar bara ett jobb i veckan &mdash; vad ar det vart?&quot;</div>'+
+     '<div style="font-size:10px;color:#999;margin-bottom:12px">TYST. Lat honom rakna.</div>'+
+     '<div style="background:#1a1a1a;color:#C49A3C;padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:8px">STEG 3 &middot; LOSNING</div>'+
+     '<div style="padding:8px 12px;background:#f9f6f0;border-left:3px solid #C49A3C;border-radius:4px;margin-bottom:12px;font-style:italic">&quot;Vi svarar i telefon at dig nar du inte kan. Den som ringer far prata med nagon som vet vad ni erbjuder, bokar in jobbet i din kalender och skickar bekraftelse till kunden. Du slipper missa jobb. Du slipper ringa tillbaka folk pa kvallen. Du slipper tanka pa det.&quot;</div>'+
+     '<div style="background:#1a1a1a;color:#C49A3C;padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:8px">STEG 4 &middot; DEMO</div>'+
+     '<div style="padding:8px 12px;background:#f9f6f0;border-left:3px solid #C49A3C;border-radius:4px;margin-bottom:12px;font-style:italic">&quot;Istallet for att jag sitter och snackar &mdash; ring det har numret nu sa hor du sjalv hur det funkar. Det tar 15 sekunder.&quot;</div>'+
+     '<div style="background:#1a1a1a;color:#C49A3C;padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:8px">STEG 5 &middot; PRIS</div>'+
+     '<div style="padding:8px 12px;background:#f9f6f0;border-left:3px solid #C49A3C;border-radius:4px;margin-bottom:12px;font-style:italic">&quot;2 500 kr i manaden. Det ar vad en missad kund kostar dig pa en dag. Och du har 30 dagars garanti &mdash; funkar det inte betalar du noll. Noll risk.&quot;</div>'+
+     '<div style="font-size:10px;color:#999;margin-bottom:12px">TYST efter priset. ALLTID.</div>'+
+     '<div style="background:#1a1a1a;color:#C49A3C;padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:8px">STEG 6 &middot; STANG</div>'+
+     '<div style="padding:8px 12px;background:#f9f6f0;border-left:3px solid #C49A3C;border-radius:4px;margin-bottom:12px;font-style:italic;font-size:14px;font-weight:600">&quot;Ska vi kora igang?&quot;</div>'+
+     '<div style="font-size:10px;color:#999;margin-bottom:14px">TYST. Fyra ord. Sen tyst. Inget mer.</div>'+
+     '<details style="margin-bottom:10px"><summary style="font-size:11px;font-weight:600;color:#888;cursor:pointer">Invandningar</summary>'+
+      '<div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;font-size:11px">'+
+       '<div><strong>&quot;Det ar for dyrt&quot;</strong><br><span style="color:#777">&quot;Vad kostar det att missa ett jobb? 20 000? 30 000? Prio kostar 2 500. Det betalar sig pa en enda kund.&quot;</span></div>'+
+       '<div><strong>&quot;Jag klarar mig&quot;</strong><br><span style="color:#777">&quot;Testa i 30 dagar &mdash; kostar dig inget om det inte funkar.&quot;</span></div>'+
+       '<div><strong>&quot;Hor man att det inte ar en riktig person?&quot;</strong><br><span style="color:#777">&quot;Ring numret. Bedom sjalv. Om du inte ar nojd kor vi inte.&quot;</span></div>'+
+       '<div><strong>&quot;Jag har redan nan som svarar&quot;</strong><br><span style="color:#777">&quot;Bra &mdash; men jobbar den personen kvallar, helger och nar du ar pa semester?&quot;</span></div>'+
+       '<div><strong>&quot;Skicka mer info&quot;</strong><br><span style="color:#777">&quot;Absolut. Men snabb fraga &mdash; om du gillar det du ser, hade du kunnat kora igang den har veckan?&quot;</span></div>'+
+      '</div>'+
+     '</details>'+
+     '<details><summary style="font-size:11px;font-weight:600;color:#888;cursor:pointer">Efter samtalet</summary>'+
+      '<div style="margin-top:8px;font-size:11px;color:#777">'+
+       '<strong>Ja</strong> &rarr; Skicka offerten inom 1 minut. Ring nasta dag.<br>'+
+       '<strong>Ska tanka</strong> &rarr; SMS inom 1 timme. Ring exakt avtalad tid.<br>'+
+       '<strong>Nej</strong> &rarr; SMS: Tack for snacket. Spara mitt nummer. Ring mig om du vill testa.'+
+      '</div>'+
+     '</details>'+
+    '</div>'+
+   '</details>'+
+  '</div>'+
   '<div style="display:grid;grid-template-columns:1fr 280px;gap:16px">'+
   '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:14px;padding:24px">'+
    '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:18px">'+
