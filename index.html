@@ -1573,6 +1573,7 @@ async function sendOffert(id){
  const l=leads.find(l=>l.id===id);if(!l)return;
  const base='https://saljos-main.vercel.app/offert';
  const longUrl=base+'?namn='+encodeURIComponent(l.company)+'&id='+id;
+ window.open(longUrl,'_blank');
  let url=longUrl;
  try{
   const r=await fetch('https://tinyurl.com/api-create.php?url='+encodeURIComponent(longUrl));
@@ -1581,15 +1582,13 @@ async function sendOffert(id){
  const ph=l.vdPhone||l.phone||'';
  const msg='Hej! Här är offerten vi pratade om: '+url;
  if(ph){
-  window.open('sms:'+ph+'?body='+encodeURIComponent(msg),'_self');
- }else{
-  navigator.clipboard.writeText(url).then(()=>showNotif('Länk kopierad','Klistra in i SMS')).catch(()=>{});
+  setTimeout(()=>{if(confirm('Skicka offerten via SMS till '+ph+'?'))window.open('sms:'+ph+'?body='+encodeURIComponent(msg),'_self');},1000);
  }
+ navigator.clipboard.writeText(url).catch(()=>{});
  l.offerSent=true;
  if(l.status!=='order')l.status='offert';
- l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via SMS',note:url,seller:currentSeller});
+ l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad',note:url,seller:currentSeller});
  saveData();updateBadges();
- showNotif('Offert skickad!',l.company);
 }
 window.addEventListener('message',function(e){
  if(e.data&&e.data.type==='prio-offert-accepted'){
