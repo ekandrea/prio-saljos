@@ -561,7 +561,7 @@ th,td{padding:8px 10px}
 <button id="hamburger" onclick="toggleSidebar()" style="display:none">☰</button>
 <div id="sb">
  <div class="logo" style="justify-content:space-between"><div style="display:flex;align-items:center;gap:10px" onclick="if(document.getElementById('sb').classList.contains('mini'))toggleSidebar()" style="cursor:pointer"><span style="font-size:22px;font-weight:900;font-family:'Inter',sans-serif;background:linear-gradient(135deg,#C49A3C,#d4aa4c);-webkit-background-clip:text;-webkit-text-fill-color:transparent">P</span><div class="t">Säljös</div></div><button onclick="toggleSidebar()" style="background:rgba(255,255,255,.06);border:none;border-radius:6px;color:#555;font-size:14px;padding:6px 8px;cursor:pointer;line-height:1;transition:color .15s" onmouseenter="this.style.color='#ccc'" onmouseleave="this.style.color='#555'">◀</button></div>
- <div class="seller-pill"><div class="av" id="sb-av">A</div><div><div class="nm" id="sb-nm">Andy</div><div class="rl">Sales rep</div></div></div>
+ <div class="seller-pill"><div class="av" id="sb-av">A</div><div><div class="nm" id="sb-nm">Andrea</div><div class="rl">Sales rep</div></div></div>
  <div class="sync-bar"><div class="sync-dot" id="sync-dot"></div><span class="sync-text" id="sync-text">Laddar...</span><button class="sync-btn" onclick="cloudSync()">Synka ↑↓</button></div>
  <div class="sec">Huvudmeny</div>
  <div class="ni active" onclick="go('dialer')" id="nav-dialer"><i data-lucide="zap" style="width:16px;height:16px"></i> Dialer <span class="badge" id="b-dialer">0</span></div>
@@ -582,7 +582,7 @@ th,td{padding:8px 10px}
     <div style="position:absolute;top:-20%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(91,95,199,.12),transparent 70%);border-radius:50%"></div>
     <div style="position:relative;z-index:1">
      <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:6px" id="greeting-text">God morgon</div>
-     <h1 style="font-size:32px;font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:20px" id="seller-greeting">Andy 👋</h1>
+     <h1 style="font-size:32px;font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:20px" id="seller-greeting">Andrea</h1>
      <div id="today-summary" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:28px"></div>
      <button class="start-btn start-btn-g" onclick="startAutopilot()" style="font-size:16px;padding:18px 48px;border-radius:14px">
       ▶ BÖRJA DAGEN
@@ -802,7 +802,7 @@ th,td{padding:8px 10px}
 const TARGET=['snickare','elektriker','vvs','målare','plåtslagare','golvläggare','takläggare','bygg'];
 const LOCK_MIN=120;
 const DEFAULT_PW='saljos2026';
-let currentSeller=sessionStorage.getItem('saljos_seller')||'Andy';
+let currentSeller=sessionStorage.getItem('saljos_seller')||'Andrea';
 const SNI=[
  {code:'43210',label:'⚡ Elinstallation',ind:'elektriker'},{code:'43220',label:'🔧 VVS-installation',ind:'vvs'},
  {code:'43340',label:'🎨 Målning & glasarbeten',ind:'målare'},{code:'43120',label:'⛏️ Mark- & grundarbeten',ind:'bygg'},
@@ -862,7 +862,7 @@ function init(){
  if(new URLSearchParams(window.location.search).has('reset')){localStorage.clear();window.history.replaceState({},'','/');location.reload();return;}
  if(window.lucide)lucide.createIcons();
  if(sessionStorage.getItem('saljos_auth')==='1'){
-  currentSeller=sessionStorage.getItem('saljos_seller')||'Andy';
+  currentSeller=sessionStorage.getItem('saljos_seller')||'Andrea';
   document.getElementById('login-screen').style.display='none';
   updateSellerUI();
   startApp();
@@ -1101,7 +1101,7 @@ function renderKK(lead){
     '<summary style="font-size:12px;font-weight:700;cursor:pointer;color:var(--ACC);user-select:none">Manus</summary>'+
     '<div style="margin-top:14px;font-size:12px;line-height:1.7;color:#555">'+
      '<div style="background:#1a1a1a;color:#C49A3C;padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:8px">STEG 1 &middot; OPPNING</div>'+
-     '<div style="padding:8px 12px;background:#f9f6f0;border-left:3px solid #C49A3C;border-radius:4px;margin-bottom:12px;font-style:italic">&quot;Hej, det ar Andy fran Prio. Jag jobbar med hantverkare i Skane. Snabb fraga &mdash; hur manga samtal missar du en vanlig dag nar du ar ute pa jobb?&quot;</div>'+
+     '<div style="padding:8px 12px;background:#f9f6f0;border-left:3px solid #C49A3C;border-radius:4px;margin-bottom:12px;font-style:italic">&quot;Hej, det ar Andrea fran Prio. Jag jobbar med hantverkare i Skane. Snabb fraga &mdash; hur manga samtal missar du en vanlig dag nar du ar ute pa jobb?&quot;</div>'+
      '<div style="font-size:10px;color:#999;margin-bottom:12px">TYST. Lat honom svara.</div>'+
      '<div style="background:#1a1a1a;color:#C49A3C;padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;display:inline-block;margin-bottom:8px">STEG 2 &middot; SMARTAN I KRONOR</div>'+
      '<div style="padding:8px 12px;background:#f9f6f0;border-left:3px solid #C49A3C;border-radius:4px;margin-bottom:12px;font-style:italic">&quot;Dom flesta hantverkare jag pratar med missar 3-5 samtal om dagen. Varje samtal kan vara ett jobb vart 15, 20, kanske 50 tusen. Om du missar bara ett jobb i veckan &mdash; vad ar det vart?&quot;</div>'+
