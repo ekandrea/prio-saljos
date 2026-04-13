@@ -1599,16 +1599,25 @@ async function doSendOffert(id,method){
  let url=longUrl;
  try{const r=await fetch('https://tinyurl.com/api-create.php?url='+encodeURIComponent(longUrl));if(r.ok){const s=await r.text();if(s.startsWith('http'))url=s;}}catch(e){}
  const msg='Hej! Här är offerten vi pratade om: '+url;
- if(method==='sms'&&ph){window.open('sms:'+ph+'?body='+encodeURIComponent(msg),'_self');}
- else if(method==='mail'&&em){window.open('mailto:'+em+'?subject=Offert från Prio&body='+encodeURIComponent(msg),'_self');}
- else{window.open(longUrl,'_blank');}
+ if(method==='sms'&&ph){
+  window.open('sms:'+ph+'?body='+encodeURIComponent(msg),'_self');
+  l.offerSent=true;
+  if(l.status!=='order')l.status='offert';
+  l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via SMS till '+ph,note:url,seller:currentSeller});
+  showNotif('Offert skickad via SMS!',l.company);
+ } else if(method==='mail'&&em){
+  window.open('mailto:'+em+'?subject=Offert från Prio&body='+encodeURIComponent(msg),'_self');
+  l.offerSent=true;
+  if(l.status!=='order')l.status='offert';
+  l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via mail till '+em,note:url,seller:currentSeller});
+  showNotif('Offert skickad via mail!',l.company);
+ } else {
+  window.open(longUrl+'&preview=1','_blank');
+  showNotif('Förhandsgranskning öppnad','Inte skickad till kund');
+ }
  navigator.clipboard.writeText(url).catch(()=>{});
- l.offerSent=true;
- if(l.status!=='order')l.status='offert';
- l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad ('+method+')',note:url,seller:currentSeller});
  saveData();updateBadges();
  document.getElementById('offert-modal')?.remove();
- showNotif('Offert skickad!',l.company);
 }
 window.addEventListener('message',function(e){
  if(e.data&&e.data.type==='prio-offert-accepted'){

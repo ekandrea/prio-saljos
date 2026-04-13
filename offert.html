@@ -244,7 +244,7 @@ function submit(){
  if(window.opener)window.opener.postMessage({type:'prio-offert-accepted',leadId,pkg:selected},'*');
 }
 
-logEvent('opened');
+if(!params.has('preview'))logEvent('opened');
 render();
 </script>
 </body>
