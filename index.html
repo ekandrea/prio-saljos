@@ -1598,9 +1598,9 @@ function sendOffert(id){
   '<button class="btn btn-o" style="width:100%;margin-bottom:20px;padding:12px" onclick="doSendOffert('+id+',\'preview\')">Öppna offerten och kolla att den ser bra ut</button>'+
   '<div style="font-size:10px;font-weight:700;color:var(--ACC);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">STEG 3 — Skicka till kund</div>'+
   '<div style="display:flex;flex-direction:column;gap:8px">'+
-   '<button onclick="doSendOffert('+id+',\'whatsapp\')" style="width:100%;padding:12px;border:1px solid #25D366;border-radius:10px;background:#f0fdf4;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#166534;display:flex;align-items:center;justify-content:center;gap:8px">WhatsApp — skickar direkt</button>'+
-   '<button onclick="doSendOffert('+id+',\'mail\')" style="width:100%;padding:12px;border:1px solid #93c5fd;border-radius:10px;background:#eff6ff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#1e40af;display:flex;align-items:center;justify-content:center;gap:8px">E-post — öppnar mailklient</button>'+
-   '<button onclick="doSendOffert('+id+',\'copy\')" style="width:100%;padding:12px;border:1px solid var(--BORDER);border-radius:10px;background:var(--W);cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--TEXT);display:flex;align-items:center;justify-content:center;gap:8px">Kopiera länk — klistra in var du vill</button>'+
+   '<button onclick="doSendOffert('+id+',\'sms\')" style="width:100%;padding:12px;border:1px solid #22c55e;border-radius:10px;background:#f0fdf4;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#166534;display:flex;align-items:center;justify-content:center;gap:8px">SMS — via Telefonlänk</button>'+
+   '<button onclick="doSendOffert('+id+',\'mail\')" style="width:100%;padding:12px;border:1px solid #93c5fd;border-radius:10px;background:#eff6ff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#1e40af;display:flex;align-items:center;justify-content:center;gap:8px">E-post</button>'+
+   '<button onclick="doSendOffert('+id+',\'copy\')" style="width:100%;padding:12px;border:1px solid var(--BORDER);border-radius:10px;background:var(--W);cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--TEXT);display:flex;align-items:center;justify-content:center;gap:8px">Kopiera länk</button>'+
   '</div>'+
  '</div>';
  document.body.appendChild(d);
@@ -1620,11 +1620,9 @@ async function doSendOffert(id,method){
  if(method==='preview'){
   window.open(longUrl+'&preview=1','_blank');return;
  }
- if(method==='whatsapp'&&ph){
-  const waPh=ph.replace(/[^0-9]/g,'');
-  const waNum=waPh.startsWith('0')?'46'+waPh.slice(1):waPh;
-  window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
-  l.offerSent=true;l.offerSentAt=now;l.offerMethod='WhatsApp till '+ph;
+ if(method==='sms'&&ph){
+  window.open('sms:'+ph+'?body='+encodeURIComponent(msg));
+  l.offerSent=true;l.offerSentAt=now;l.offerMethod='SMS till '+ph;
  } else if(method==='mail'&&em){
   window.open('mailto:'+em+'?subject=Offert från Prio&body='+encodeURIComponent(msg),'_blank');
   l.offerSent=true;l.offerSentAt=now;l.offerMethod='Mail till '+em;
