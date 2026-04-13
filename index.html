@@ -1620,26 +1620,37 @@ async function doSendOffert(id,method){
  if(method==='preview'){
   window.open(longUrl+'&preview=1','_blank');return;
  }
+ const modal=document.getElementById('offert-modal');
+ const showStep4=(title,desc)=>{
+  const content=modal.querySelector('.modal');
+  content.innerHTML='<button onclick="document.getElementById(\'offert-modal\').remove()" style="position:absolute;top:16px;right:20px;background:#f4f4f8;border:1px solid var(--BORDER);width:32px;height:32px;border-radius:8px;font-size:16px;cursor:pointer;color:var(--MUTED);display:flex;align-items:center;justify-content:center">✕</button>'+
+   '<div style="text-align:center;padding:20px 0">'+
+    '<div style="font-size:10px;font-weight:700;color:var(--ACC);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px">STEG 4 — BEKRÄFTELSE</div>'+
+    '<div style="width:48px;height:48px;border-radius:50%;background:#dcfce7;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:20px;color:#166534">✓</div>'+
+    '<h3 style="margin-bottom:6px">'+title+'</h3>'+
+    '<p style="font-size:13px;color:var(--MUTED);margin-bottom:20px">'+desc+'</p>'+
+    '<button class="btn btn-p" onclick="document.getElementById(\'offert-modal\').remove()">Stäng</button>'+
+   '</div>';
+ };
  if(method==='sms'&&ph){
   await navigator.clipboard.writeText(msg);
-  alert('SMS-text kopierad!\\n\\nÖppna Meddelanden på din telefon.\\nTill: '+ph+'\\nKlistra in texten och skicka.');
   l.offerSent=true;l.offerSentAt=now;l.offerMethod='SMS till '+ph;
+  showStep4('SMS-text kopierad','Öppna Meddelanden i Telefonlänk.<br>Till: <strong>'+esc(ph)+'</strong><br>Klistra in (Ctrl+V) och skicka.');
  } else if(method==='mail'&&em){
   window.open('mailto:'+em+'?subject=Offert från Prio&body='+encodeURIComponent(msg),'_blank');
   l.offerSent=true;l.offerSentAt=now;l.offerMethod='Mail till '+em;
+  showStep4('Mail öppnat','Mailen är redo att skickas till <strong>'+esc(em)+'</strong>.<br>Kolla din mailklient och tryck Skicka.');
  } else if(method==='copy'){
   await navigator.clipboard.writeText(msg);
   l.offerSent=true;l.offerSentAt=now;l.offerMethod='Länk kopierad';
-  showNotif('Länk kopierad!','Klistra in i SMS, mail eller chat');
+  showStep4('Länk kopierad','Klistra in (Ctrl+V) i SMS, mail eller chat.');
  } else {
-  showNotif('Fyll i telefon eller e-post först','');return;
+  showStep4('Fyll i uppgifter','Skriv in kundens telefon eller e-post först.');return;
  }
  if(l.status!=='order')l.status='offert';
  l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad ('+l.offerMethod+')',note:url,seller:currentSeller});
  l.offerUrl=url;
  saveData();updateBadges();
- document.getElementById('offert-modal')?.remove();
- showNotif('Offert skickad!',l.company+' — '+l.offerMethod);
 }
 window.addEventListener('message',function(e){
  if(e.data&&e.data.type==='prio-offert-accepted'){
