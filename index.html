@@ -1615,7 +1615,7 @@ async function doSendOffert(id,method){
  const longUrl=base+'?namn='+encodeURIComponent(l.company)+'&id='+id;
  let url=longUrl;
  try{const r=await fetch('https://tinyurl.com/api-create.php?url='+encodeURIComponent(longUrl));if(r.ok){const s=await r.text();if(s.startsWith('http'))url=s;}}catch(e){}
- const msg='Hej! Tack för snacket. Här kan du se hur det funkar och välja vad som passar dig: '+url+' /Andrea, Prio';
+ const msg='Hej, det är Andrea från Prio. Som vi pratade om — här är allt samlat så du kan kolla i lugn och ro: '+url;
  const now=new Date().toISOString().slice(0,16).replace('T',' ');
  if(method==='preview'){
   window.open(longUrl+'&preview=1','_blank');return;
