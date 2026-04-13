@@ -566,6 +566,7 @@ th,td{padding:8px 10px}
  <div class="sec">Huvudmeny</div>
  <div class="ni active" onclick="go('dialer')" id="nav-dialer"><i data-lucide="zap" style="width:16px;height:16px"></i> Dialer <span class="badge" id="b-dialer">0</span></div>
  <div class="ni" onclick="go('leads')" id="nav-leads"><i data-lucide="users" style="width:16px;height:16px"></i> Leads <span class="badge" id="b-leads">0</span></div>
+ <div class="ni" onclick="go('offerter')" id="nav-offerter"><i data-lucide="file-text" style="width:16px;height:16px"></i> Offerter <span class="badge" id="b-offerter">0</span></div>
  <div class="ni" onclick="go('dash')" id="nav-dash"><i data-lucide="bar-chart-3" style="width:16px;height:16px"></i> Dashboard</div>
  <div class="sec">Verktyg</div>
  <div class="ni" onclick="go('sok')" id="nav-sok"><i data-lucide="search" style="width:16px;height:16px"></i> Sök</div>
@@ -618,6 +619,12 @@ th,td{padding:8px 10px}
   <div style="display:flex;justify-content:center;gap:12px;padding:12px" id="pag-row"></div>
  </div>
  
+ <div class="view" id="v-offerter">
+  <div class="page-title">📄 Offerter</div>
+  <div class="card" style="padding:0;overflow-x:auto">
+   <table><thead><tr><th>Företag</th><th>Bransch</th><th>Kontakt</th><th>Skickad</th><th>Status</th><th></th></tr></thead><tbody id="offerter-tb"></tbody></table>
+  </div>
+ </div>
  <!-- NYTT: Mörkt Dashboard -->
  <div class="view dashboard-dark-theme" id="v-dash">
   <div class="dash-header">
@@ -1076,7 +1083,7 @@ function updateProgress(){
  const pct=dialerQ.length?Math.round(((dialerIdx+1)/dialerQ.length)*100):0;
  document.getElementById('progress-fill').style.width=pct+'%';
 }
-function stopDialer(){dialerOn=false;dialerIdx=-1;document.getElementById('d-active').classList.remove('on');document.getElementById('d-idle').style.display='';document.getElementById('bcb').style.display='none';document.getElementById('progress-bar-area').style.display='none';const io=document.getElementById('inline-outcome');if(io)io.innerHTML='';renderDialer();updateBadges();}
+function stopDialer(){dialerOn=false;dialerIdx=-1;sessionStorage.removeItem('dialerIdx');document.getElementById('d-active').classList.remove('on');document.getElementById('d-idle').style.display='';document.getElementById('bcb').style.display='none';document.getElementById('progress-bar-area').style.display='none';const io=document.getElementById('inline-outcome');if(io)io.innerHTML='';renderDialer();updateBadges();}
 function nextDialerLead(){if(dialerIdx>=dialerQ.length){stopDialer();return;}const l=leads.find(l=>l.id===dialerQ[dialerIdx].id);if(!l){dialerIdx++;nextDialerLead();return;}lockLead(l.id);renderKK(l);renderInlineOutcome(l);document.getElementById('calling-lbl').textContent='';callingPhone='';}
 function skipLead(){const l=getCurLead();if(l)unlockLead(l.id);dialerIdx++;if(dialerIdx<dialerQ.length)nextDialerLead();else stopDialer();updateBadges();}
 function rateBtn(leadId,field,val,current){
@@ -1247,7 +1254,7 @@ function renderInlineOutcome(lead){
 }
 function quickOutcome(type){
  sessionCalls++;
- if(type==='nosvar'){handleOutcome('Ej svar – åter om 2h',2,'h',true);return;}
+ if(type==='nosvar'){handleOutcome('Ej svar',10,'d',true);return;}
  if(type==='ringsenare'){
   const el=document.getElementById('inline-outcome');
   el.innerHTML='<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:20px;margin-top:16px">'+
@@ -1489,6 +1496,7 @@ function go(v){
  if(v==='dialer')renderDialer();
  if(v==='pipeline')renderPipeline();
  if(v==='leads')renderLeads();
+ if(v==='offerter')renderOfferter();
  if(v==='dash')renderDash();
  if(v==='bolagsverket'){initSNI();setBVDates();}
  if(v!=='dialer'){document.getElementById('bcb').style.display='none';document.getElementById('fab-area').style.display='none';if(dialerOn)stopDialer();}
@@ -1502,6 +1510,7 @@ function updateBadges(){
  const pipe=leads.filter(l=>l.lockedBy===currentSeller&&!['blacklist','order'].includes(l.status)).length+cb+leads.filter(l=>['offert','apg'].includes(l.status)&&l.seller===currentSeller).length;
  const _bp=document.getElementById('b-pipeline');if(_bp)_bp.textContent=pipe;
  const tc=document.getElementById('leads-total-count');if(tc)tc.textContent='('+leads.filter(l=>l.status!=='blacklist').length+')';
+ const bo=document.getElementById('b-offerter');if(bo)bo.textContent=leads.filter(l=>l.offerSent).length;
  renderPipeline();
 }
 function makeCall(){const l=getCurLead();if(!l)return;const ph=callingPhone||l.phone;document.getElementById('calling-lbl').textContent=fmtPhone(ph);window.open(toTel(ph),'_self');}
@@ -1672,6 +1681,18 @@ window.addEventListener('message',function(e){
   if(l){l.status='order';l.offerOpened=true;l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert godkänd: '+e.data.pkg,note:'',seller:currentSeller});saveData();updateBadges();showNotif('OFFERT GODKÄND!',l.company+' valde '+e.data.pkg);celebrate();}
  }
 });
+function renderOfferter(){
+ const offerts=leads.filter(l=>l.offerSent);
+ const tb=document.getElementById('offerter-tb');if(!tb)return;
+ tb.innerHTML=offerts.length?offerts.map(l=>{
+  let st='Skickad';
+  if(l.status==='order')st='<span style="color:#22c55e;font-weight:700">Godkänd</span>';
+  else if(l.offerOpened)st='<span style="color:#f59e0b;font-weight:700">Öppnad</span>';
+  else st='<span style="color:var(--MUTED)">Väntar</span>';
+  return '<tr class="clickable" onclick="openKK('+l.id+')"><td><strong>'+esc(l.company)+'</strong></td><td><span class="industry-badge">'+getIndLabel(l.industry)+'</span></td><td>'+esc(l.vdName||l.contact||'—')+'</td><td style="font-size:11px">'+esc(l.offerMethod||'—')+'<br><span style="color:var(--MUTED)">'+esc(l.offerSentAt||'')+'</span></td><td>'+st+'</td><td><button class="btn btn-o btn-sm" onclick="event.stopPropagation();openKK('+l.id+')">Öppna</button></td></tr>';
+ }).join(''):'<tr><td colspan="6" class="empty">Inga offerter skickade ännu</td></tr>';
+ const bo=document.getElementById('b-offerter');if(bo)bo.textContent=offerts.length;
+}
 function confirmCallback(){
  const d=document.getElementById('cb-date').value;
  const t=document.getElementById('cb-time').value;
