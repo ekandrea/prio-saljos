@@ -582,7 +582,7 @@ th,td{padding:8px 10px}
   <div id="d-idle" style="min-height:calc(100vh - 56px);display:flex;flex-direction:column">
    <div style="padding:40px 0">
     <div style="font-size:13px;color:#999;margin-bottom:4px" id="greeting-text">God morgon</div>
-    <h1 style="font-size:26px;font-weight:800;color:var(--TEXT);letter-spacing:-.02em;margin-bottom:24px" id="seller-greeting">Andrea</h1>
+    <h1 style="font-size:26px;font-weight:800;color:var(--TEXT);letter-spacing:-.02em;margin-bottom:24px" id="seller-greeting">Andrea.</h1>
     <div id="today-summary" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px"></div>
     <button onclick="startAutopilot()" style="padding:14px 36px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:all .15s" onmouseenter="this.style.background='#333'" onmouseleave="this.style.background='#1a1a1a'">Börja dagen</button>
    </div>
@@ -1041,7 +1041,7 @@ function renderDialer(){
  const greet=hour<10?'God morgon':hour<17?'Hej':'God kväll';
  const el=document.getElementById('greeting-text');if(el)el.textContent=greet;
  const sg=document.getElementById('seller-greeting');
- if(sg){const raw=currentSeller||'andy';sg.textContent=raw.charAt(0).toUpperCase()+raw.slice(1)+' 👋';}
+ if(sg){const raw=currentSeller||'andrea';sg.textContent=raw.charAt(0).toUpperCase()+raw.slice(1)+'.'}
  const sum=document.getElementById('today-summary');
  if(sum)sum.innerHTML=
   '<div style="border:1px solid #e5e5e5;border-radius:10px;padding:16px 22px;min-width:130px;background:#fff"><div style="font-size:24px;font-weight:800;color:#1a1a1a">'+q.callbacks.length+'</div><div style="font-size:11px;color:#999;margin-top:2px">Återkomster</div></div>'+
