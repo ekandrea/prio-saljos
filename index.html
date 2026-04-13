@@ -1248,7 +1248,21 @@ function renderInlineOutcome(lead){
 function quickOutcome(type){
  sessionCalls++;
  if(type==='nosvar'){handleOutcome('Ej svar – åter om 2h',2,'h',true);return;}
- if(type==='ringsenare'){const d=prompt('Ringdatum (YYYY-MM-DD):');if(d){const lead=getCurLead();if(lead){lead.status='ring_senare';lead.nextCallDate=d;lead.history.push({date:new Date().toISOString().slice(0,10),outcome:'Återkomst: '+d,note:lead.note||'',seller:currentSeller});saveData();closeOutcomePanel();dialerIdx++;updateProgress();if(dialerIdx<dialerQ.length)nextDialerLead();else stopDialer();updateBadges();}}return;}
+ if(type==='ringsenare'){
+  const el=document.getElementById('inline-outcome');
+  el.innerHTML='<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:20px;margin-top:16px">'+
+   '<div style="font-size:12px;font-weight:700;margin-bottom:14px">Ring senare</div>'+
+   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'+
+    '<div><label style="font-size:10px;font-weight:600;color:var(--MUTED);display:block;margin-bottom:4px">DATUM</label><input type="date" id="cb-date" style="padding:10px 12px" value="'+new Date(Date.now()+86400000).toISOString().slice(0,10)+'"></div>'+
+    '<div><label style="font-size:10px;font-weight:600;color:var(--MUTED);display:block;margin-bottom:4px">TID</label><input type="time" id="cb-time" style="padding:10px 12px" value="07:00"></div>'+
+   '</div>'+
+   '<div style="display:flex;gap:8px">'+
+    '<button class="btn btn-p" style="flex:1" onclick="confirmCallback()">Boka återkomst</button>'+
+    '<button class="btn btn-o" onclick="renderInlineOutcome(getCurLead())">Avbryt</button>'+
+   '</div>'+
+  '</div>';
+  return;
+ }
  if(type==='demo'){handleOutcome('Demo bokad',0,'apg',false);return;}
  if(type==='offert'){sessionOffers++;handleOutcome('Skicka offert',0,'offert',false);return;}
  if(type==='order'){sessionOrders++;handleOutcome('✅ Stängd – kund!',0,'order',false);return;}
@@ -1658,6 +1672,19 @@ window.addEventListener('message',function(e){
   if(l){l.status='order';l.offerOpened=true;l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert godkänd: '+e.data.pkg,note:'',seller:currentSeller});saveData();updateBadges();showNotif('OFFERT GODKÄND!',l.company+' valde '+e.data.pkg);celebrate();}
  }
 });
+function confirmCallback(){
+ const d=document.getElementById('cb-date').value;
+ const t=document.getElementById('cb-time').value;
+ if(!d)return;
+ const dateTime=d+(t?' '+t:'');
+ const lead=getCurLead();if(!lead)return;
+ lead.status='ring_senare';
+ lead.nextCallDate=d;
+ lead.history.push({date:new Date().toISOString().slice(0,10),outcome:'Återkomst: '+dateTime,note:lead.userNote||'',seller:currentSeller});
+ sessionCalls++;
+ saveData();updateBadges();
+ dialerIdx++;if(dialerIdx<dialerQ.length)nextDialerLead();else stopDialer();
+}
 function checkOffertEvents(){
  const sentLeads=leads.filter(l=>l.offerSent&&!l.offerOpened);
  if(!sentLeads.length)return;
