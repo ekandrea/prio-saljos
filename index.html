@@ -891,7 +891,11 @@ function doLogin(){
 }
 function logout(){cloudPush().catch(()=>{});sessionStorage.clear();location.reload();}
 async function startApp(){
- migrateOldData();loadLocal();updateBadges();renderDialer();initSNI();setBVDates();
+ migrateOldData();loadLocal();updateBadges();
+ const savedView=localStorage.getItem('prio_view');
+ if(savedView&&document.getElementById('v-'+savedView)){go(savedView);}
+ else{renderDialer();}
+ initSNI();setBVDates();
  const savedGoal=localStorage.getItem('saljos_goal');
  if(savedGoal)document.getElementById('daily-goal').value=savedGoal;
  setInterval(lockCleanup,60000);
@@ -1503,6 +1507,7 @@ function doSearch(q){
  const res=leads.filter(l=>l.company.toLowerCase().includes(ql)||(l.orgnr||'').toLowerCase().includes(ql)||normPhone(l.phone).toLowerCase().includes(nq)||(l.subs||[]).some(s=>normPhone(s.phone).toLowerCase().includes(nq)));
  document.getElementById('sok-res').innerHTML=res.length?res.map(l=>'<div class="card" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center" onclick="openKK('+l.id+')"><div><strong>'+esc(l.company)+'</strong><div style="font-size:12px;color:var(--MUTED)">'+esc(fmtOrg(l.orgnr)||'')+' · '+fmtPhone(l.phone)+'</div></div><div style="display:flex;gap:8px;align-items:center"><span class="op op-'+(l.operator||'okänd').toLowerCase()+'">'+esc(l.operator||'Okänd')+'</span><span class="st-badge st-'+l.status+'">'+(SN[l.status]||l.status)+'</span></div></div>').join(''):'<div class="card" style="text-align:center;padding:28px;color:var(--MUTED)">Inga resultat</div>';}
 function go(v){
+ localStorage.setItem('prio_view',v);
  document.querySelectorAll('.view').forEach(e=>e.classList.remove('on'));
  document.getElementById('v-'+v)?.classList.add('on');
  document.querySelectorAll('#sb .ni').forEach(e=>e.classList.remove('active'));
