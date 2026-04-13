@@ -1146,7 +1146,7 @@ function renderKK(lead){
       '<span style="font-size:10px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(lead.orgnr)||'')+'</span>'+
       (regYear?'<span style="font-size:10px;color:var(--MUTED)">Reg. '+regYear+'</span>':'')+
       (verdict?' '+verdict:'')+
-     (lead.offerSent?' <span style="background:#ede9fe;color:#5b21b6;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">OFFERT SKICKAD</span>':'')+
+     (lead.offerOpened?' <span style="background:#dcfce7;color:#166534;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">KUND ÖPPNADE</span>':lead.offerSent?' <span style="background:#ede9fe;color:#5b21b6;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">OFFERT SKICKAD</span>':'')+
      '</div>'+
     '</div>'+
     ''+
@@ -1179,7 +1179,16 @@ function renderKK(lead){
      '<div style="display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:12px;font-weight:700">Synlighet</div><div style="font-size:10px;color:var(--MUTED)">Hemsida + Google</div></div><div style="display:flex;gap:3px">'+rateBtn(lead.id,'check_visible','g',c3)+rateBtn(lead.id,'check_visible','y',c3)+rateBtn(lead.id,'check_visible','r',c3)+'</div></div>'+
     '</div>'+
    '</div>'+
-   ''+
+   (lead.offerSent?
+    '<div style="background:var(--W);border:1px solid var(--BORDER);border-radius:12px;padding:14px;margin-top:12px">'+
+     '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--MUTED);margin-bottom:10px">Offert-status</div>'+
+     '<div style="display:flex;flex-direction:column;gap:6px;font-size:11px">'+
+      '<div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:#5b21b6;flex-shrink:0"></span><span>Skickad '+esc(lead.offerMethod||'')+' — '+esc(lead.offerSentAt||'')+'</span></div>'+
+      '<div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:'+(lead.offerOpened?'#22c55e':'#ddd')+';flex-shrink:0"></span><span style="color:'+(lead.offerOpened?'#166534':'#999')+'">'+(lead.offerOpened?'Kund har öppnat':'Väntar — kund har inte öppnat ännu')+'</span></div>'+
+      '<div style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:'+(lead.status==='order'?'#22c55e':'#ddd')+';flex-shrink:0"></span><span style="color:'+(lead.status==='order'?'#166534':'#999')+'">'+(lead.status==='order'?'Kund har godkänt!':'Väntar på godkännande')+'</span></div>'+
+     '</div>'+
+    '</div>'
+   :'')+
   '</div>'+
   '</div>';
  if(window.lucide)lucide.createIcons();
@@ -1600,22 +1609,21 @@ async function doSendOffert(id,method){
  let url=longUrl;
  try{const r=await fetch('https://tinyurl.com/api-create.php?url='+encodeURIComponent(longUrl));if(r.ok){const s=await r.text();if(s.startsWith('http'))url=s;}}catch(e){}
  const msg='Hej! Här är offerten vi pratade om: '+url;
+ const now=new Date().toISOString().slice(0,16).replace('T',' ');
  if(method==='sms'&&ph){
   window.open('sms:'+ph+'?body='+encodeURIComponent(msg),'_self');
-  l.offerSent=true;
+  l.offerSent=true;l.offerSentAt=now;l.offerMethod='SMS till '+ph;
   if(l.status!=='order')l.status='offert';
-  l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via SMS till '+ph,note:url,seller:currentSeller});
-  showNotif('Offert skickad via SMS!',l.company);
+  l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via SMS',note:ph,seller:currentSeller});
  } else if(method==='mail'&&em){
   window.open('mailto:'+em+'?subject=Offert från Prio&body='+encodeURIComponent(msg),'_self');
-  l.offerSent=true;
+  l.offerSent=true;l.offerSentAt=now;l.offerMethod='Mail till '+em;
   if(l.status!=='order')l.status='offert';
-  l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via mail till '+em,note:url,seller:currentSeller});
-  showNotif('Offert skickad via mail!',l.company);
+  l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via mail',note:em,seller:currentSeller});
  } else {
   window.open(longUrl+'&preview=1','_blank');
-  showNotif('Förhandsgranskning öppnad','Inte skickad till kund');
  }
+ l.offerUrl=url;
  navigator.clipboard.writeText(url).catch(()=>{});
  saveData();updateBadges();
  document.getElementById('offert-modal')?.remove();
