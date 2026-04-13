@@ -580,9 +580,9 @@ th,td{padding:8px 10px}
 <div class="main" id="main">
  <div class="view on" id="v-dialer">
   <div id="d-idle" style="min-height:calc(100vh - 56px);display:flex;flex-direction:column">
-   <div style="padding:48px 40px;margin:-32px -40px 0;background:linear-gradient(180deg,#0e0e0e 0%,#1a1508 60%,#2a2010 85%,#f5f5f3 100%);border-radius:0 0 16px 0;min-height:280px">
-    <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:4px" id="greeting-text">God morgon</div>
-    <h1 style="font-size:26px;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:24px" id="seller-greeting">Andrea.</h1>
+   <div style="padding:40px 0">
+    <div style="font-size:13px;color:#999;margin-bottom:4px" id="greeting-text">God morgon</div>
+    <h1 style="font-size:26px;font-weight:800;color:var(--TEXT);letter-spacing:-.02em;margin-bottom:24px" id="seller-greeting">Andrea.</h1>
     <div id="today-summary" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px"></div>
     <button onclick="startAutopilot()" style="padding:14px 36px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.5px;transition:all .15s" onmouseenter="this.style.background='#333'" onmouseleave="this.style.background='#1a1a1a'">Börja dagen</button>
    </div>
@@ -709,22 +709,20 @@ th,td{padding:8px 10px}
 </div>
 
 <div id="add-modal" class="overlay" style="display:none">
- <div class="modal">
-  <h3>Lägg till nytt lead</h3>
+ <div class="modal" style="max-width:480px">
+  <h3>Nytt lead</h3>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
-   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Bolagsnamn*</label><input id="al-co"></div>
-   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Org-nummer</label><input id="al-org"></div>
-   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Kontaktperson</label><input id="al-con"></div>
-   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Telefon</label><input id="al-ph"></div>
-   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">E-post</label><input id="al-em"></div>
-   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Operatör</label><select id="al-op"><option>Okänd</option><option>Telenor</option><option>Tre</option><option>Telia</option><option>Tele2</option></select></div>
-   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Abonnemang</label><input id="al-plan"></div>
-   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Pris (kr/mån)</label><input id="al-pr"></div>
-   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Bindningstid slutar</label><input id="al-bind" type="date"></div>
-   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Webbplats</label><input id="al-web"></div>
-   <div style="grid-column:1/-1"><label style="font-size:11px;color:var(--MUTED);font-weight:600">Bransch</label><select id="al-industry"><option value="">-- Auto-detektera --</option><option value="åkeri">🚛 Åkeri/Transport</option><option value="måleri">🎨 Måleri</option><option value="bygg">🏗️ Bygg</option><option value="logistik">📦 Logistik</option><option value="vvs">🔧 VVS</option><option value="el">⚡ El</option><option value="annat">🏢 Övrigt</option></select></div>
+   <div style="grid-column:1/-1"><label style="font-size:11px;color:var(--MUTED);font-weight:600">Företagsnamn *</label><input id="al-co" placeholder="T.ex. Erikssons Bygg AB"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Org-nummer</label><input id="al-org" placeholder="XXXXXX-XXXX"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Bransch</label><select id="al-industry"><option value="">Välj bransch</option><option value="snickare">Snickare</option><option value="elektriker">Elektriker</option><option value="vvs">VVS</option><option value="målare">Målare</option><option value="plåtslagare">Plåtslagare</option><option value="golvläggare">Golvläggare</option><option value="takläggare">Takläggare</option><option value="bygg">Bygg</option></select></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Kontaktperson</label><input id="al-con" placeholder="Namn"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Telefon</label><input id="al-ph" placeholder="07X-XXX XX XX"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">E-post</label><input id="al-em" placeholder="namn@foretag.se"></div>
+   <div><label style="font-size:11px;color:var(--MUTED);font-weight:600">Webbplats</label><input id="al-web" placeholder="www.foretag.se"></div>
   </div>
-  <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-o" onclick="closeAddModal()">Avbryt</button><button class="btn btn-p" onclick="addLead()">Spara lead</button></div>
+  <select id="al-op" style="display:none"><option>Okänd</option></select>
+  <input id="al-plan" style="display:none"><input id="al-pr" style="display:none"><input id="al-bind" style="display:none" type="date">
+  <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-o" onclick="closeAddModal()">Avbryt</button><button class="btn btn-p" onclick="addLead()">Spara</button></div>
  </div>
 </div>
 
