@@ -1582,27 +1582,33 @@ function importPrioFile(){
 }
 function sendOffert(id){
  const l=leads.find(l=>l.id===id);if(!l)return;
- const base='https://saljos-main.vercel.app/offert';
- const longUrl=base+'?namn='+encodeURIComponent(l.company)+'&id='+id;
  const ph=l.vdPhone||l.phone||'';
  const em=l.vdEmail||l.email||'';
  const d=document.createElement('div');d.className='overlay';d.id='offert-modal';
- d.innerHTML='<div class="modal" style="max-width:420px"><h3 style="margin-bottom:16px">Skicka offert till '+esc(l.company)+'</h3>'+
-  '<div style="margin-bottom:12px"><label style="font-size:11px;font-weight:700;color:var(--MUTED);display:block;margin-bottom:4px">TELEFON</label><input id="offert-ph" value="'+esc(ph)+'" placeholder="07X-XXX XX XX" style="padding:10px 14px;font-size:14px"></div>'+
-  '<div style="margin-bottom:16px"><label style="font-size:11px;font-weight:700;color:var(--MUTED);display:block;margin-bottom:4px">E-POST</label><input id="offert-em" value="'+esc(em)+'" placeholder="namn@foretag.se" style="padding:10px 14px"></div>'+
-  '<div style="display:flex;gap:8px">'+
-   '<button class="btn btn-p" style="flex:1" onclick="doSendOffert('+id+',\'sms\')">Skicka SMS</button>'+
-   '<button class="btn btn-o" style="flex:1" onclick="doSendOffert('+id+',\'mail\')">Skicka mail</button>'+
-   '<button class="btn btn-o" style="flex:1" onclick="doSendOffert('+id+',\'preview\')">Förhandsgranska</button>'+
-  '</div>'+
+ d.innerHTML='<div class="modal" style="max-width:460px;position:relative">'+
   '<button onclick="document.getElementById(\'offert-modal\').remove()" style="position:absolute;top:16px;right:20px;background:#f4f4f8;border:1px solid var(--BORDER);width:32px;height:32px;border-radius:8px;font-size:16px;cursor:pointer;color:var(--MUTED);display:flex;align-items:center;justify-content:center">✕</button>'+
+  '<h3 style="margin-bottom:4px">Offert till '+esc(l.company)+'</h3>'+
+  '<p style="font-size:12px;color:var(--MUTED);margin-bottom:20px">Fyll i kundens uppgifter, förhandsgranska, och skicka.</p>'+
+  '<div style="font-size:10px;font-weight:700;color:var(--ACC);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">STEG 1 — Kundens uppgifter</div>'+
+  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">'+
+   '<div><label style="font-size:11px;font-weight:600;color:var(--MUTED);display:block;margin-bottom:3px">Telefon</label><input id="offert-ph" value="'+esc(ph)+'" placeholder="07X-XXX XX XX" style="padding:9px 12px"></div>'+
+   '<div><label style="font-size:11px;font-weight:600;color:var(--MUTED);display:block;margin-bottom:3px">E-post</label><input id="offert-em" value="'+esc(em)+'" placeholder="namn@foretag.se" style="padding:9px 12px"></div>'+
+  '</div>'+
+  '<div style="font-size:10px;font-weight:700;color:var(--ACC);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">STEG 2 — Förhandsgranska</div>'+
+  '<button class="btn btn-o" style="width:100%;margin-bottom:20px;padding:12px" onclick="doSendOffert('+id+',\'preview\')">Öppna offerten och kolla att den ser bra ut</button>'+
+  '<div style="font-size:10px;font-weight:700;color:var(--ACC);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">STEG 3 — Skicka till kund</div>'+
+  '<div style="display:flex;flex-direction:column;gap:8px">'+
+   '<button onclick="doSendOffert('+id+',\'whatsapp\')" style="width:100%;padding:12px;border:1px solid #25D366;border-radius:10px;background:#f0fdf4;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#166534;display:flex;align-items:center;justify-content:center;gap:8px">WhatsApp — skickar direkt</button>'+
+   '<button onclick="doSendOffert('+id+',\'mail\')" style="width:100%;padding:12px;border:1px solid #93c5fd;border-radius:10px;background:#eff6ff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:#1e40af;display:flex;align-items:center;justify-content:center;gap:8px">E-post — öppnar mailklient</button>'+
+   '<button onclick="doSendOffert('+id+',\'copy\')" style="width:100%;padding:12px;border:1px solid var(--BORDER);border-radius:10px;background:var(--W);cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;color:var(--TEXT);display:flex;align-items:center;justify-content:center;gap:8px">Kopiera länk — klistra in var du vill</button>'+
+  '</div>'+
  '</div>';
  document.body.appendChild(d);
 }
 async function doSendOffert(id,method){
  const l=leads.find(l=>l.id===id);if(!l)return;
- const ph=document.getElementById('offert-ph').value.trim();
- const em=document.getElementById('offert-em').value.trim();
+ const ph=document.getElementById('offert-ph')?.value.trim()||'';
+ const em=document.getElementById('offert-em')?.value.trim()||'';
  if(ph){l.vdPhone=ph;l.phone=l.phone||ph;}
  if(em){l.vdEmail=em;l.email=l.email||em;}
  const base='https://saljos-main.vercel.app/offert';
@@ -1611,25 +1617,30 @@ async function doSendOffert(id,method){
  try{const r=await fetch('https://tinyurl.com/api-create.php?url='+encodeURIComponent(longUrl));if(r.ok){const s=await r.text();if(s.startsWith('http'))url=s;}}catch(e){}
  const msg='Hej! Här är offerten vi pratade om: '+url;
  const now=new Date().toISOString().slice(0,16).replace('T',' ');
- if(method==='sms'&&ph){
-  const isMobile=/iPhone|iPad|Android/i.test(navigator.userAgent);
-  if(isMobile){window.open('sms:'+ph+'?body='+encodeURIComponent(msg),'_self');}
-  else{navigator.clipboard.writeText(msg).then(()=>alert('SMS-text kopierad!\\n\\nÖppna SMS på telefonen och klistra in.\\n\\nTill: '+ph)).catch(()=>{});}
-  l.offerSent=true;l.offerSentAt=now;l.offerMethod='SMS till '+ph;
-  if(l.status!=='order')l.status='offert';
-  l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via SMS',note:ph,seller:currentSeller});
- } else if(method==='mail'&&em){
-  window.open('mailto:'+em+'?subject=Offert från Prio&body='+encodeURIComponent(msg),'_self');
-  l.offerSent=true;l.offerSentAt=now;l.offerMethod='Mail till '+em;
-  if(l.status!=='order')l.status='offert';
-  l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad via mail',note:em,seller:currentSeller});
- } else {
-  window.open(longUrl+'&preview=1','_blank');
+ if(method==='preview'){
+  window.open(longUrl+'&preview=1','_blank');return;
  }
+ if(method==='whatsapp'&&ph){
+  const waPh=ph.replace(/[^0-9]/g,'');
+  const waNum=waPh.startsWith('0')?'46'+waPh.slice(1):waPh;
+  window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
+  l.offerSent=true;l.offerSentAt=now;l.offerMethod='WhatsApp till '+ph;
+ } else if(method==='mail'&&em){
+  window.open('mailto:'+em+'?subject=Offert från Prio&body='+encodeURIComponent(msg),'_blank');
+  l.offerSent=true;l.offerSentAt=now;l.offerMethod='Mail till '+em;
+ } else if(method==='copy'){
+  await navigator.clipboard.writeText(msg);
+  l.offerSent=true;l.offerSentAt=now;l.offerMethod='Länk kopierad';
+  showNotif('Länk kopierad!','Klistra in i SMS, mail eller chat');
+ } else {
+  showNotif('Fyll i telefon eller e-post först','');return;
+ }
+ if(l.status!=='order')l.status='offert';
+ l.history.push({date:new Date().toISOString().slice(0,10),outcome:'Offert skickad ('+l.offerMethod+')',note:url,seller:currentSeller});
  l.offerUrl=url;
- navigator.clipboard.writeText(url).catch(()=>{});
  saveData();updateBadges();
  document.getElementById('offert-modal')?.remove();
+ showNotif('Offert skickad!',l.company+' — '+l.offerMethod);
 }
 window.addEventListener('message',function(e){
  if(e.data&&e.data.type==='prio-offert-accepted'){
