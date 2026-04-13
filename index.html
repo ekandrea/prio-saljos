@@ -1168,7 +1168,7 @@ function renderKK(lead){
     '<a href="https://www.merinfo.se/search?q='+encodeURIComponent(lead.company||fmtOrg(lead.orgnr))+'" target="_blank" class="link-btn" style="background:#fce4ec;color:#b71c1c;border-color:#f48fb1">Merinfo</a>'+
     '<a href="https://www.eniro.se/'+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="background:#f3e5f5;color:#6a1b9a;border-color:#ce93d8">Eniro</a>'+
     '<a href="https://www.google.com/search?q='+encodeURIComponent(lead.company||'')+'" target="_blank" class="link-btn" style="background:#e8eaf6;color:#283593;border-color:#9fa8da">Google</a>'+
-    '<button class="link-btn" style="background:#C49A3C;color:#fff;border:none;font-weight:700" onclick="sendOffert('+lead.id+')">Skicka offert</button>'+
+    '<button class="link-btn" style="background:#C49A3C;color:#fff;border:none;font-weight:700;cursor:pointer" onclick="sendOffert('+lead.id+')">Skicka offert</button>'+
    '</div>'+
   '</div>'+
   '<div style="display:flex;flex-direction:column;gap:12px">'+
