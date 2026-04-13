@@ -1146,6 +1146,7 @@ function renderKK(lead){
       '<span style="font-size:10px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(lead.orgnr)||'')+'</span>'+
       (regYear?'<span style="font-size:10px;color:var(--MUTED)">Reg. '+regYear+'</span>':'')+
       (verdict?' '+verdict:'')+
+     (lead.offerSent?' <span style="background:#ede9fe;color:#5b21b6;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700">OFFERT SKICKAD</span>':'')+
      '</div>'+
     '</div>'+
     ''+
@@ -1414,7 +1415,7 @@ function renderLeads(){
  const pages=Math.ceil(filtered.length/PAGE);
  if(curPage>=pages)curPage=Math.max(0,pages-1);
  const paged=filtered.slice(curPage*PAGE,(curPage+1)*PAGE);
- document.getElementById('leads-tb').innerHTML=paged.map(l=>{const ort=l.address?l.address.split(',').pop().trim():(l.city||'');return '<tr class="clickable" onclick="openKK('+l.id+')"><td><strong>'+esc(l.company)+'</strong>'+(TARGET.includes(l.industry)?' <span class="priority-target">⭐</span>':'')+'<div style="font-size:11px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(l.orgnr)||'')+'</div></td><td><span class="industry-badge">'+getIndLabel(l.industry)+'</span></td><td style="font-size:12px">'+esc(ort||'—')+'</td><td>'+fmtPhone(l.phone||l.vdPhone)+'</td><td style="font-size:12px">'+esc(l.vdName||l.contact||'—')+'</td><td><span class="st-badge st-'+l.status+'">'+(SN[l.status]||l.status)+'</span></td><td><strong style="color:var(--ACC)">'+(l.score>0?l.score:'—')+'</strong></td></tr>';}).join('')||'<tr><td colspan="7" class="empty">Inga leads</td></tr>';
+ document.getElementById('leads-tb').innerHTML=paged.map(l=>{const ort=l.address?l.address.split(',').pop().trim():(l.city||'');return '<tr class="clickable" onclick="openKK('+l.id+')"><td><strong>'+esc(l.company)+'</strong>'+(TARGET.includes(l.industry)?' <span class="priority-target">⭐</span>':'')+'<div style="font-size:11px;color:var(--MUTED);font-family:monospace">'+esc(fmtOrg(l.orgnr)||'')+'</div></td><td><span class="industry-badge">'+getIndLabel(l.industry)+'</span></td><td style="font-size:12px">'+esc(ort||'—')+'</td><td>'+fmtPhone(l.phone||l.vdPhone)+'</td><td style="font-size:12px">'+esc(l.vdName||l.contact||'—')+'</td><td><span class="st-badge st-'+l.status+'">'+(SN[l.status]||l.status)+'</span>'+(l.offerSent?' <span style="background:#ede9fe;color:#5b21b6;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700">OFFERT</span>':'')+'</td><td><strong style="color:var(--ACC)">'+(l.score>0?l.score:'—')+'</strong></td></tr>';}).join('')||'<tr><td colspan="7" class="empty">Inga leads</td></tr>';
  let ph='';if(pages>1){ph='<button class="btn btn-o btn-sm" onclick="curPage--;renderLeads()" '+(curPage===0?'disabled':'')+'>← Föregående</button><span style="padding:8px 16px;font-size:12px;color:var(--MUTED)">Sida '+(curPage+1)+' av '+pages+'</span><button class="btn btn-o btn-sm" onclick="curPage++;renderLeads()" '+(curPage>=pages-1?'disabled':'')+'>Nästa →</button>';}
  document.getElementById('pag-row').innerHTML=ph;
 }
