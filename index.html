@@ -896,7 +896,9 @@ async function startApp(){
  setInterval(()=>saveData(),30000);
  setInterval(checkOffertEvents,5000);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(panelOpen)closeOutcomePanel();if(qvLeadId)closeQuickView();if(document.getElementById('tb-modal').style.display==='flex')skipTB();}});
- await cloudPull();await enrichFromPrio();updateBadges();renderDialer();
+ await cloudPull();await enrichFromPrio();updateBadges();
+ if(dialerOn){const cur=getCurLead();if(cur)renderKK(cur);}
+ else{renderDialer();}
 }
 async function cloudPull(){
  setSyncState('busy','Hämtar...');
