@@ -896,6 +896,7 @@ async function startApp(){
  setInterval(()=>saveData(),30000);
  setInterval(checkOffertEvents,5000);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(panelOpen)closeOutcomePanel();if(qvLeadId)closeQuickView();if(document.getElementById('tb-modal').style.display==='flex')skipTB();}});
+ try{const pr=await fetch('/prio_leads.json?v='+Date.now());if(pr.ok){const pd=await pr.json();if(pd&&pd.length){window._prioMap={};pd.forEach(p=>{if(p.orgnr)window._prioMap[p.orgnr.replace(/[\s\-]/g,'')]=p;});console.log('Prio-map laddad:',pd.length,'leads');}}}catch(e){console.log('Kunde inte ladda prio-map',e);}
  await cloudPull();await enrichFromPrio();updateBadges();
  if(dialerOn){const cur=getCurLead();if(cur)renderKK(cur);}
  else{renderDialer();}
@@ -1141,6 +1142,7 @@ function rateBtn(leadId,field,val,current){
  return '<button onclick="saveField('+leadId+',\''+field+'\',\''+val+'\');renderKK(leads.find(l=>l.id==='+leadId+'))" style="padding:4px 10px;border-radius:6px;border:1px solid '+(active?colors[val]:'#e5e7eb')+';background:'+(active?colors[val]+'20':'#fff')+';color:'+(active?colors[val]:'#999')+';font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">'+labels[val]+'</button>';
 }
 function renderKK(lead){
+ if(window._prioMap&&lead.orgnr){const p=window._prioMap[(lead.orgnr||'').replace(/[\s\-]/g,'')];if(p){if(p.googleRating&&!lead.googleRating){lead.googleRating=p.googleRating;lead.googleReviews=p.googleReviews;}if(p.leadScore&&!lead.leadScore)lead.leadScore=p.leadScore;if(p.phone&&!lead.phone)lead.phone=p.phone;if(p.vdPhone&&!lead.vdPhone)lead.vdPhone=p.vdPhone;if(p.website&&!lead.website)lead.website=p.website;if(p.address&&!lead.address)lead.address=p.address;}}
  const ort=lead.address?lead.address.split(',').pop().trim():(lead.city||'');
  const c1=lead.check_size||'';const c2=lead.check_revenue||'';const c3=lead.check_visible||'';
  const greens=[c1,c2,c3].filter(c=>c==='g').length;
