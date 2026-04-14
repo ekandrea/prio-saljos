@@ -932,27 +932,37 @@ async function autoLoadPrioLeads(){
  }catch(e){console.log('Kunde inte ladda prio_leads.json',e);}
 }
 async function enrichFromPrio(){
- const missing=leads.filter(l=>!l.googleRating&&!l.googleReviews);
- if(missing.length<10)return;
+ const withGoogle=leads.filter(l=>l.googleRating>0);
+ if(withGoogle.length>leads.length*0.3)return;
  try{
+  setSyncState('busy','Berikar med Google-data...');
   const res=await fetch('/prio_leads.json?v='+Date.now());
   if(!res.ok)return;
   const prio=await res.json();
   if(!prio||!prio.length)return;
-  const byOrg={};prio.forEach(p=>{if(p.orgnr)byOrg[p.orgnr]=p;});
-  let enriched=0;
-  leads.forEach(l=>{
-   const p=byOrg[l.orgnr];
-   if(!p)return;
-   if(p.googleRating&&!l.googleRating){l.googleRating=p.googleRating;enriched++;}
-   if(p.googleReviews&&!l.googleReviews)l.googleReviews=p.googleReviews;
-   if(p.leadScore&&!l.leadScore)l.leadScore=p.leadScore;
-   if(p.phone&&!l.phone)l.phone=p.phone;
-   if(p.vdPhone&&!l.vdPhone)l.vdPhone=p.vdPhone;
-   if(p.website&&!l.website)l.website=p.website;
-   if(p.address&&!l.address)l.address=p.address;
+  const norm=s=>(s||'').replace(/[\s\-]/g,'');
+  const userByOrg={};leads.forEach(l=>{if(l.orgnr)userByOrg[norm(l.orgnr)]=l;});
+  const USER_FIELDS=['status','note','notes','history','check_size','check_revenue','check_visible',
+   'seller','lockedBy','lockedAt','offerSent','offerOpened','offerMethod','offerSentAt',
+   'nextCallDate','deal_type','tb_amount','nyteck_count','forlang_count'];
+  const merged=prio.map(p=>{
+   const existing=userByOrg[norm(p.orgnr)];
+   if(!existing)return p;
+   const out={...p};
+   USER_FIELDS.forEach(f=>{if(existing[f]!==undefined&&existing[f]!==null&&existing[f]!=='')out[f]=existing[f];});
+   if(existing.vdName)out.vdName=existing.vdName;
+   if(existing.vdEmail)out.vdEmail=existing.vdEmail;
+   if(existing.contact)out.contact=existing.contact;
+   if(existing.subs&&existing.subs.length)out.subs=existing.subs;
+   out.id=existing.id;
+   return out;
   });
-  if(enriched>0){saveData();console.log('Berikade '+enriched+' leads med Google-data');}
+  const mergedOrgs=new Set(merged.map(l=>norm(l.orgnr)));
+  leads.forEach(l=>{if(l.orgnr&&!mergedOrgs.has(norm(l.orgnr)))merged.push(l);});
+  leads=merged;
+  migrateLeads();saveData();
+  setSyncState('ok','Berikad! '+leads.filter(l=>l.googleRating>0).length+' med Google-data');
+  console.log('Berikade leads: '+leads.length+' totalt, '+leads.filter(l=>l.googleRating>0).length+' med Google');
  }catch(e){console.log('Kunde inte berika från prio_leads.json',e);}
 }
 async function cloudPush(){
